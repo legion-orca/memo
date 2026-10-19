@@ -155,6 +155,77 @@ main{max-width:880px;width:100%;margin:0 auto;padding:12px 20px 40px;flex:1}
 /* share */
 .share{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);position:relative}
 .share::before{content:'TRANSMIT';position:absolute;top:-8px;left:16px;background:var(--paper);padding:0 6px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--accent)}
+.edit-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding:10px 12px;border-radius:10px;background:var(--soft);border:1px solid var(--sky);font-size:13px;color:var(--deep)}
+.edit-bar[hidden]{display:none}
+.edit-tag{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:#fff;background:var(--accent);border-radius:4px;padding:2px 7px}
+.edit-msg{flex:1;min-width:0}
+.edit-id{font-family:var(--mono);font-size:12px;color:var(--accent)}
+.edit-bar .txt:hover{color:var(--danger)}
+.pw[hidden]{display:none}
+.edit-btn{appearance:none;border:0;background:none;padding:6px 4px;font-size:12.5px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.edit-btn:hover{color:var(--accent)}
+.edit-form{margin-top:12px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;max-width:420px;margin-left:auto}
+.edit-guide{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+.edit-row{display:flex;gap:8px}
+.edit-row .inwrap{flex:1}
+.edit-form .err{margin:6px 0 0;font-size:12.5px;color:var(--danger);min-height:18px}
+.preview-btn{margin-left:auto}
+.pv{position:fixed;inset:0;z-index:80;background:rgba(6,24,48,.55);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:24px;animation:rise .2s ease}
+.pv[hidden]{display:none}
+.pv-panel{width:min(1040px,100%);height:min(860px,100%);display:flex;flex-direction:column;background:var(--paper);border-radius:16px;border-top:3px solid var(--accent);box-shadow:0 30px 60px -20px rgba(0,0,0,.45);overflow:hidden}
+.pv-head{display:flex;align-items:center;gap:14px;padding:12px 14px 10px 18px;border-bottom:1px solid var(--line)}
+.pv-head > div:first-child{flex:1}
+.pv-head small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--accent)}
+.pv-head b{font-size:15px;color:var(--deep)}
+.pv-close{border:0;background:var(--bg);width:32px;height:32px;border-radius:8px;font-size:18px;cursor:pointer;color:var(--muted)}
+.pv-close:hover{color:var(--ink)}
+.pv-note{margin:0;padding:8px 18px;font-size:12px;color:var(--muted);background:#fbfdff;border-bottom:1px dashed var(--line)}
+.pv-stage{flex:1;min-height:0;background:repeating-linear-gradient(45deg,#eef3f8 0 10px,#e8eef5 10px 20px);display:flex;justify-content:center;padding:14px}
+.pv-frame{width:100%;height:100%;border:1px solid var(--line);border-radius:10px;background:#fff;transition:width .25s}
+.pv-stage.mobile .pv-frame{width:390px;max-width:100%;border-radius:22px;border:6px solid #1b2a3c}
+/* 미리보기 안에서는 이동 버튼·작성자 수정 숨김 */
+body.is-preview #crumb,body.is-preview .view-actions .btn,body.is-preview .edit-btn,body.is-preview .edit-form{display:none!important}
+@media (max-width:560px){.pv{padding:0}.pv-panel{height:100%;border-radius:0}.pv-head .seg{display:none}.pv-stage{padding:0}.pv-stage .pv-frame,.pv-stage.mobile .pv-frame{width:100%;border:0;border-radius:0}}
+.style-pick{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:2px 0 14px}
+.style-pick .lab{font-size:12.5px;color:var(--muted)}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.seg button{appearance:none;border:0;background:none;padding:6px 14px;border-radius:7px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.seg button:hover{color:var(--accent)}
+.seg button.on{background:var(--paper);color:var(--accent);box-shadow:0 1px 3px rgba(11,53,102,.15)}
+.css-box{margin:0 0 14px;padding:12px;border:1px dashed var(--sky);border-radius:10px;background:#fbfdff}
+.css-box[hidden]{display:none}
+.css-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.css-tpl{flex:1;min-width:160px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--paper);font-size:13px;color:var(--ink);outline:0}
+.css-tpl:focus{border-color:var(--accent)}
+.css-in{display:block;width:100%;min-height:150px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#0f2238;color:#d6e8fb;font:12.5px/1.6 var(--mono);outline:0;tab-size:2}
+.css-in:focus{border-color:var(--accent)}
+.css-box .hint{margin-top:8px}
+
+/* 공유 화면: 심플 (CSS 스타일도 이 바탕 위에 적용) */
+body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4f4f4;--accent:#444;--deep:#222;--muted:#8a8a8a;--ink:#222;--rule:transparent;--bg:#fafafa}
+:where(body.share-plain) .sysbar,:where(body.share-plain) .top,:where(body.share-plain) .sea,:where(body.share-plain) #fab,:where(body.share-plain) #board{display:none!important}
+:where(body.share-plain) main{max-width:760px;padding-top:44px}
+:where(body.share-plain) .sheet{border:1px solid #e5e5e5;border-top:1px solid #e5e5e5;box-shadow:none;border-radius:10px}
+:where(body.share-plain) .sheet-head,:where(body.share-plain) .toolbar{background:#fff}
+:where(body.share-plain) .tag{background:#f2f2f2;color:#666}
+:where(body.share-plain) .doc-title{color:#141414}
+:where(body.share-plain) .doc-date,:where(body.share-plain) .cnt{color:#999}
+:where(body.share-plain) .paper{background-image:none;color:#222}
+:where(body.share-plain) .chip{background:#fff;border-color:#e2e2e2;color:#333}
+:where(body.share-plain) .chip:hover{border-color:#999;color:#111}
+:where(body.share-plain) .chip.fill{background:#f5f5f5}
+:where(body.share-plain) .badge{background:#f4f4f4;border-color:#e4e4e4;color:#666}
+:where(body.share-plain) .bname{color:#222}
+:where(body.share-plain) .pill{background:#666}
+:where(body.share-plain) .block[data-k="neg"] .badge{background:#fbefef;border-color:#f0d6d6;color:#b04a4a}
+:where(body.share-plain) .block[data-k="neg"] .bname{color:#b04a4a}
+:where(body.share-plain) .view-actions .btn{display:none}
+:where(body.share-plain) .view-actions .ro{color:#999}
+:where(body.share-plain) .view-actions .ro::before{color:#888;border-color:#ddd}
+:where(body.share-plain) .lock .ico{color:#999}
+:where(body.share-plain) .btn.primary{background:#222;border-color:#222;color:#fff}
+:where(body.share-plain) .inwrap{background:#fafafa;border-color:#e2e2e2}
+:where(body.share-plain) #toast{background:#222}
 .share-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
 .pw{flex:1;min-width:220px;display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--muted)}
 .inwrap{display:flex;border:1px solid var(--line);border-radius:10px;background:var(--bg);overflow:hidden;transition:border-color .15s}
@@ -246,6 +317,10 @@ main{max-width:880px;width:100%;margin:0 auto;padding:12px 20px 40px;flex:1}
   .linkrow .link{flex-basis:100%}
   .linkrow .btn{flex:1}
   .view-actions .ro{flex-basis:100%}
+  .doc-head{row-gap:6px}
+  .doc-head .doc-title{font-size:16.5px}
+  .doc-head .doc-date{order:9;flex-basis:100%;font-size:10.5px}
+  .preview-btn{margin-left:0}
 }
 /* inquiry board */
 #fab{position:fixed;right:20px;bottom:20px;z-index:50;height:52px;padding:0 18px 0 14px;border-radius:999px;border:0;background:var(--deep);color:#fff;display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 12px 26px -10px rgba(11,53,102,.7),0 0 0 4px rgba(255,255,255,.7);transition:transform .2s,background .2s}
@@ -351,9 +426,10 @@ main{max-width:880px;width:100%;margin:0 auto;padding:12px 20px 40px;flex:1}
     <div class="notice">
       <div class="notice-head"><span>NOTICE</span><b>이용 안내</b></div>
       <ul>
-        <li>작성하신 내용은 별도의 서버에 보관되지 않으며, <b>공유 링크 안에만</b> 담겨 전달됩니다.</li>
+        <li>공유 링크를 발급하면 기록이 해양지부 기록 보관소에 저장되고, <b>짧은 링크</b>로 전달됩니다.</li>
+        <li>비밀번호를 지정한 기록은 <b>암호화된 상태</b>로 보관되어 관리자도 내용을 열람할 수 없습니다.</li>
         <li>비밀번호를 지정한 기록은 비밀번호를 아는 분만 열람할 수 있습니다. 비밀번호는 <b>복구할 수 없으니</b> 따로 보관해 주십시오.</li>
-        <li>공유된 기록은 <b>읽기 전용</b>입니다. 내용을 고친 경우 링크를 새로 발급해 전달해 주십시오.</li>
+        <li>공유된 기록은 <b>읽기 전용</b>입니다. 링크를 만들 때 <b>편집 접속 번호</b>를 정해 두면, 공유 화면의 ‘작성자 수정’에서 같은 링크의 내용을 고칠 수 있습니다.</li>
         <li>작성 중인 내용은 현재 이용 중인 브라우저에 자동으로 임시 저장됩니다.</li>
         <li>문의 및 건의 사항은 화면 오른쪽 아래 <b>‘문의’</b> 창구를 이용해 주십시오.</li>
       </ul>
@@ -664,27 +740,167 @@ function buildShare(t){
     el('div', { class:'linkrow' }, link, el('button', { class:'btn', text:'링크 복사', onclick(){ copy(link.value, '링크를 복사했어요'); } }), openA), hint);
   res.hidden = true;
   link.addEventListener('focus', () => link.select());
-  box.append(el('div', { class:'share-row' },
-    el('label', { class:'pw' }, el('span', { text:'비밀번호 (선택)' }), el('div', { class:'inwrap' }, pwin, eye)), make), res);
+  // 공유 화면 스타일: 해양지부 / 심플 / CSS
+  let sk = store.get('nd:sk') || 'marine';
+  const segBtns = [['marine','해양지부'],['plain','심플'],['css','CSS']].map(([k,label]) =>
+    el('button', { type:'button', 'data-sk':k, text:label, onclick(){ setSk(k); store.set('nd:sk', k); markStale(t); } }));
+  const tplSel = el('select', { class:'css-tpl', 'aria-label':'저장된 CSS 템플릿' });
+  const cssIn = el('textarea', { class:'css-in', spellcheck:'false', placeholder: CSS_SAMPLE });
+  cssIn.value = store.get('nd:css-last') ?? CSS_SAMPLE;
+  cssIn.addEventListener('input', () => store.set('nd:css-last', cssIn.value));
+  tplSel.addEventListener('change', () => {
+    const tp = cssTemplates().find(x => x.name === tplSel.value);
+    if (tp){ cssIn.value = tp.css; store.set('nd:css-last', tp.css); markStale(t); toast(`'${tp.name}' 템플릿을 불러왔어요`); }
+  });
+  const cssBox = el('div', { class:'css-box' },
+    el('div', { class:'css-row' }, tplSel,
+      el('button', { type:'button', class:'chip', text:'템플릿 저장', onclick(){
+        const css = cssIn.value.trim(); if (!css) return toast('저장할 CSS가 없어요');
+        const name = (prompt('템플릿 이름을 정해 주세요', tplSel.value || '내 템플릿') || '').trim(); if (!name) return;
+        const list = cssTemplates().filter(x => x.name !== name); list.push({ name, css: cssIn.value });
+        store.set('nd:css-tpl', list); refreshTemplates(name); toast(`'${name}' 템플릿을 저장했어요`);
+      } }),
+      el('button', { type:'button', class:'chip', text:'삭제', onclick(){
+        const name = tplSel.value; if (!name) return toast('삭제할 템플릿을 골라 주세요');
+        if (!confirm(`'${name}' 템플릿을 지울까요?`)) return;
+        store.set('nd:css-tpl', cssTemplates().filter(x => x.name !== name)); refreshTemplates(''); toast('템플릿을 지웠어요');
+      } })),
+    cssIn,
+    el('p', { class:'hint', text:'공유 화면에만 적용돼요. 템플릿은 이 브라우저에 저장되어 다음에도 불러 쓸 수 있어요. 쓸 수 있는 이름: body · .sheet · .doc-title · .doc-text · .block · .bname · .tag' }));
+  function setSk(k){ sk = k; segBtns.forEach(b => b.classList.toggle('on', b.dataset.sk === k)); cssBox.hidden = k !== 'css'; }
+  setSk(sk);
+
+  // 편집 접속 번호: 나중에 같은 링크의 내용을 고칠 때 쓰는 작성자 전용 번호
+  const keyin = el('input', { type:'password', placeholder:'4자 이상 · 나중에 수정할 때 필요', autocomplete:'new-password', class:'keyin', maxlength:'40' });
+  const keyEye = el('button', { type:'button', text:'보기', onclick(){ const s = keyin.type === 'password'; keyin.type = s ? 'text' : 'password'; keyEye.textContent = s ? '숨기기' : '보기'; } });
+  const keyLabel = el('label', { class:'pw' }, el('span', { text:'편집 접속 번호 (선택)' }), el('div', { class:'inwrap' }, keyin, keyEye));
+  // 수정 모드 안내 띠
+  const editInfo = el('span', { class:'edit-id' });
+  const editBar = el('div', { class:'edit-bar' },
+    el('span', { class:'edit-tag', text:'EDIT' }), el('span', { class:'edit-msg' }, '공유한 기록을 수정하는 중이에요 · ', editInfo),
+    el('button', { type:'button', class:'txt', text:'수정 그만두기', onclick(){ if (confirm('수정을 그만두고 새 기록 모드로 돌아갈까요? (작성 중인 글은 그대로 남아요)')) setEdit(null); } }));
+
+  function setEdit(info){
+    editState[t] = info;
+    try { info ? sessionStorage.setItem('nd:edit:' + t, JSON.stringify(info)) : sessionStorage.removeItem('nd:edit:' + t); } catch(e){}
+    editBar.hidden = !info; keyLabel.hidden = !!info;
+    if (info) editInfo.textContent = '#/s/' + info.id;
+    make.textContent = info ? '수정 내용 업데이트' : '저장하고 링크 만들기';
+    res.hidden = true;
+  }
+  box._setEdit = setEdit;
+  box._setSk = (k, css) => { setSk(k); if (k === 'css' && css != null){ cssIn.value = css; } };
+
+  box.append(
+    editBar,
+    el('div', { class:'style-pick' }, el('span', { class:'lab', text:'공유 화면' }), el('div', { class:'seg' }, segBtns),
+      el('button', { type:'button', class:'chip preview-btn', text:'미리보기', async onclick(){
+        const d = F[t].get();
+        if (F[t].empty(d)) return toast('내용을 먼저 적어 주세요');
+        d.at = Date.now();
+        if (sk !== 'marine') d.sk = sk;
+        if (sk === 'css') d.css = cssIn.value.slice(0, 20000);
+        const sfx = sk === 'plain' ? '!p' : sk === 'css' ? '!c' : '';
+        // 미리보기는 저장하지 않고, 비밀번호 없이 화면만 보여 줌
+        openPreview(base() + '#/v/' + await pack(d, '') + sfx + '!x');
+      } })),
+    cssBox,
+    el('div', { class:'share-row' },
+      el('label', { class:'pw' }, el('span', { text:'비밀번호 (선택)' }), el('div', { class:'inwrap' }, pwin, eye)),
+      keyLabel, make), res);
 
   make.addEventListener('click', async () => {
     const d = F[t].get();
     if (F[t].empty(d)) return toast('내용을 먼저 적어 주세요');
-    const pw = pwin.value;
+    const pw = pwin.value, key = keyin.value, ed = editState[t];
     if (pw && !(window.crypto && crypto.subtle)) return toast('이 환경에선 비밀번호를 쓸 수 없어요 (https 필요)');
+    if (!ed && key && key.length < 4) return toast('편집 접속 번호는 4자 이상이에요'), keyin.focus();
     store.set('nd:' + t, d);
     d.at = Date.now();
-    make.disabled = true; make.textContent = '만드는 중…';
+    if (sk !== 'marine') d.sk = sk;
+    if (sk === 'css') d.css = cssIn.value.slice(0, 20000);
+    const sfx = sk === 'plain' ? '!p' : sk === 'css' ? '!c' : '';
+    make.disabled = true; make.textContent = ed ? '업데이트 중…' : '만드는 중…';
     try {
-      const url = base() + '#/v/' + await pack(d, pw);
+      const code = await pack(d, pw);
+      let url = '', short = false, note = '';
+      if (ed){
+        // 같은 링크에 덮어쓰기
+        try { await api({ action:'update', id: ed.id, key: ed.key, data: code }); }
+        catch(err){ toast(err.message || '업데이트하지 못했어요'); return; }
+        url = base() + '#/s/' + ed.id + sfx; short = true; note = ' · 같은 링크에 수정 내용을 반영했어요.';
+      } else {
+        if (live){
+          try {
+            const r = await api({ action:'save', data: code, key: key || undefined });
+            url = base() + '#/s/' + r.id + sfx; short = true;
+            note = key ? ' · 편집 접속 번호로 나중에 이 링크의 내용을 고칠 수 있어요.' : ' · 짧은 링크로 발급했어요.';
+          } catch(e){}
+        }
+        if (!url){
+          url = base() + '#/v/' + code + sfx;
+          note = ` · 보관소에 연결하지 못해 긴 링크(${url.length.toLocaleString()}자)로 만들었어요.` + (key ? ' 긴 링크는 편집 접속 번호로 수정할 수 없어요.' : '') + (url.length > 8000 ? ' 일부 메신저에선 잘릴 수 있어요.' : '');
+        }
+      }
       link.value = url; openA.href = url; res.hidden = false; res.classList.remove('stale');
-      hint.textContent = (pw ? '비밀번호가 걸린 링크예요. 비밀번호는 따로 알려 주세요.' : '링크를 가진 사람은 누구나 볼 수 있어요.')
-        + ` · 링크 길이 ${url.length.toLocaleString()}자` + (url.length > 8000 ? ' — 길어서 일부 메신저에선 잘릴 수 있어요.' : '');
-      copy(url, '링크를 만들고 복사했어요');
+      hint.textContent = (pw ? '비밀번호가 걸린 링크예요. 비밀번호는 따로 알려 주세요.' : '링크를 가진 사람은 누구나 볼 수 있어요.') + note;
+      copy(url, ed ? '업데이트하고 링크를 복사했어요' : '링크를 만들고 복사했어요');
     } catch(e){ toast('링크를 만들지 못했어요'); }
-    finally { make.disabled = false; make.textContent = '저장하고 링크 만들기'; }
+    finally { make.disabled = false; make.textContent = editState[t] ? '수정 내용 업데이트' : '저장하고 링크 만들기'; }
   });
-  box._res = res; box._hint = hint; box._pw = pwin;
+  box._res = res; box._hint = hint; box._pw = pwin; box._key = keyin;
+
+  // 새로고침해도 이 탭에서는 수정 모드 유지
+  let saved = null; try { saved = JSON.parse(sessionStorage.getItem('nd:edit:' + t) || 'null'); } catch(e){}
+  setEdit(saved);
+}
+const editState = {};
+
+/* 공유 화면 미리보기 (저장하지 않음) */
+let pv = null;
+function openPreview(url){
+  if (!pv){
+    const frame = el('iframe', { class:'pv-frame', title:'공유 화면 미리보기' });
+    const wrap = el('div', { class:'pv-stage' }, frame);
+    const sizes = [['pc','PC'],['mobile','모바일']].map(([k,l]) => el('button', { type:'button', 'data-size':k, text:l, onclick(){ setSize(k); } }));
+    function setSize(k){ sizes.forEach(b => b.classList.toggle('on', b.dataset.size === k)); wrap.classList.toggle('mobile', k === 'mobile'); }
+    const box = el('div', { class:'pv', role:'dialog', 'aria-modal':'true', 'aria-label':'공유 화면 미리보기', onclick(e){ if (e.target === box) closePreview(); } },
+      el('div', { class:'pv-panel' },
+        el('div', { class:'pv-head' },
+          el('div', {}, el('small', { text:'PREVIEW' }), el('b', { text:'공유 화면 미리보기' })),
+          el('div', { class:'seg' }, sizes),
+          el('button', { type:'button', class:'pv-close', 'aria-label':'닫기', text:'×', onclick: closePreview })),
+        el('p', { class:'pv-note', text:'받는 사람에게 이렇게 보여요. 미리보기는 저장되지 않고, 비밀번호 잠금 화면은 건너뛰어요.' }),
+        wrap));
+    document.body.append(box);
+    pv = { box, frame, setSize };
+    setSize(innerWidth < 700 ? 'mobile' : 'pc');
+  }
+  pv.frame.src = url;
+  pv.box.hidden = false;
+  document.documentElement.style.overflow = 'hidden';
+}
+function closePreview(){
+  if (!pv) return;
+  pv.box.hidden = true; pv.frame.src = 'about:blank';
+  document.documentElement.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && pv && !pv.box.hidden) closePreview(); });
+
+/* CSS templates (이 브라우저에만 저장) */
+const CSS_SAMPLE = `/* 공유 화면에만 적용되는 CSS예요 */
+body { background: #faf6ef; }
+.sheet { border-radius: 4px; border-color: #e7dccb; }
+.doc-title { font-family: 'Nanum Myeongjo', serif; color: #4a3b2a; }
+.doc-text { color: #3d342a; }`;
+const cssTemplates = () => { const v = store.get('nd:css-tpl'); return Array.isArray(v) ? v : []; };
+function refreshTemplates(selected){
+  const list = cssTemplates();
+  $$('.css-tpl').forEach(s => {
+    const keep = selected ?? s.value;
+    s.replaceChildren(el('option', { value:'', text: list.length ? '저장된 템플릿 선택…' : '저장된 템플릿 없음' }), ...list.map(x => el('option', { value:x.name, text:x.name })));
+    s.value = list.some(x => x.name === keep) ? keep : '';
+  });
 }
 function markStale(t){
   const box = $(`.share[data-for="${t}"]`);
@@ -692,7 +908,7 @@ function markStale(t){
 }
 function resetShare(t){
   const box = $(`.share[data-for="${t}"]`);
-  if (box._res){ box._res.hidden = true; box._res.classList.remove('stale'); box._pw.value = ''; }
+  if (box._res){ box._res.hidden = true; box._res.classList.remove('stale'); box._pw.value = ''; box._key.value = ''; box._setEdit(null); }
 }
 
 const timers = {};
@@ -707,6 +923,7 @@ for (const t of Object.keys(F)){
   });
 }
 
+refreshTemplates('');
 $$('[data-go]').forEach(b => b.addEventListener('click', () => go('#/' + b.dataset.go)));
 // 카드 아무 곳이나 눌러도 해당 서비스로 이동
 $$('.card').forEach(c => c.addEventListener('click', e => { if (!e.target.closest('button')) c.querySelector('[data-go]').click(); }));
@@ -762,16 +979,38 @@ function msgCard(title, text){
   return el('div', { class:'sheet lock' }, el('div', { class:'ico', text:'FEARLESS MARINE' }), el('h2', { text:title }), el('p', { text:text }),
     el('a', { class:'btn', href:'#/', text:'처음으로' }));
 }
-async function showView(code){
+// 짧은 링크(#/s/아이디): 보관소에서 기록을 받아 와서 보여 줌
+async function showStored(id){
+  const box = vb();
+  box.replaceChildren(el('div', { class:'sheet lock' }, el('div', { class:'ico', text:'LOADING' }), el('h2', { text:'기록을 불러오는 중이에요' }), el('p', { text:'잠시만 기다려 주세요.' })));
+  if (!live) return box.replaceChildren(msgCard('기록을 불러올 수 없어요', '기록 보관소가 연결되어 있지 않아요.'));
+  try {
+    const r = await fetch(BOARD_URL + '?action=doc&id=' + encodeURIComponent(id));
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error);
+    if (current !== null && !current.startsWith('#/s/' + id)) return; // 그새 다른 화면으로 이동함
+    showView(d.data, id);
+  } catch(e){ box.replaceChildren(msgCard('기록을 찾을 수 없어요', '링크가 잘못되었거나 삭제된 기록이에요.')); }
+}
+// 공유 화면 스타일 적용
+function applyShareStyle(sk, css){
+  document.body.classList.toggle('share-plain', sk === 'plain' || sk === 'css');
+  let st = $('#user-css');
+  if (sk === 'css' && css){
+    if (!st){ st = el('style', { id:'user-css' }); document.head.append(st); }
+    st.textContent = css;
+  } else if (st) st.textContent = '';
+}
+async function showView(code, id){
   const box = vb(); box.replaceChildren();
   let bytes;
   try { bytes = fromB64(code); if (!bytes.length || (bytes[0] !== 1 && bytes[0] !== 2)) throw 0; }
   catch(e){ box.append(msgCard('링크가 올바르지 않아요', '주소가 중간에 잘리지 않았는지 확인해 주세요.')); return; }
-  if (bytes[0] === 2){ box.append(lockCard(bytes)); return; }
-  try { renderDoc(await unpack(bytes)); }
+  if (bytes[0] === 2){ box.append(lockCard(bytes, id)); return; }
+  try { renderDoc(await unpack(bytes), { id }); }
   catch(e){ box.append(msgCard('메모를 열 수 없어요', '링크가 손상되었거나 이 브라우저에서 지원하지 않는 형식이에요.')); }
 }
-function lockCard(bytes){
+function lockCard(bytes, id){
   if (!(window.crypto && crypto.subtle)) return msgCard('잠긴 메모예요', '이 환경에선 잠금을 풀 수 없어요. https 주소로 열어 주세요.');
   const input = el('input', { type:'password', placeholder:'비밀번호', autocomplete:'off' });
   const err = el('p', { class:'err' });
@@ -781,7 +1020,7 @@ function lockCard(bytes){
     el('form', { async onsubmit(e){
       e.preventDefault(); if (!input.value) return;
       btn.disabled = true; btn.textContent = '여는 중…'; err.textContent = '';
-      try { renderDoc(await unpack(bytes, input.value)); }
+      try { renderDoc(await unpack(bytes, input.value), { id, pw: input.value }); }
       catch(_){ err.textContent = '비밀번호가 맞지 않아요'; card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); input.select(); }
       finally { btn.disabled = false; btn.textContent = '열기'; }
     } }, el('div', { class:'inwrap' }, input), btn, err));
@@ -789,12 +1028,13 @@ function lockCard(bytes){
   return card;
 }
 function pre(text){ return el('pre', { class:'paper doc-text', text: text || '' }); }
-function renderDoc(d){
+function renderDoc(d, ctx = {}){
   const box = vb(); box.replaceChildren();
+  applyShareStyle(d.sk || 'marine', d.css);
   const date = d.at ? new Date(d.at).toLocaleString('ko-KR', { dateStyle:'medium', timeStyle:'short' }) : '';
   const sheet = el('div', { class:'sheet' },
     el('div', { class:'sheet-head doc-head' }, el('span', { class:'tag', text: TAGS[d.t] }), el('h1', { class:'doc-title', text: d.title || '제목 없음' }), el('span', { class:'doc-date', text: date })));
-  document.title = (d.title || TYPES[d.t]) + ' · 해양지부 우리의 소리';
+  document.title = (d.title || TYPES[d.t]) + (d.sk ? '' : ' · 해양지부 우리의 소리');
 
   if (d.t === 'ooc'){
     const pc = d.pc || 'PC', npc = d.npc || 'NPC';
@@ -821,9 +1061,39 @@ function renderDoc(d){
     }
   }
   // 공유받은 사람은 읽기·복사만 가능 (편집기로 가져가는 기능 없음)
-  box.append(sheet, el('div', { class:'view-actions' },
-    el('span', { class:'ro', text:'공유된 기록은 수정할 수 없어요' }),
-    el('a', { class:'btn', href:'#/', text:'처음으로' })));
+  const actions = el('div', { class:'view-actions' },
+    el('span', { class:'ro', text:'공유된 기록은 읽기 전용이에요' }),
+    ctx.id ? el('button', { type:'button', class:'edit-btn', text:'작성자 수정', onclick(){ toggleEditForm(); } }) : null,
+    el('a', { class:'btn', href:'#/', text:'처음으로' }));
+  box.append(sheet, actions);
+
+  // 작성자 수정: 편집 접속 번호 확인 후 편집기로 불러옴
+  let ef = null;
+  function toggleEditForm(){
+    if (ef){ ef.remove(); ef = null; return; }
+    const kin = el('input', { type:'password', placeholder:'편집 접속 번호', autocomplete:'off' });
+    const ok = el('button', { type:'submit', class:'btn primary', text:'확인' });
+    const msg = el('p', { class:'err' });
+    ef = el('form', { class:'edit-form', async onsubmit(e){
+      e.preventDefault(); if (!kin.value) return;
+      ok.disabled = true; msg.textContent = '';
+      try { await api({ action:'verify', id: ctx.id, key: kin.value }); enterEdit(d, ctx.id, kin.value, ctx.pw); }
+      catch(err){ msg.textContent = err.message || '확인하지 못했어요'; kin.select(); }
+      finally { ok.disabled = false; }
+    } },
+      el('p', { class:'edit-guide', text:'링크를 만들 때 정한 편집 접속 번호를 입력하면 이 기록을 수정할 수 있어요.' }),
+      el('div', { class:'edit-row' }, el('div', { class:'inwrap' }, kin), ok), msg);
+    box.append(ef); kin.focus();
+  }
+}
+function enterEdit(d, id, key, pw){
+  const t = d.t, cur = F[t].get();
+  if (!F[t].empty(cur) && !confirm(`작성 중인 ${TYPES[t]} 내용이 이 기록으로 바뀌어요. 계속할까요?`)) return;
+  const copyD = { ...d }; delete copyD.at; delete copyD.sk; delete copyD.css;
+  F[t].set(copyD); updateCounts(t); store.set('nd:' + t, F[t].get());
+  const box = $(`.share[data-for="${t}"]`);
+  box._pw.value = pw || ''; box._setSk(d.sk || 'marine', d.css); box._setEdit({ id, key });
+  go('#/' + t); toast('수정 모드로 열었어요. 고친 뒤 업데이트를 눌러 주세요');
 }
 
 /* ---------- inquiry board ---------- */
@@ -941,10 +1211,16 @@ function render(h){
   current = h;
   $$('.view').forEach(v => v.classList.remove('on'));
   const crumb = $('#crumb'); crumb.replaceChildren();
-  if (h.startsWith('#/v/')){
-    $('#v-view').classList.add('on'); document.title = '공유된 메모 · 해양지부 우리의 소리';
+  applyShareStyle('marine');
+  document.body.classList.remove('is-preview');
+  if (h.startsWith('#/v/') || h.startsWith('#/s/')){
+    const [code, flag, px] = h.slice(4).split('!');
+    document.body.classList.toggle('is-preview', px === 'x' || flag === 'x');
+    // 잠금 화면 등 내용을 열기 전에도 고른 스타일의 바탕을 먼저 깔아 둠
+    applyShareStyle(flag === 'p' ? 'plain' : flag === 'c' ? 'css' : 'marine');
+    $('#v-view').classList.add('on'); document.title = '공유된 기록';
     crumb.append(el('a', { href:'#/', text:'← 처음으로' }));
-    showView(h.slice(4));
+    h.startsWith('#/s/') ? showStored(code) : showView(code);
   } else {
     const t = h.slice(2);
     if (F[t]){
