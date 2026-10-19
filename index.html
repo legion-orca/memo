@@ -186,6 +186,8 @@ main{max-width:880px;width:100%;margin:0 auto;padding:12px 20px 40px;flex:1}
 /* 미리보기 안에서는 이동 버튼·작성자 수정 숨김 */
 body.is-preview #crumb,body.is-preview .view-actions .btn,body.is-preview .edit-btn,body.is-preview .edit-form{display:none!important}
 @media (max-width:560px){.pv{padding:0}.pv-panel{height:100%;border-radius:0}.pv-head .seg{display:none}.pv-stage{padding:0}.pv-stage .pv-frame,.pv-stage.mobile .pv-frame{width:100%;border:0;border-radius:0}}
+.admin-maker{max-width:520px}
+.admin-maker .result{text-align:left}
 .style-pick{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:2px 0 14px}
 .style-pick .lab{font-size:12.5px;color:var(--muted)}
 .seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
@@ -1115,6 +1117,36 @@ function renderDoc(d, ctx = {}){
     box.append(ef); kin.focus();
   }
 }
+// 어드민 키 → board.gs에 넣을 해시값 만들기 (키 자체는 어디에도 저장·전송하지 않음)
+function showAdminKeyMaker(){
+  const box = vb();
+  const k1 = el('input', { type:'password', placeholder:'어드민 키 (8자 이상 권장)', autocomplete:'new-password' });
+  const k2 = el('input', { type:'password', placeholder:'한 번 더 입력', autocomplete:'new-password' });
+  const out = el('input', { class:'link', readonly:'' });
+  const result = el('div', { class:'result' },
+    el('p', { class:'hint', text:'아래 한 줄을 통째로 복사해서 board.gs의 const ADMIN_HASH = \'\'; 줄과 바꿔 넣으세요.' }),
+    el('div', { class:'linkrow' }, out, el('button', { type:'button', class:'btn', text:'복사', onclick(){ copy(out.value, '복사했어요'); } })));
+  result.hidden = true;
+  const err = el('p', { class:'err' });
+  const btn = el('button', { type:'submit', class:'btn primary', text:'해시 만들기' });
+  box.replaceChildren(el('div', { class:'sheet lock admin-maker' },
+    el('div', { class:'ico', text:'ADMIN' }), el('h2', { text:'어드민 키 해시 만들기' }),
+    el('p', { text:'어드민 키로 문의 게시판의 모든 비밀글을 열 수 있어요. 키는 이 화면 밖으로 나가지 않고, 코드에는 해시값만 들어가요.' }),
+    el('form', { async onsubmit(e){
+      e.preventDefault(); err.textContent = ''; result.hidden = true;
+      if (!canCrypto()) return err.textContent = '이 환경에선 만들 수 없어요 (https 필요)';
+      if (k1.value.length < 6) return err.textContent = '6자 이상으로 정해 주세요';
+      if (k1.value !== k2.value) return err.textContent = '두 번 입력한 키가 달라요';
+      btn.disabled = true;
+      try {
+        const proof = await proofOf(k1.value, 'fmnd-admin');
+        const dg = new Uint8Array(await crypto.subtle.digest('SHA-256', te.encode('fmnd:admin:' + proof)));
+        let bin = ''; dg.forEach(x => bin += String.fromCharCode(x));
+        out.value = `const ADMIN_HASH = '${btoa(bin)}';`;
+        k1.value = ''; k2.value = ''; result.hidden = false;
+      } finally { btn.disabled = false; }
+    } }, el('div', { class:'inwrap' }, k1), el('div', { class:'inwrap' }, k2), btn, err, result)));
+}
 function enterEdit(d, id, proof, pw){
   const t = d.t, cur = F[t].get();
   if (!F[t].empty(cur) && !confirm(`작성 중인 ${TYPES[t]} 내용이 이 기록으로 바뀌어요. 계속할까요?`)) return;
@@ -1203,10 +1235,12 @@ function postItem(p){
       e.preventDefault(); if (!pw.value) return;
       go.disabled = true;
       try {
-        if (!p.salt) throw new Error('예전 방식의 비밀글이라 여기서는 열 수 없어요');
         if (!canCrypto()) throw new Error('이 환경에선 열 수 없어요 (https 필요)');
-        const proof = await proofOf(pw.value, 'fmnd-post:' + p.salt);
-        const d = await api({ action:'read', id: p.id, proof }); lock.remove(); f.remove(); li.append(...postBody(d.post));
+        // 글쓴이 비밀번호용 증명값 + 어드민 키용 증명값을 함께 보냄 (둘 다 원래 글자는 아님)
+        const body = { action:'read', id: p.id, adminProof: await proofOf(pw.value, 'fmnd-admin') };
+        if (p.salt) body.proof = await proofOf(pw.value, 'fmnd-post:' + p.salt);
+        pw.value = '';
+        const d = await api(body); lock.remove(); f.remove(); li.append(...postBody(d.post));
       }
       catch(err){ toast(err.message || '열지 못했어요'); pw.select(); }
       finally { go.disabled = false; }
@@ -1252,7 +1286,11 @@ function render(h){
   const crumb = $('#crumb'); crumb.replaceChildren();
   applyShareStyle('marine');
   document.body.classList.remove('is-preview');
-  if (h.startsWith('#/v/') || h.startsWith('#/s/')){
+  if (h === '#/adminkey'){
+    $('#v-view').classList.add('on'); document.title = '어드민 키 해시 만들기';
+    crumb.append(el('a', { href:'#/', text:'← 처음으로' }));
+    showAdminKeyMaker();
+  } else if (h.startsWith('#/v/') || h.startsWith('#/s/')){
     const [code, flag, px] = h.slice(4).split('!');
     document.body.classList.toggle('is-preview', px === 'x' || flag === 'x');
     // 잠금 화면 등 내용을 열기 전에도 고른 스타일의 바탕을 먼저 깔아 둠
