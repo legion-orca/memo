@@ -162,8 +162,10 @@ main{max-width:880px;width:100%;margin:0 auto;padding:12px 20px 40px;flex:1}
 .edit-id{font-family:var(--mono);font-size:12px;color:var(--accent)}
 .edit-bar .txt:hover{color:var(--danger)}
 .pw[hidden]{display:none}
-.edit-btn{appearance:none;border:0;background:none;padding:6px 4px;font-size:12.5px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-.edit-btn:hover{color:var(--accent)}
+.edit-btn{appearance:none;display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border:1px solid var(--accent);border-radius:999px;background:var(--paper);color:var(--accent);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,color .15s,transform .1s}
+.edit-btn::before{content:'';width:14px;height:14px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20h4L19 9l-4-4L4 16z'/%3E%3Cpath d='M13.5 6.5l4 4'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20h4L19 9l-4-4L4 16z'/%3E%3Cpath d='M13.5 6.5l4 4'/%3E%3C/svg%3E") center/contain no-repeat}
+.edit-btn:hover,.edit-btn.on{background:var(--accent);color:var(--paper)}
+.edit-btn:active{transform:translateY(1px)}
 .edit-form{margin-top:12px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;max-width:420px;margin-left:auto}
 .edit-guide{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
 .edit-row{display:flex;gap:8px}
@@ -188,6 +190,13 @@ body.is-preview #crumb,body.is-preview .view-actions .btn,body.is-preview .edit-
 @media (max-width:560px){.pv{padding:0}.pv-panel{height:100%;border-radius:0}.pv-head .seg{display:none}.pv-stage{padding:0}.pv-stage .pv-frame,.pv-stage.mobile .pv-frame{width:100%;border:0;border-radius:0}}
 .admin-maker{max-width:520px}
 .admin-maker .result{text-align:left}
+.made-with{display:none}
+:where(body.share-plain) .made-with{display:flex;flex-direction:column;align-items:center;gap:4px;width:max-content;max-width:100%;margin:36px auto 0;padding:12px 22px;border-radius:999px;text-decoration:none;text-align:center;border:1px solid var(--line);background:var(--paper);transition:border-color .15s,transform .15s}
+:where(body.share-plain) .made-with:hover{border-color:var(--accent);transform:translateY(-1px)}
+.made-with .mw-sub{font-size:11px;color:var(--muted)}
+.made-with .mw-go{font-size:13.5px;font-weight:700;color:var(--accent)}
+.lock .made-with{margin-top:22px}
+body.is-preview .made-with{pointer-events:none}
 .style-pick{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:2px 0 14px}
 .style-pick .lab{font-size:12.5px;color:var(--muted)}
 .seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
@@ -1063,9 +1072,16 @@ function lockCard(bytes, id){
       try { const pw = input.value; renderDoc(await unpack(bytes, pw), { id, pw }); input.value = ''; }
       catch(_){ err.textContent = '비밀번호가 맞지 않아요'; card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); input.select(); }
       finally { btn.disabled = false; btn.textContent = '열기'; }
-    } }, el('div', { class:'inwrap' }, input), btn, err));
+    } }, el('div', { class:'inwrap' }, input), btn, err), homeLink());
   setTimeout(() => input.focus(), 50);
   return card;
+}
+// 심플·CSS 화면에서도 사이트로 돌아와 직접 써 볼 수 있게 하는 작은 안내
+const HOME_URL = 'https://legion-orca.github.io/memo/#/';
+function homeLink(){
+  return el('a', { class:'made-with', href: HOME_URL },
+    el('span', { class:'mw-sub', text:'본 문서는 해양지부 우리의 소리에서 발행되었습니다' }),
+    el('span', { class:'mw-go', text:'새 기록 문서 작성하기 →' }));
 }
 function pre(text){ return el('pre', { class:'paper doc-text', text: text || '' }); }
 function renderDoc(d, ctx = {}){
@@ -1103,14 +1119,14 @@ function renderDoc(d, ctx = {}){
   // 공유받은 사람은 읽기·복사만 가능 (편집기로 가져가는 기능 없음)
   const actions = el('div', { class:'view-actions' },
     el('span', { class:'ro', text:'공유된 기록은 읽기 전용이에요' }),
-    ctx.id ? el('button', { type:'button', class:'edit-btn', text:'작성자 수정', onclick(){ toggleEditForm(); } }) : null,
+    ctx.id ? el('button', { type:'button', class:'edit-btn', text:'작성자 수정', onclick(){ this.classList.toggle('on', toggleEditForm()); } }) : null,
     el('a', { class:'btn', href:'#/', text:'처음으로' }));
-  box.append(sheet, actions);
+  box.append(sheet, actions, homeLink());
 
   // 작성자 수정: 편집 접속 번호 확인 후 편집기로 불러옴
   let ef = null;
   function toggleEditForm(){
-    if (ef){ ef.remove(); ef = null; return; }
+    if (ef){ ef.remove(); ef = null; return false; }
     const kin = el('input', { type:'password', placeholder:'편집 접속 번호', autocomplete:'off' });
     const ok = el('button', { type:'submit', class:'btn primary', text:'확인' });
     const msg = el('p', { class:'err' });
@@ -1129,7 +1145,8 @@ function renderDoc(d, ctx = {}){
     } },
       el('p', { class:'edit-guide', text:'링크를 만들 때 정한 편집 접속 번호를 입력하면 이 기록을 수정할 수 있어요.' }),
       el('div', { class:'edit-row' }, el('div', { class:'inwrap' }, kin), ok), msg);
-    box.append(ef); kin.focus();
+    box.insertBefore(ef, actions.nextSibling); kin.focus();
+    return true;
   }
 }
 // 어드민 키 → board.gs에 넣을 해시값 만들기 (키 자체는 어디에도 저장·전송하지 않음)
