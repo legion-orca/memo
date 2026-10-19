@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="@POINTLE0 · Sol2">
-<title>해양지부 우리의 소리</title>
+<title>해양지부 신문고</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap">
@@ -191,10 +191,10 @@ body.is-preview #crumb,body.is-preview .view-actions .btn,body.is-preview .edit-
 .admin-maker{max-width:520px}
 .admin-maker .result{text-align:left}
 .made-with{display:none}
-:where(body.share-plain) .made-with{display:flex;flex-direction:column;align-items:center;gap:4px;width:max-content;max-width:100%;margin:36px auto 0;padding:12px 22px;border-radius:999px;text-decoration:none;text-align:center;border:1px solid var(--line);background:var(--paper);transition:border-color .15s,transform .15s}
-:where(body.share-plain) .made-with:hover{border-color:var(--accent);transform:translateY(-1px)}
-.made-with .mw-sub{font-size:11px;color:var(--muted)}
-.made-with .mw-go{font-size:13.5px;font-weight:700;color:var(--accent)}
+:where(body.share-plain) .made-with{display:flex;flex-direction:column;align-items:center;gap:10px;margin:40px auto 0;text-align:center}
+.made-with .mw-sub{margin:0;font-size:12px;color:var(--muted)}
+.made-with .mw-go{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:999px;border:1px solid var(--accent);background:var(--accent);color:var(--paper);font-size:13.5px;font-weight:700;text-decoration:none;transition:transform .15s,opacity .15s}
+.made-with .mw-go:hover{transform:translateY(-1px);opacity:.88}
 .lock .made-with{margin-top:22px}
 body.is-preview .made-with{pointer-events:none}
 .style-pick{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:2px 0 14px}
@@ -393,7 +393,7 @@ body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4
 <header class="top">
   <a href="#/" class="brand">
     <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><circle cx="16" cy="16" r="15.5" fill="#0b3566"/><circle cx="16" cy="16" r="12.5" fill="none" stroke="#6fb2ee" stroke-width=".8"/><g fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="9.2" r="2"/><path d="M16 11.2V24.5M12 14.6h8M9.2 19.2c.9 3.3 3.7 5.3 6.8 5.3s5.9-2 6.8-5.3"/><path d="M9.2 19.2l-1.4 1.6M22.8 19.2l1.4 1.6"/></g></svg>
-    <span><small>FEARLESS MARINE NOTE DESK</small><b>해양지부 우리의 소리</b></span>
+    <span><small>FEARLESS MARINE NOTE DESK</small><b>해양지부 신문고</b></span>
   </a>
   <nav id="crumb"></nav>
 </header>
@@ -402,7 +402,7 @@ body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4
   <!-- HOME -->
   <section id="v-home" class="view">
     <div class="hero">
-      <div class="kicker">VOICE OF THE SEA · 우리의 소리</div>
+      <div class="kicker">VOICE OF THE SEA · 바다의 소리</div>
       <h1>해양지부는<br>여러분의 이야기를 듣습니다</h1>
       <p>전하고 싶은 기록을 남겨 주십시오. 작성하신 기록은 공유 링크로 전달되며, <br class="pc">필요한 경우 비밀번호로 안전하게 봉인할 수 있습니다.</p>
       <div class="coord"><span>LEGION <b>∞</b> ORCA</span><span>POINT NEMO</span><span>DEPTH 3,700m</span></div>
@@ -512,7 +512,7 @@ body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4
     <svg viewBox="0 0 2880 120" preserveAspectRatio="none"><path fill="#0b3566" d="M0 70 Q180 54 360 70 T720 70 T1080 70 T1440 70 T1800 70 T2160 70 T2520 70 T2880 70 V120 H0Z"/></svg>
   </div>
   <div class="sign">
-    <p>해양지부 우리의 소리 · FEARLESS MARINE</p>
+    <p>해양지부 신문고 · FEARLESS MARINE</p>
     <div class="credit"><span class="lbl">MADE BY</span><b>@POINTLE0</b><i>·</i><span>Sol2</span></div>
   </div>
 </footer>
@@ -1079,9 +1079,9 @@ function lockCard(bytes, id){
 // 심플·CSS 화면에서도 사이트로 돌아와 직접 써 볼 수 있게 하는 작은 안내
 const HOME_URL = 'https://legion-orca.github.io/memo/#/';
 function homeLink(){
-  return el('a', { class:'made-with', href: HOME_URL },
-    el('span', { class:'mw-sub', text:'본 문서는 해양지부 우리의 소리에서 발행되었습니다' }),
-    el('span', { class:'mw-go', text:'새 기록 문서 작성하기 →' }));
+  return el('div', { class:'made-with' },
+    el('p', { class:'mw-sub', text:'본 문서는 해양지부 신문고에서 발행되었습니다' }),
+    el('a', { class:'mw-go', href: HOME_URL, text:'새 기록 문서 작성하기 →' }));
 }
 function pre(text){ return el('pre', { class:'paper doc-text', text: text || '' }); }
 function renderDoc(d, ctx = {}){
@@ -1090,7 +1090,7 @@ function renderDoc(d, ctx = {}){
   const date = d.at ? new Date(d.at).toLocaleString('ko-KR', { dateStyle:'medium', timeStyle:'short' }) : '';
   const sheet = el('div', { class:'sheet' },
     el('div', { class:'sheet-head doc-head' }, el('span', { class:'tag', text: TAGS[d.t] }), el('h1', { class:'doc-title', text: d.title || '제목 없음' }), el('span', { class:'doc-date', text: date })));
-  document.title = (d.title || TYPES[d.t]) + (d.sk ? '' : ' · 해양지부 우리의 소리');
+  document.title = (d.title || TYPES[d.t]) + (d.sk ? '' : ' · 해양지부 신문고');
 
   if (d.t === 'ooc'){
     const pc = d.pc || 'PC', npc = d.npc || 'NPC';
@@ -1333,9 +1333,9 @@ function render(h){
   } else {
     const t = h.slice(2);
     if (F[t]){
-      $('#v-' + t).classList.add('on'); document.title = TYPES[t] + ' · 해양지부 우리의 소리';
+      $('#v-' + t).classList.add('on'); document.title = TYPES[t] + ' · 해양지부 신문고';
       crumb.append(el('a', { href:'#/', text:'← 처음으로' }));
-    } else { $('#v-home').classList.add('on'); document.title = '해양지부 우리의 소리'; }
+    } else { $('#v-home').classList.add('on'); document.title = '해양지부 신문고'; }
   }
   window.scrollTo(0, 0);
 }
