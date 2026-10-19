@@ -199,6 +199,9 @@ body.is-preview #crumb,body.is-preview .view-actions .btn,body.is-preview .edit-
 .css-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
 .css-tpl{flex:1;min-width:160px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--paper);font-size:13px;color:var(--ink);outline:0}
 .css-tpl:focus{border-color:var(--accent)}
+.css-name{flex:1;min-width:160px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--paper);font-size:13px;color:var(--ink);outline:0}
+.css-name:focus{border-color:var(--accent)}
+.css-row .chip.arm{border-color:var(--danger);color:var(--danger);background:#fdf1f0}
 .css-in{display:block;width:100%;min-height:150px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#0f2238;color:#d6e8fb;font:12.5px/1.6 var(--mono);outline:0;tab-size:2}
 .css-in:focus{border-color:var(--accent)}
 .css-box .hint{margin-top:8px}
@@ -765,23 +768,35 @@ function buildShare(t){
   const cssIn = el('textarea', { class:'css-in', spellcheck:'false', placeholder: CSS_SAMPLE });
   cssIn.value = store.get('nd:css-last') ?? CSS_SAMPLE;
   cssIn.addEventListener('input', () => store.set('nd:css-last', cssIn.value));
+  const tplName = el('input', { class:'css-name', placeholder:'템플릿 이름', maxlength:'30' });
   tplSel.addEventListener('change', () => {
     const tp = cssTemplates().find(x => x.name === tplSel.value);
+    tplName.value = tp ? tp.name : '';
     if (tp){ cssIn.value = tp.css; store.set('nd:css-last', tp.css); markStale(t); toast(`'${tp.name}' 템플릿을 불러왔어요`); }
   });
+  function saveTpl(){
+    const css = cssIn.value.trim(); if (!css) return toast('저장할 CSS가 없어요');
+    const name = tplName.value.trim(); if (!name){ tplName.focus(); return toast('템플릿 이름을 먼저 적어 주세요'); }
+    const old = cssTemplates(), had = old.some(x => x.name === name);
+    store.set('nd:css-tpl', [...old.filter(x => x.name !== name), { name, css: cssIn.value }]);
+    refreshTemplates(name); toast(had ? `'${name}' 템플릿을 덮어썼어요` : `'${name}' 템플릿을 저장했어요`);
+  }
+  tplName.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); saveTpl(); } });
+  // 삭제는 브라우저 팝업 대신 버튼을 한 번 더 누르면 확정
+  let delTimer = null;
+  const delBtn = el('button', { type:'button', class:'chip', text:'삭제', onclick(){
+    const name = tplSel.value; if (!name) return toast('삭제할 템플릿을 골라 주세요');
+    if (!delBtn.classList.contains('arm')){
+      delBtn.classList.add('arm'); delBtn.textContent = '한 번 더 누르면 삭제';
+      clearTimeout(delTimer); delTimer = setTimeout(() => { delBtn.classList.remove('arm'); delBtn.textContent = '삭제'; }, 3000);
+      return;
+    }
+    clearTimeout(delTimer); delBtn.classList.remove('arm'); delBtn.textContent = '삭제';
+    store.set('nd:css-tpl', cssTemplates().filter(x => x.name !== name)); refreshTemplates(''); tplName.value = ''; toast(`'${name}' 템플릿을 지웠어요`);
+  } });
   const cssBox = el('div', { class:'css-box' },
-    el('div', { class:'css-row' }, tplSel,
-      el('button', { type:'button', class:'chip', text:'템플릿 저장', onclick(){
-        const css = cssIn.value.trim(); if (!css) return toast('저장할 CSS가 없어요');
-        const name = (prompt('템플릿 이름을 정해 주세요', tplSel.value || '내 템플릿') || '').trim(); if (!name) return;
-        const list = cssTemplates().filter(x => x.name !== name); list.push({ name, css: cssIn.value });
-        store.set('nd:css-tpl', list); refreshTemplates(name); toast(`'${name}' 템플릿을 저장했어요`);
-      } }),
-      el('button', { type:'button', class:'chip', text:'삭제', onclick(){
-        const name = tplSel.value; if (!name) return toast('삭제할 템플릿을 골라 주세요');
-        if (!confirm(`'${name}' 템플릿을 지울까요?`)) return;
-        store.set('nd:css-tpl', cssTemplates().filter(x => x.name !== name)); refreshTemplates(''); toast('템플릿을 지웠어요');
-      } })),
+    el('div', { class:'css-row' }, tplSel, delBtn),
+    el('div', { class:'css-row' }, tplName, el('button', { type:'button', class:'chip fill', text:'템플릿 저장', onclick: saveTpl })),
     cssIn,
     el('p', { class:'hint', text:'공유 화면에만 적용돼요. 템플릿은 이 브라우저에 저장되어 다음에도 불러 쓸 수 있어요. 쓸 수 있는 이름: body · .sheet · .doc-title · .doc-text · .block · .bname · .tag' }));
   function setSk(k){ sk = k; segBtns.forEach(b => b.classList.toggle('on', b.dataset.sk === k)); cssBox.hidden = k !== 'css'; }
