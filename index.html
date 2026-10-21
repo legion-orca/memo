@@ -148,6 +148,13 @@ main{max-width:880px;width:100%;margin:0 auto;padding:12px 20px 40px;flex:1}
 .p-empty{margin:10px 18px 4px;font-size:13px;color:var(--muted)}
 #p-list .block{animation:rise .25s ease}
 .p-add{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px 14px}
+.o-add{align-items:center;border-top:1px solid var(--line)}
+.o-add-hint{font-size:12px;color:var(--muted)}
+#o-list .block{animation:rise .25s ease;border-bottom:0;border-top:1px solid var(--line)}
+#o-list .block[data-k="next"] .badge{background:var(--paper)}
+#v-ooc .o-divider + #o-list .block:first-child{border-top:0}
+#v-ooc #o-list .paper{min-height:150px}
+#v-ooc:has(#o-list .block) #ooc-body{min-height:220px}
 .p-add .chip{border-style:dashed}
 .p-add .chip.neg:hover{border-color:var(--danger);color:var(--danger)}
 #v-view .doc-text{min-height:84px;resize:none}
@@ -506,6 +513,7 @@ body.share-full .share-page{min-height:100vh}
 .lock-err{min-height:18px;margin:8px 0 0;font-size:12.5px;color:var(--danger)}
 .made-with{display:none}
 .mini-note{margin:6px 0 0;font-size:11.5px;line-height:1.5;color:var(--muted)}
+.share-page .doc:has(.doc-more) .doc-body{min-height:0}
 .share-src{position:absolute;z-index:3;left:50%;bottom:3px;translate:-50% 0;white-space:nowrap;color:var(--s-onbg-muted);text-decoration:none;opacity:.8}
 .share-src:hover{text-decoration:underline}
 body.share-full .share-page:has(.share-src) .share-foot{bottom:20px}
@@ -841,6 +849,9 @@ details.fold:not([open]):hover{border-color:var(--sky)}
         <button class="chip" id="ooc-copy">복사하기</button>
       </div>
       <div id="ooc-body" class="paper rich" contenteditable="true" spellcheck="false" data-ph="OOC 내용을 적어 주세요."></div>
+      <div class="p-divider o-divider" hidden><span>후속 OOC</span></div>
+      <div id="o-list"></div>
+      <div class="p-add o-add"><button type="button" class="chip" id="ooc-add">＋ 후속 OOC 이어 쓰기</button><span class="o-add-hint">같은 OOC에 이어지는 내용을 블록으로 쌓아요</span></div>
       <div class="foot"><span><span id="ooc-count">0자</span><span class="fmt-hint"> · 글자를 드래그하면 꾸밀 수 있어요</span></span><button class="txt" data-clear="ooc">새로 쓰기</button></div>
     </div>
     <aside class="side">
@@ -1183,9 +1194,12 @@ $$('details.fold[data-fold]').forEach(d => initFold(d, d.dataset.fold));
 /* ---------- editors ---------- */
 const F = {
   ooc: {
-    get: () => ({ t:'ooc', title: $('#ooc-title').value.trim(), body: $('#ooc-body').value, rich: $('#ooc-body').html, pc: $('#ooc-pc').value.trim() || 'PC', npc: $('#ooc-npc').value.trim() || 'NPC' }),
-    set: d => { $('#ooc-title').value = d.title || ''; fillRich($('#ooc-body'), d.body, d.rich); $('#ooc-pc').value = d.pc || 'PC'; $('#ooc-npc').value = d.npc || 'NPC'; syncLabels(); },
-    empty: d => !d.body.trim()
+    get: () => { const d = { t:'ooc', title: $('#ooc-title').value.trim(), body: $('#ooc-body').value, rich: $('#ooc-body').html, pc: $('#ooc-pc').value.trim() || 'PC', npc: $('#ooc-npc').value.trim() || 'NPC' };
+      const more = $$('#o-list .block').map(b => ({ name: b.querySelector('.bname').value.trim(), body: b.querySelector('.rich').value, rich: b.querySelector('.rich').html }));
+      if (more.length) d.more = more; return d; },
+    set: d => { $('#ooc-title').value = d.title || ''; fillRich($('#ooc-body'), d.body, d.rich); $('#ooc-pc').value = d.pc || 'PC'; $('#ooc-npc').value = d.npc || 'NPC';
+      $$('#o-list .block').forEach(n => n.remove()); (d.more || []).forEach(m => $('#o-list').append(makeOocBlock(m))); refreshOoc(); syncLabels(); },
+    empty: d => !d.body.trim() && !(d.more || []).some(m => m.body.trim())
   },
   memo: {
     get: () => ({ t:'memo', title: $('#memo-title').value.trim(), body: $('#memo-body').value, rich: $('#memo-body').html }),
@@ -1209,6 +1223,37 @@ const F = {
     empty: d => d.blocks.every(b => !b.body.trim())
   }
 };
+
+/* OOC 후속 블록: 같은 OOC에 이어지는 내용 */
+const oocRiches = () => [$('#ooc-body'), ...$$('#o-list .block .rich')];
+function nextOocName(){
+  const used = new Set($$('#o-list .bname').map(i => i.value.trim()));
+  for (let i = 1; i < 99; i++){ const n = '후속 OOC ' + i; if (!used.has(n)) return n; }
+  return '후속 OOC';
+}
+function makeOocBlock({ name, body, rich } = {}){
+  const ta = makeRich('이어지는 OOC 내용을 적어 주세요.'); fillRich(ta, body || '', rich || '');
+  const nm = el('input', { class:'bname', placeholder:'블록 이름' }); nm.value = name || nextOocName();
+  return el('div', { class:'block', 'data-k':'next' },
+    el('div', { class:'block-head' }, el('span', { class:'badge' }), nm, el('span', { class:'cnt', text: count(body || '') }),
+      el('button', { type:'button', class:'icon-btn', 'data-act':'up', title:'위로', text:'↑' }),
+      el('button', { type:'button', class:'icon-btn', 'data-act':'down', title:'아래로', text:'↓' }),
+      el('button', { type:'button', class:'icon-btn del', 'data-act':'del', title:'블록 삭제', text:'✕' }),
+      el('button', { type:'button', class:'chip copyb', text:'복사' })),
+    ta);
+}
+function refreshOoc(){
+  const items = $$('#o-list .block');
+  $('#v-ooc .o-divider').hidden = !items.length;
+  items.forEach((b,i) => {
+    b.querySelector('.badge').textContent = i + 2;
+    b.querySelector('[data-act=up]').disabled = i === 0;
+    b.querySelector('[data-act=down]').disabled = i === items.length - 1;
+  });
+  $('#ooc-copy').textContent = items.length ? '전체 복사' : '복사하기';
+  updateCounts('ooc');
+}
+const oocAllText = () => oocRiches().map(r => r.value.trim()).filter(Boolean).join('\n\n');
 
 /* prompt blocks */
 const BLOCK_NAME = { common:'공통 프롬프트', neg:'네거티브', free:'새 블록' };
@@ -1250,11 +1295,11 @@ function refreshBlocks(){
 }
 const promptChanged = () => $('#v-prompt').dispatchEvent(new Event('input'));
 function updateCounts(t){
-  if (t === 'ooc') $('#ooc-count').textContent = count($('#ooc-body').value);
+  if (t === 'ooc'){ $('#ooc-count').textContent = count(oocRiches().map(r => r.value).join('')); $$('#o-list .block').forEach(b => b.querySelector('.cnt').textContent = count(b.querySelector('.rich').value)); }
   if (t === 'memo') $('#memo-count').textContent = count($('#memo-body').value);
   if (t === 'prompt') $$('#v-prompt .block').forEach(b => b.querySelector('.cnt').textContent = count(b.querySelector('.rich').value));
   // 오른쪽 계기판
-  const len = t === 'prompt' ? $$('#v-prompt .block .rich').reduce((n, x) => n + x.value.length, 0) : $('#' + t + '-body').value.length;
+  const len = t === 'prompt' ? $$('#v-prompt .block .rich').reduce((n, x) => n + x.value.length, 0) : t === 'ooc' ? oocRiches().reduce((n, x) => n + x.value.length, 0) : $('#' + t + '-body').value.length;
   $$(`[data-len="${t}"]`).forEach(x => x.textContent = len.toLocaleString());
   if (t === 'prompt'){ const bc = $('[data-blocks]'); if (bc) bc.textContent = $$('#v-prompt .block').length; }
 }
@@ -1674,15 +1719,34 @@ $$('[data-clear]').forEach(b => b.addEventListener('click', () => {
 }));
 
 // OOC
+// PC/NPC 넣기는 마지막으로 쓰던 칸(본문 또는 후속 블록)에
+let oocTarget = $('#ooc-body');
+$('#v-ooc').addEventListener('focusin', e => { if (e.target.classList?.contains('rich')) oocTarget = e.target; });
 $$('#v-ooc [data-ins]').forEach(b => b.addEventListener('click', () => {
-  insertAt($('#ooc-body'), b.dataset.ins === 'pc' ? ($('#ooc-pc').value.trim() || 'PC') : ($('#ooc-npc').value.trim() || 'NPC'));
+  const ta = oocTarget && oocTarget.isConnected ? oocTarget : $('#ooc-body');
+  insertAt(ta, b.dataset.ins === 'pc' ? ($('#ooc-pc').value.trim() || 'PC') : ($('#ooc-npc').value.trim() || 'NPC'));
 }));
 $('#ooc-swap').addEventListener('click', () => {
-  const ta = $('#ooc-body'), pc = $('#ooc-pc').value.trim() || 'PC', npc = $('#ooc-npc').value.trim() || 'NPC';
-  if (!swapRich(ta, pc, npc, true)) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`);
+  const pc = $('#ooc-pc').value.trim() || 'PC', npc = $('#ooc-npc').value.trim() || 'NPC';
+  let any = false; oocRiches().forEach(r => { if (swapRich(r, pc, npc, true)) any = true; });
+  if (!any) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`);
   toast(`${pc} ⇄ ${npc} 바꿨어요`);
 });
-$('#ooc-copy').addEventListener('click', () => copy($('#ooc-body').value));
+$('#ooc-copy').addEventListener('click', () => $$('#o-list .block').length ? copy(oocAllText(), '전체 복사했어요') : copy($('#ooc-body').value));
+const oocChanged = () => $('#v-ooc').dispatchEvent(new Event('input'));
+$('#ooc-add').addEventListener('click', () => {
+  const b = makeOocBlock(); $('#o-list').append(b); refreshOoc(); oocChanged();
+  b.querySelector('.rich').focus(); b.scrollIntoView({ block:'nearest', behavior:'smooth' });
+});
+$('#o-list').addEventListener('click', e => {
+  const blk = e.target.closest('.block'); if (!blk) return;
+  if (e.target.closest('.copyb')) return copy(blk.querySelector('.rich').value, `${blk.querySelector('.bname').value || '블록'} 복사했어요`);
+  const act = e.target.closest('[data-act]')?.dataset.act; if (!act) return;
+  if (act === 'del'){ if (blk.querySelector('.rich').value.trim() && !confirm('이 블록을 지울까요?')) return; blk.remove(); }
+  if (act === 'up' && blk.previousElementSibling) blk.previousElementSibling.before(blk);
+  if (act === 'down' && blk.nextElementSibling) blk.nextElementSibling.after(blk);
+  refreshOoc(); oocChanged();
+});
 ['#ooc-pc', '#ooc-npc'].forEach(s => $(s).addEventListener('input', syncLabels));
 
 // Prompt
@@ -1834,10 +1898,20 @@ function renderDoc(d, ctx = {}){
   if (d.t === 'ooc'){
     const pc = d.pc || 'PC', npc = d.npc || 'NPC';
     const body = bodyEl(d.body, d.rich);
+    const more = (d.more || []).filter(m => (m.body || '').trim());
+    const mBodies = more.map(m => { const p = el('pre', { class:'doc-block-body' }); fillRich(p, m.body, m.rich); return p; });
+    const all = [body, ...mBodies];
     card.append(el('div', { class:'doc-tools' },
-      el('button', { type:'button', class:'doc-btn mono fill', text:`${pc} ⇄ ${npc}`, onclick(){ if (!swapRich(body, pc, npc)) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`); toast(`${pc} ⇄ ${npc} 바꿨어요`); } }),
+      el('button', { type:'button', class:'doc-btn mono fill', text:`${pc} ⇄ ${npc}`, onclick(){ let any = false; all.forEach(p => { if (swapRich(p, pc, npc)) any = true; }); if (!any) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`); toast(`${pc} ⇄ ${npc} 바꿨어요`); } }),
       el('span', { class:'sp' }),
-      el('button', { type:'button', class:'doc-btn', text:'복사하기', onclick(){ copy(richText(body)); } })), body);
+      el('button', { type:'button', class:'doc-btn', text: more.length ? '전체 복사' : '복사하기', onclick(){ more.length ? copy(all.map(p => richText(p).trim()).filter(Boolean).join('\n\n'), '전체 복사했어요') : copy(richText(body)); } })), body);
+    if (more.length) card.append(el('div', { class:'doc-blocks doc-more' }, more.map((m, i) => el('section', { class:'doc-block', 'data-k':'next' },
+      el('div', { class:'doc-block-head' },
+        el('span', { class:'doc-badge', text: String(i + 2) }),
+        el('span', { class:'doc-block-name', text: m.name || '후속 OOC ' + (i + 1) }),
+        el('span', { class:'sp' }), el('span', { class:'doc-cnt', text: count(m.body) }),
+        el('button', { type:'button', class:'doc-btn', text:'복사', onclick(){ copy(richText(mBodies[i]), `${m.name || '블록'} 복사했어요`); } })),
+      mBodies[i]))));
   } else if (d.t === 'memo'){
     card.append(bodyEl(d.body, d.rich));
   } else {
