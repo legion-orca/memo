@@ -490,7 +490,7 @@ body.share-full .share-page{min-height:100vh}
 .doc-sign svg{width:16px;height:16px}
 .doc-after{position:relative;z-index:2;width:min(var(--s-width),100%);display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px}
 .doc-ro{font-size:12px;color:var(--s-onbg-muted);display:flex;align-items:center;gap:6px}
-.doc-ro::before{content:'READ ONLY';font:600 9.5px/1 var(--mono);letter-spacing:.14em;border:1px solid currentColor;border-radius:4px;padding:2px 6px;opacity:.85}
+.doc-ro::before{content:var(--t-ro-badge,'READ ONLY');font:600 9.5px/1 var(--mono);letter-spacing:.14em;border:1px solid currentColor;border-radius:4px;padding:2px 6px;opacity:.85}
 .doc-edit{display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border:1px solid var(--s-edit);border-radius:999px;background:transparent;color:var(--s-edit);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,color .15s}
 .doc-edit::before{content:'';width:14px;height:14px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20h4L19 9l-4-4L4 16z'/%3E%3Cpath d='M13.5 6.5l4 4'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20h4L19 9l-4-4L4 16z'/%3E%3Cpath d='M13.5 6.5l4 4'/%3E%3C/svg%3E") center/contain no-repeat}
 .doc-edit:hover,.doc-edit.on{background:var(--s-edit);color:var(--s-edit-ink)}
@@ -524,7 +524,7 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
 .lay-marine .doc{padding:0;border:1px solid #dde7f1;border-radius:14px;box-shadow:0 22px 48px -28px rgba(11,53,102,.45)}
 .lay-marine .doc-mark{display:flex;align-items:center;gap:6px;left:22px;top:-14px;height:28px;padding:0 12px 0 6px;border-radius:999px;background:var(--s-deep);color:#fff;font:600 10px/1 var(--mono);letter-spacing:.14em;box-shadow:0 6px 14px -6px rgba(11,53,102,.6)}
 .lay-marine .doc-mark::before{content:'';width:18px;height:18px;border-radius:50%;background:#fff var(--anchor-svg) center/16px no-repeat}
-.lay-marine .doc-mark::after{content:'FEARLESS LOG'}
+.lay-marine .doc-mark::after{content:var(--t-badge,'FEARLESS LOG')}
 .lay-marine .doc-deco i:nth-child(1){display:block;right:-1px;top:24px;width:6px;height:46px;border-radius:3px 0 0 3px;background:var(--s-accent)}
 .lay-marine .doc-head{padding:30px 26px 14px;border-bottom:1px solid #edf2f7}
 .lay-marine .doc-kicker .doc-tag{display:none}
@@ -602,7 +602,7 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
 .lay-logbook .doc-deco i:nth-child(1){display:block;left:12px;top:12%;bottom:12%;width:12px;background:radial-gradient(circle,#e3eaf2 5.5px,transparent 6px) center/12px 33.33% repeat-y}
 .lay-logbook .doc-deco i:nth-child(2){display:block;right:34px;top:-6px;width:22px;height:70px;background:var(--s-accent);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%)}
 .lay-logbook .doc-mark{display:grid;place-content:center;right:70px;top:18px;width:78px;height:78px;border-radius:50%;border:2px solid rgba(26,99,176,.55);color:rgba(26,99,176,.8);text-align:center;font:600 8.5px/1.5 var(--mono);letter-spacing:.12em;transform:rotate(-12deg)}
-.lay-logbook .doc-mark::before{content:'FEARLESS\A RECEIVED';white-space:pre;font-size:8.5px}
+.lay-logbook .doc-mark::before{content:var(--t-stamp,'FEARLESS\A RECEIVED');white-space:pre;font-size:8.5px}
 .lay-logbook .doc-mark::after{content:attr(data-date)}
 .lay-logbook .doc-head{padding:0 120px 12px 0;border-bottom:2px solid var(--s-deep)}
 .lay-logbook .doc-kicker .doc-tag{display:none}
@@ -714,6 +714,12 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
 .bg-url{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:8px 10px;font-size:12.5px;outline:0;color:var(--ink)}
 .bg-url:focus{border-color:var(--accent)}
 .head-box[hidden]{display:none}
+.tx-help{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.tx-help summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--accent);width:max-content}
+.tx-rows{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto;margin-top:6px}
+.tx-row{display:flex;gap:8px;align-items:baseline;text-align:left;border:0;background:none;padding:5px 6px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--muted)}
+.tx-row:hover{background:var(--soft);color:var(--ink)}
+.tx-row code{font-family:var(--mono);font-size:11px;color:var(--accent);flex:none;min-width:112px}
 .photo-prev{height:58px;border-radius:9px;border:1px solid var(--line);background:#eef4fa center/cover no-repeat}
 .css-toggle{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;width:max-content}
 .css-toggle input{width:16px;height:16px;accent-color:var(--accent);margin:0}
@@ -760,11 +766,11 @@ details.fold:not([open]):hover{border-color:var(--sky)}
 </head>
 <body>
 
-<div class="sysbar"><div class="in"><span class="live">FEARLESS MARINE · OUR VOICE</span><span>48°52′S 123°23′W</span></div></div>
+<div class="sysbar"><div class="in"><span class="live"><span class="tx" data-k="site-bar" data-d="FEARLESS MARINE · OUR VOICE"></span></span><span>48°52′S 123°23′W</span></div></div>
 <header class="top">
   <a href="#/" class="brand">
     <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><circle cx="16" cy="16" r="15.5" fill="#0b3566"/><circle cx="16" cy="16" r="12.5" fill="none" stroke="#6fb2ee" stroke-width=".8"/><g fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="9.2" r="2"/><path d="M16 11.2V24.5M12 14.6h8M9.2 19.2c.9 3.3 3.7 5.3 6.8 5.3s5.9-2 6.8-5.3"/><path d="M9.2 19.2l-1.4 1.6M22.8 19.2l1.4 1.6"/></g></svg>
-    <span><small>FEARLESS MARINE NOTE DESK</small><b>해양지부 신문고</b></span>
+    <span><small><span class="tx" data-k="site-sub" data-d="FEARLESS MARINE NOTE DESK"></span></small><b><span class="tx" data-k="site-name" data-d="해양지부 신문고"></span></b></span>
   </a>
   <nav id="crumb"></nav>
 </header>
@@ -891,7 +897,7 @@ details.fold:not([open]):hover{border-color:var(--sky)}
     <svg viewBox="0 0 2880 120" preserveAspectRatio="none"><path fill="#0b3566" d="M0 70 Q180 54 360 70 T720 70 T1080 70 T1440 70 T1800 70 T2160 70 T2520 70 T2880 70 V120 H0Z"/></svg>
   </div>
   <div class="sign">
-    <p>해양지부 신문고 · FEARLESS MARINE</p>
+    <p><span class="tx" data-k="site-foot" data-d="해양지부 신문고 · FEARLESS MARINE"></span></p>
     <div class="credit"><span class="lbl">MADE BY</span><b>@POINTLE0</b><i>·</i><span>Sol2</span></div>
   </div>
 </footer>
@@ -1383,7 +1389,19 @@ function buildShare(t){
     el('div', { class:'css-row' }, tplSel, delBtn),
     el('div', { class:'css-row' }, tplName, el('button', { type:'button', class:'chip fill', text:'프리셋 저장', onclick: saveTpl })),
     cssIn,
-    el('p', { class:'hint', text:'적어 두면 고른 레이아웃 위에 덧입혀지고, 비워 두면 적용되지 않아요. 프리셋은 이 브라우저에 저장돼요. 이름표: .share-page · .share-deco i · .doc · .doc-mark · .doc-deco i · .doc-title · .doc-meta · .doc-tools · .doc-body · .doc-block · .doc-sign · .doc-after  /  변수: --s-bg · --s-head-bg · --s-card · --s-text · --s-accent · --s-radius · --s-width · --s-title' }));
+    el('p', { class:'hint', text:'적어 두면 고른 레이아웃 위에 덧입혀지고, 비워 두면 적용되지 않아요. 프리셋은 이 브라우저에 저장돼요. 이름표: .share-page · .share-deco i · .doc · .doc-mark · .doc-deco i · .doc-title · .doc-meta · .doc-tools · .doc-body · .doc-block · .doc-sign · .doc-after  /  글자: --t-이름 (아래 목록)  /  변수: --s-bg · --s-head-bg · --s-card · --s-text · --s-accent · --s-radius · --s-width · --s-title' }));
+  // 글자 바꾸기 변수 목록 (눌러서 CSS 칸에 넣기)
+  const txList = el('details', { class:'tx-help' },
+    el('summary', { text:'글자 바꾸기 변수 보기' }),
+    el('p', { class:'hint', text:'이름이나 안내 문구를 바꾸고 싶으면 아래 줄을 눌러 CSS 칸에 넣고 따옴표 안을 고치세요. 빈 따옴표("")로 두면 글자가 사라져요.' }),
+    el('div', { class:'tx-rows' }, [...TX, ...TX_PSEUDO].map(([k, d, label]) => el('button', { type:'button', class:'tx-row', title:'눌러서 CSS 칸에 넣기', onclick(){
+      const line = `  --t-${k}: "${d}";`;
+      let v = cssIn.value;
+      if (/:root\s*\{[^}]*\}/.test(v)) v = v.replace(/:root\s*\{([^}]*)\}/, (m, body) => body.includes(`--t-${k}:`) ? m : `:root {${body.replace(/\s*$/, '')}\n${line}\n}`);
+      else v = `:root {\n${line}\n}\n` + v;
+      cssIn.value = v; store.set('nd:css2', v); updCssSum(); markStale(t); toast(`--t-${k} 를 넣었어요`);
+    } }, el('code', { text:'--t-' + k }), el('span', { text: label })))));
+  cssBox.append(txList);
   // 접는 칸: 공유 화면(레이아웃·배경) / CSS
   const viewSum = el('span', { class:'fold-sum' }), cssSum = el('span', { class:'fold-sum' });
   const BG_NAME = { color:'단색', sea:'바다 사진', url:'사진', img:'사진' };
@@ -1496,6 +1514,27 @@ function buildShare(t){
   setEdit(null);
 }
 const editState = {};
+
+/* ---------- 글자 변수: CSS에서 --t-이름 으로 바꾸거나 지울 수 있음 ---------- */
+const TX = [
+  ['site-name','해양지부 신문고','사이트 이름 (위 로고 옆)'], ['site-sub','FEARLESS MARINE NOTE DESK','로고 위 작은 글씨'],
+  ['site-bar','FEARLESS MARINE · OUR VOICE','맨 위 상태 바'], ['site-foot','해양지부 신문고 · FEARLESS MARINE','맨 아래 파도 띠'],
+  ['brand','해양지부 신문고','공유 화면 왼쪽 위 이름'], ['brand-sub','FEARLESS MARINE','그 위 작은 글씨'],
+  ['home','← 처음으로','처음으로 링크'], ['foot','해양지부 신문고 · FEARLESS MARINE','공유 화면 맨 아래'],
+  ['form-ooc','MN-01 · OOC 기록 문서','OOC 서식 줄'], ['form-memo','MN-02 · 신규 기록 문서','신규 기록 서식 줄'], ['form-prompt','MN-03 · 프롬프트 기록 문서','프롬프트 서식 줄'],
+  ['date','DATE','날짜 칸 이름'], ['from','FROM','발신 칸 이름'], ['from-v','해양지부 신문고','발신 칸 내용'],
+  ['station','STATION','기지 칸 이름'], ['station-v','POINT NEMO','기지 칸 내용'],
+  ['sign','해양지부 신문고 발행','카드 아래 서명'], ['ro','공유된 기록은 읽기 전용이에요','읽기 전용 안내'],
+  ['edit','작성자 수정','작성자 수정 버튼'], ['made','본 문서는 해양지부 신문고에서 발행되었습니다','맨 아래 안내'],
+  ['made-btn','새 기록 문서 작성하기 →','맨 아래 버튼'],
+  ['lock-kicker','LOCKED RECORD','잠금 화면 윗줄'], ['lock-title','비밀번호가 걸린 기록이에요','잠금 화면 제목'], ['lock-desc','받은 비밀번호를 입력해 주세요.','잠금 화면 안내'],
+];
+const TX_PSEUDO = [['ro-badge','READ ONLY','읽기 전용 꼬리표'], ['badge','FEARLESS LOG','해양지부 카드 배지'], ['stamp','FEARLESS\\A RECEIVED','항해일지 도장 (\\A = 줄바꿈)']];
+const TXD = Object.fromEntries(TX.map(x => [x[0], x[1]]));
+function tx(key, def){ return el('span', { class:'tx', 'data-k': key, 'data-d': def ?? TXD[key] ?? '' }); }
+document.head.append(el('style', { id:'tx-rules', text:
+  '.tx::before{content:attr(data-d)}\n' + [...TX.map(x => x[0]), 'form-ooc','form-memo','form-prompt']
+    .map(k => `.tx[data-k="${k}"]::before{content:var(--t-${k},attr(data-d))}`).join('\n') }));
 
 /* 공유 화면 레이아웃 · 배경 */
 const LAYOUTS = [['marine','해양지부',''],['plain','심플','p'],['official','공문 카드','o'],['transmit','수신 전문','t'],['logbook','항해일지','l'],['horizon','수평선','h'],['sheet','여백 편지지','s']];
@@ -1693,17 +1732,17 @@ function sharePage(bg, hd){
   page.append(
     el('div', { class:'share-deco' }, el('i'), el('i'), el('i')),
     el('div', { class:'share-top' },
-      el('a', { class:'share-brand', href:'#/' }, svgAnchor(), el('span', {}, el('small', { text:'FEARLESS MARINE' }), el('b', { text:'해양지부 신문고' }))),
-      el('a', { class:'share-home', href:'#/', text:'← 처음으로' })),
+      el('a', { class:'share-brand', href:'#/' }, svgAnchor(), el('span', {}, el('small', {}, tx('brand-sub')), el('b', {}, tx('brand')))),
+      el('a', { class:'share-home', href:'#/' }, tx('home'))),
     center,
-    el('div', { class:'share-foot', text:'해양지부 신문고 · FEARLESS MARINE' }));
+    el('div', { class:'share-foot' }, tx('foot')));
   vb().replaceChildren(page);
   return center;
 }
 function docShell(kind, kicker, title){
   return el('article', { class:'doc ' + kind },
     el('span', { class:'doc-mark' }), el('div', { class:'doc-deco' }, el('i'), el('i'), el('i')),
-    el('header', { class:'doc-head' }, el('div', { class:'doc-kicker', text:kicker }), el('h1', { class:'doc-title', text:title })));
+    el('header', { class:'doc-head' }, el('div', { class:'doc-kicker' }, kicker), el('h1', { class:'doc-title' }, title)));
 }
 function showMsg(kicker, title, text, withHome = true){
   const card = docShell('is-msg', kicker, title);
@@ -1735,8 +1774,8 @@ function lockCard(bytes, id){
   const input = el('input', { class:'lock-field', type:'password', placeholder:'비밀번호', autocomplete:'off' });
   const err = el('p', { class:'lock-err' });
   const btn = el('button', { class:'lock-go', type:'submit', text:'열기' });
-  const card = docShell('is-lock', 'LOCKED RECORD', '비밀번호가 걸린 기록이에요');
-  card.append(el('p', { class:'lock-desc', text:'받은 비밀번호를 입력해 주세요.' }),
+  const card = docShell('is-lock', tx('lock-kicker'), tx('lock-title'));
+  card.append(el('p', { class:'lock-desc' }, tx('lock-desc')),
     el('form', { async onsubmit(e){
       e.preventDefault(); if (!input.value) return;
       btn.disabled = true; btn.textContent = '여는 중…'; err.textContent = '';
@@ -1752,8 +1791,8 @@ function lockCard(bytes, id){
 const HOME_URL = 'https://legion-orca.github.io/memo/#/';
 function homeLink(){
   return el('div', { class:'made-with' },
-    el('p', { class:'mw-sub', text:'본 문서는 해양지부 신문고에서 발행되었습니다' }),
-    el('a', { class:'mw-go', href: HOME_URL, text:'새 기록 문서 작성하기 →' }));
+    el('p', { class:'mw-sub' }, tx('made')),
+    el('a', { class:'mw-go', href: HOME_URL }, tx('made-btn')));
 }
 function renderDoc(d, ctx = {}){
   const lay = layoutOf(d);
@@ -1762,14 +1801,14 @@ function renderDoc(d, ctx = {}){
   const day = d.at ? new Date(d.at) : null;
   const p2 = n => String(n).padStart(2, '0');
   document.title = (d.title || TYPES[d.t]) + (lay === 'marine' ? ' · 해양지부 신문고' : '');
-  const mi = (k, v) => el('div', {}, el('dt', { text:k }), el('dd', { text:v }));
+  const mi = (k, label, v) => el('div', { 'data-meta':k }, el('dt', {}, tx(k, label)), el('dd', {}, v));
   const card = el('article', { class:'doc', 'data-t': d.t },
     el('span', { class:'doc-mark', 'data-date': day ? `${p2(day.getMonth() + 1)} · ${p2(day.getDate())}` : '' }),
     el('div', { class:'doc-deco' }, el('i'), el('i'), el('i')),
     el('header', { class:'doc-head' },
-      el('div', { class:'doc-kicker' }, el('span', { class:'doc-tag', text: TAGS[d.t] }), el('span', { class:'doc-form', text: `${FORM_NO[d.t]} · ${TYPES[d.t]}` })),
+      el('div', { class:'doc-kicker' }, el('span', { class:'doc-tag', text: TAGS[d.t] }), el('span', { class:'doc-form' }, tx('form-' + d.t, `${FORM_NO[d.t]} · ${TYPES[d.t]}`))),
       el('h1', { class:'doc-title', text: d.title || '제목 없음' })),
-    el('dl', { class:'doc-meta' }, mi('DATE', day ? day.toLocaleDateString('ko-KR') : '—'), mi('FROM', '해양지부 신문고'), mi('STATION', 'POINT NEMO')));
+    el('dl', { class:'doc-meta' }, mi('date', 'DATE', day ? day.toLocaleDateString('ko-KR') : '—'), mi('from', 'FROM', tx('from-v')), mi('station', 'STATION', tx('station-v'))));
   const bodyEl = (txt, html) => { const p = el('pre', { class:'doc-body' }); fillRich(p, txt, html); return p; };
   if (d.t === 'ooc'){
     const pc = d.pc || 'PC', npc = d.npc || 'NPC';
@@ -1796,11 +1835,11 @@ function renderDoc(d, ctx = {}){
         el('button', { type:'button', class:'doc-btn', text:'복사', onclick(){ copy(b.body, `${b.name || '블록'} 복사했어요`); } })),
       (() => { const p = el('pre', { class:'doc-block-body' }); fillRich(p, b.body, b.rich); return p; })()))));
   }
-  card.append(el('div', { class:'doc-sign' }, svgAnchor(), '해양지부 신문고 발행'));
+  card.append(el('div', { class:'doc-sign' }, svgAnchor(), tx('sign')));
   // 공유받은 사람은 읽기·복사만 가능
   const after = el('div', { class:'doc-after' },
-    el('span', { class:'doc-ro', text:'공유된 기록은 읽기 전용이에요' }),
-    ctx.id ? el('button', { type:'button', class:'doc-edit', text:'작성자 수정', onclick(){ this.classList.toggle('on', toggleEditForm()); } }) : null);
+    el('span', { class:'doc-ro' }, tx('ro')),
+    ctx.id ? el('button', { type:'button', class:'doc-edit', onclick(){ this.classList.toggle('on', toggleEditForm()); } }, tx('edit')) : null);
   center.append(card, after, homeLink());
 
   // 작성자 수정: 편집 접속 번호 확인 후 편집기로 불러옴
@@ -2008,7 +2047,7 @@ function render(h){
     // 잠금 화면 등 내용을 열기 전에도 고른 레이아웃의 바탕을 먼저 깔아 둠
     applyShareStyle(LAY_FLAG[flag] || 'marine');
     $('#v-view').classList.add('on'); document.title = '공유된 기록';
-    crumb.append(el('a', { href:'#/', text:'← 처음으로' }));
+    crumb.append(el('a', { href:'#/' }, tx('home')));
     h.startsWith('#/s/') ? showStored(code) : showView(code);
   } else {
     const t = h.slice(2);
