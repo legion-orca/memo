@@ -63,13 +63,16 @@ main{max-width:880px;width:100%;margin:0 auto;padding:12px 20px 40px;flex:1}
 .card{background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:12px;padding:20px 20px 18px;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
 .card:hover{transform:translateY(-3px);box-shadow:0 18px 34px -18px rgba(11,53,102,.4)}
 .card .no{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);display:flex;justify-content:space-between}
-.card .no i{font-style:normal;color:var(--muted);font-family:Pretendard,sans-serif;letter-spacing:0;font-size:11.5px}
+.card .no i{font-style:normal;color:#9aabbd}
 .card h2{font-size:19px;margin:8px 0 6px;letter-spacing:-.01em;color:var(--deep)}
 .card,.notice,.hero{word-break:keep-all}
-.card .desc{margin:0 0 12px;font-size:13px;line-height:1.6;color:var(--ink);padding-bottom:12px;border-bottom:1px dashed var(--line)}
+.card .desc{margin:0 0 14px;font-size:13px;line-height:1.6;color:var(--muted)}
 .card ul{margin:0 0 14px;padding:0;list-style:none;color:var(--muted);font-size:13px}
-.card .meta{margin:auto 0 12px;display:flex;gap:6px;flex-wrap:wrap}
-.card .meta span{font-size:11px;font-weight:600;color:var(--accent);background:var(--soft);border-radius:999px;padding:2px 9px}
+.card .spec{margin:0 0 16px;font-size:12.5px;border-top:1px solid #edf2f7}
+.card .spec div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #edf2f7}
+.card .spec dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:#8a9bb0}
+.card .spec dd{margin:0;color:var(--ink);font-weight:500}
+.card .btn{margin-top:auto}
 .card ul li{margin:3px 0;padding-left:14px;position:relative}
 .card ul li::before{content:'';position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;border:1.5px solid var(--accent)}
 .card .btn{width:100%}
@@ -186,17 +189,9 @@ main{max-width:880px;width:100%;margin:0 auto;padding:12px 20px 40px;flex:1}
 .pv-frame{width:100%;height:100%;border:1px solid var(--line);border-radius:10px;background:#fff;transition:width .25s}
 .pv-stage.mobile .pv-frame{width:390px;max-width:100%;border-radius:22px;border:6px solid #1b2a3c}
 /* 미리보기 안에서는 이동 버튼·작성자 수정 숨김 */
-body.is-preview #crumb,body.is-preview .view-actions .btn,body.is-preview .edit-btn,body.is-preview .edit-form{display:none!important}
 @media (max-width:560px){.pv{padding:0}.pv-panel{height:100%;border-radius:0}.pv-head .seg{display:none}.pv-stage{padding:0}.pv-stage .pv-frame,.pv-stage.mobile .pv-frame{width:100%;border:0;border-radius:0}}
 .admin-maker{max-width:520px}
 .admin-maker .result{text-align:left}
-.made-with{display:none}
-:where(body.share-plain) .made-with{display:flex;flex-direction:column;align-items:center;gap:10px;margin:40px auto 0;text-align:center}
-.made-with .mw-sub{margin:0;font-size:12px;color:var(--muted)}
-.made-with .mw-go{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:999px;border:1px solid var(--accent);background:var(--accent);color:var(--paper);font-size:13.5px;font-weight:700;text-decoration:none;transition:transform .15s,opacity .15s}
-.made-with .mw-go:hover{transform:translateY(-1px);opacity:.88}
-.lock .made-with{margin-top:22px}
-body.is-preview .made-with{pointer-events:none}
 .style-pick{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:2px 0 14px}
 .style-pick .lab{font-size:12.5px;color:var(--muted)}
 .seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
@@ -216,30 +211,6 @@ body.is-preview .made-with{pointer-events:none}
 .css-box .hint{margin-top:8px}
 
 /* 공유 화면: 심플 (CSS 스타일도 이 바탕 위에 적용) */
-body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4f4f4;--accent:#444;--deep:#222;--muted:#8a8a8a;--ink:#222;--rule:transparent;--bg:#fafafa}
-:where(body.share-plain) .sysbar,:where(body.share-plain) .top,:where(body.share-plain) .sea,:where(body.share-plain) #fab,:where(body.share-plain) #board{display:none!important}
-:where(body.share-plain) main{max-width:760px;padding-top:44px}
-:where(body.share-plain) .sheet{border:1px solid #e5e5e5;border-top:1px solid #e5e5e5;box-shadow:none;border-radius:10px}
-:where(body.share-plain) .sheet-head,:where(body.share-plain) .toolbar{background:#fff}
-:where(body.share-plain) .tag{background:#f2f2f2;color:#666}
-:where(body.share-plain) .doc-title{color:#141414}
-:where(body.share-plain) .doc-date,:where(body.share-plain) .cnt{color:#999}
-:where(body.share-plain) .paper{background-image:none;color:#222}
-:where(body.share-plain) .chip{background:#fff;border-color:#e2e2e2;color:#333}
-:where(body.share-plain) .chip:hover{border-color:#999;color:#111}
-:where(body.share-plain) .chip.fill{background:#f5f5f5}
-:where(body.share-plain) .badge{background:#f4f4f4;border-color:#e4e4e4;color:#666}
-:where(body.share-plain) .bname{color:#222}
-:where(body.share-plain) .pill{background:#666}
-:where(body.share-plain) .block[data-k="neg"] .badge{background:#fbefef;border-color:#f0d6d6;color:#b04a4a}
-:where(body.share-plain) .block[data-k="neg"] .bname{color:#b04a4a}
-:where(body.share-plain) .view-actions .btn{display:none}
-:where(body.share-plain) .view-actions .ro{color:#999}
-:where(body.share-plain) .view-actions .ro::before{color:#888;border-color:#ddd}
-:where(body.share-plain) .lock .ico{color:#999}
-:where(body.share-plain) .btn.primary{background:#222;border-color:#222;color:#fff}
-:where(body.share-plain) .inwrap{background:#fafafa;border-color:#e2e2e2}
-:where(body.share-plain) #toast{background:#222}
 .share-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
 .pw{flex:1;min-width:220px;display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--muted)}
 .inwrap{display:flex;border:1px solid var(--line);border-radius:10px;background:var(--bg);overflow:hidden;transition:border-color .15s}
@@ -309,7 +280,7 @@ body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4
   .card .no i{font-size:10.5px}
   .card h2{grid-column:1;font-size:16.5px;margin:4px 0 2px}
   .card .desc{grid-column:1;margin:0;padding:0;border:0;font-size:12.5px;color:var(--muted);line-height:1.55}
-  .card ul,.card .meta{display:none}
+  .card ul,.card .spec{display:none}
   .card .btn{grid-column:2;grid-row:2/4;width:42px;height:42px;padding:0;border-radius:50%;font-size:0;gap:0}
   .card .btn::after{content:'→';font-size:18px;line-height:1}
 
@@ -385,6 +356,322 @@ body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4
   #fab{right:14px;bottom:14px;width:50px;height:50px;padding:0;justify-content:center}
   #fab span{display:none}
 }
+/* ═══ 작성 화면 · 함교 일지 (본문 + 오른쪽 계기판) ═══ */
+main:has(> #v-ooc.on, > #v-memo.on, > #v-prompt.on){max-width:1120px}
+body:has(#v-ooc.on, #v-memo.on, #v-prompt.on) .top{max-width:1120px}
+.desk{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.desk .sheet{border-radius:14px}
+.desk .sheet-head{flex-direction:column;align-items:stretch;gap:2px;padding:16px 22px 12px}
+.sh-k{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--accent)}
+.sh-k .tag{font-size:10px;padding:2px 7px}
+.desk .title{font-size:21px;padding:4px 0 0}
+.desk .paper{background-image:none;line-height:1.9;padding:18px 22px 24px;font-size:15px}
+#v-ooc .paper,#v-memo .paper{min-height:420px}
+.desk .block .paper{padding:6px 22px 18px 50px;min-height:130px}
+.desk .block-head{padding:14px 14px 4px 18px}
+.side{display:flex;flex-direction:column;gap:12px;position:sticky;top:12px}
+.panel,.side .share{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px 16px;margin:0}
+.panel h5,.side .share::before{display:block;margin:0 0 10px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--accent);font-weight:600}
+.side .share::before{content:'TRANSMIT · 발행';position:static;background:none;padding:0}
+.read{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.read > div{background:var(--bg);border-radius:10px;padding:8px 10px;min-width:0}
+.read span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:#8ea3b8}
+.read b{font-family:var(--mono);font-size:17px;color:var(--deep);font-weight:600}
+.read b em{font-style:normal}
+.read b small{font-size:11px;color:var(--muted);font-weight:400;margin-left:2px}
+.read .wide{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center}
+.read .wide b{font-family:Pretendard,sans-serif;font-size:12.5px;color:var(--accent)}
+.read .wide b.saving{color:var(--muted)}
+.wide-btn{width:100%;margin-top:10px}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.pf{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;color:var(--muted)}
+.pf input{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:7px 10px;font-family:var(--mono);font-size:13px;outline:0;color:var(--ink)}
+.pf input:focus{border-color:var(--accent)}
+/* 발행 칸을 좁은 계기판에 맞게 세로로 */
+.side .style-pick{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin:0 0 12px}
+.side .style-pick .lab{font-size:12px;font-weight:600}
+.side .style-pick .seg{display:flex}
+.side .style-pick .seg button{flex:1;padding:7px 4px;white-space:nowrap}
+.side .preview-btn{margin:0;width:100%;padding:7px 12px}
+.side .inwrap{width:100%}
+.side .inwrap input{width:0}
+.side .share-row{flex-direction:column;align-items:stretch;gap:10px}
+.side .pw{min-width:0;font-size:12px;font-weight:600}
+.side .share-row .btn.primary{width:100%;padding:11px 16px}
+.side .linkrow .link{flex-basis:100%;min-width:0}
+.side .linkrow .btn{flex:1;padding:8px 10px;font-size:13px}
+.side .css-row{flex-wrap:wrap}
+.side .css-tpl,.side .css-name{min-width:0;flex:1}
+.side .css-row .chip{flex:none}
+.side .css-in{min-height:140px;font-size:12px}
+.side .edit-bar{font-size:12px}
+@media (max-width:900px){
+  .desk{grid-template-columns:minmax(0,1fr)}
+  .side{position:static}
+  .side .share-row .btn.primary{width:100%}
+}
+@media (max-width:560px){
+  .desk .sheet-head{padding:13px 14px 10px}
+  .desk .title{font-size:18px}
+  .desk .paper{padding:14px 16px 20px;font-size:14.5px}
+  #v-ooc .paper,#v-memo .paper{min-height:300px}
+  .desk .block .paper{padding-left:16px}
+  .panel,.side .share{padding:13px 14px}
+}
+/* 메인 카드: 제목·설명·사양표·버튼 줄을 카드끼리 맞춤 (subgrid) */
+@media (min-width:561px){
+  .card{display:grid;grid-row:span 5;grid-template-rows:subgrid;row-gap:0}
+  .card .btn{align-self:end;margin-top:0}
+}
+/* ════════════════════════════════════════════════
+   공유 화면 — 레이아웃 공통 이름표
+   CSS로 덮어쓸 때는 아래 이름표와 --s-* 변수를 쓰면 돼요
+   ════════════════════════════════════════════════ */
+:root{
+  --anchor-svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15.5' fill='%230b3566'/%3E%3Ccircle cx='16' cy='16' r='12.5' fill='none' stroke='%236fb2ee' stroke-width='.8'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='16' cy='9.2' r='2'/%3E%3Cpath d='M16 11.2V24.5M12 14.6h8M9.2 19.2c.9 3.3 3.7 5.3 6.8 5.3s5.9-2 6.8-5.3'/%3E%3Cpath d='M9.2 19.2l-1.4 1.6M22.8 19.2l1.4 1.6'/%3E%3C/g%3E%3C/svg%3E");
+  --rose-svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%230b3566'%3E%3Ccircle cx='100' cy='100' r='96'/%3E%3Ccircle cx='100' cy='100' r='80'/%3E%3Ccircle cx='100' cy='100' r='40'/%3E%3Cpath d='M100 4v192M4 100h192M32 32l136 136M168 32L32 168'/%3E%3C/g%3E%3Cg fill='%230b3566'%3E%3Cpath d='M100 10l10 90-10 10-10-10z'/%3E%3Cpath d='M100 190l-10-90 10-10 10 10z' opacity='.5'/%3E%3Cpath d='M10 100l90-10 10 10-10 10z' opacity='.5'/%3E%3Cpath d='M190 100l-90 10-10-10 10-10z' opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+body.share-full .sysbar,body.share-full .top,body.share-full .sea,body.share-full #fab,body.share-full #board{display:none!important}
+body.share-full main{max-width:none;padding:0}
+body.share-bg-on{background:var(--page-bg)!important;background-attachment:fixed!important}
+body.share-bg-dark .top .brand b,body.share-bg-dark #crumb a{color:#fff}
+body.share-bg-dark .top .brand small{color:#bfe0ff}
+
+.share-page{
+  --s-bg:transparent; --s-card:#fff; --s-text:var(--ink); --s-muted:var(--muted); --s-accent:var(--accent); --s-deep:var(--deep);
+  --s-line:var(--line); --s-soft:var(--soft); --s-radius:16px; --s-shadow:0 24px 60px -28px rgba(11,53,102,.45);
+  --s-width:640px; --s-title:24px; --s-onbg:var(--ink); --s-onbg-muted:var(--muted); --s-edit:var(--s-accent); --s-edit-ink:#fff;
+  position:relative;background:var(--s-bg);color:var(--s-text);overflow:hidden
+}
+body.share-full .share-page{min-height:100vh}
+.share-deco{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.share-deco i{position:absolute;display:block}
+.share-top{position:absolute;z-index:3;top:18px;left:22px;right:22px;display:flex;justify-content:space-between;align-items:center}
+.share-brand{display:flex;align-items:center;gap:9px;color:var(--s-onbg);text-decoration:none}
+.share-brand svg{width:26px;height:26px;flex:none}
+.share-brand small{display:block;font:600 9px/1.4 var(--mono);letter-spacing:.16em;color:var(--s-onbg-muted)}
+.share-brand b{display:block;font-size:13.5px;line-height:1.2}
+.share-home{font-size:12.5px;font-weight:600;color:var(--s-onbg-muted);text-decoration:none}
+.share-center{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:84px 24px 72px}
+.share-foot{position:absolute;z-index:3;left:0;right:0;bottom:16px;text-align:center;font:10px/1 var(--mono);letter-spacing:.18em;color:var(--s-onbg-muted)}
+
+.doc{position:relative;width:min(var(--s-width),100%);background:var(--s-card);border-radius:var(--s-radius);box-shadow:var(--s-shadow);padding:28px 30px 22px;color:var(--s-text)}
+.doc-mark{position:absolute;display:none}
+.doc-deco{position:absolute;inset:0;pointer-events:none;border-radius:inherit}
+.doc-deco i{position:absolute;display:none}
+.doc-head{position:relative;display:flex;flex-direction:column;gap:6px}
+.doc-kicker{display:flex;align-items:center;gap:8px;font:600 10.5px/1.4 var(--mono);letter-spacing:.16em;color:var(--s-accent)}
+.doc-tag{font-size:9.5px;letter-spacing:.14em;color:#fff;background:var(--s-deep);border-radius:4px;padding:2px 7px}
+.doc-title{margin:0;font-size:var(--s-title);line-height:1.3;letter-spacing:-.01em;word-break:break-word;color:var(--s-text)}
+.doc-meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin:12px 0 0;font-size:12px;color:var(--s-muted)}
+.doc-meta div{display:flex;gap:6px;align-items:baseline}
+.doc-meta dt{font:600 9.5px/1 var(--mono);letter-spacing:.14em;opacity:.75}
+.doc-meta dd{margin:0}
+.doc-tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.doc-tools .sp{flex:1}
+.doc-btn{border:1px solid var(--s-line);background:var(--s-card);color:var(--s-text);font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:999px;transition:border-color .15s,color .15s}
+.doc-btn:hover{border-color:var(--s-accent);color:var(--s-accent)}
+.doc-btn.mono{font-family:var(--mono);font-size:12px}
+.doc-btn.fill{background:var(--s-soft);border-color:transparent;color:var(--s-accent)}
+.doc-body{margin:12px 0 0;font:inherit;font-size:15.5px;line-height:1.95;min-height:96px;white-space:pre-wrap;word-break:break-word;color:var(--s-text)}
+.doc-blocks{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.doc-block{border:1px solid var(--s-line);border-radius:12px;overflow:hidden;background:var(--s-card)}
+.doc-block-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--s-line);background:var(--s-soft)}
+.doc-badge{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:600 11px/1 var(--mono);background:var(--s-card);color:var(--s-accent);border:1px solid var(--s-line);flex:none}
+.doc-block-name{font-weight:700;font-size:14px;color:var(--s-text)}
+.doc-pill{font:600 9.5px/1 var(--mono);letter-spacing:.12em;color:#fff;background:var(--s-accent);border-radius:4px;padding:3px 6px}
+.doc-block-head .sp{flex:1}
+.doc-cnt{font:11px/1 var(--mono);color:var(--s-muted)}
+.doc-block-body{margin:0;padding:12px 14px;font:inherit;font-size:14.5px;line-height:1.85;white-space:pre-wrap;word-break:break-word;color:var(--s-text)}
+.doc-block[data-k="neg"] .doc-badge,.doc-block[data-k="neg"] .doc-block-name{color:var(--danger)}
+.doc-sign{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:16px;font:10.5px/1 var(--mono);letter-spacing:.12em;color:var(--s-muted)}
+.doc-sign svg{width:16px;height:16px}
+.doc-after{position:relative;z-index:2;width:min(var(--s-width),100%);display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px}
+.doc-ro{font-size:12px;color:var(--s-onbg-muted);display:flex;align-items:center;gap:6px}
+.doc-ro::before{content:'READ ONLY';font:600 9.5px/1 var(--mono);letter-spacing:.14em;border:1px solid currentColor;border-radius:4px;padding:2px 6px;opacity:.85}
+.doc-edit{display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border:1px solid var(--s-edit);border-radius:999px;background:transparent;color:var(--s-edit);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,color .15s}
+.doc-edit::before{content:'';width:14px;height:14px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20h4L19 9l-4-4L4 16z'/%3E%3Cpath d='M13.5 6.5l4 4'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20h4L19 9l-4-4L4 16z'/%3E%3Cpath d='M13.5 6.5l4 4'/%3E%3C/svg%3E") center/contain no-repeat}
+.doc-edit:hover,.doc-edit.on{background:var(--s-edit);color:var(--s-edit-ink)}
+.share-center .edit-form{align-self:center;width:min(420px,100%);margin:12px 0 0;background:var(--s-card);border-color:var(--s-line);color:var(--s-text)}
+.doc.is-lock,.doc.is-msg{width:min(420px,100%);text-align:center}
+.doc.is-lock .doc-head,.doc.is-msg .doc-head{align-items:center}
+.doc.is-lock .doc-kicker,.doc.is-msg .doc-kicker{justify-content:center}
+.doc.is-lock .doc-title,.doc.is-msg .doc-title{font-size:20px}
+.lock-desc{margin:8px 0 18px;color:var(--s-muted);font-size:13px}
+.lock-field{display:block;width:100%;border:1px solid var(--s-line);background:var(--s-soft);border-radius:12px;padding:12px 14px;font-size:14px;outline:0;color:var(--s-text)}
+.lock-field:focus{border-color:var(--s-accent)}
+.lock-go{display:block;width:100%;margin-top:10px;border:0;background:var(--s-deep);color:#fff;font-weight:700;font-size:14px;padding:12px;border-radius:12px;cursor:pointer;text-decoration:none}
+.lock-err{min-height:18px;margin:8px 0 0;font-size:12.5px;color:var(--danger)}
+.made-with{display:none}
+body.share-full .made-with{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;margin:34px 0 0;text-align:center}
+.made-with .mw-sub{margin:0;font-size:12px;color:var(--s-onbg-muted)}
+.made-with .mw-go{display:inline-flex;padding:10px 22px;border-radius:999px;background:var(--s-edit);color:var(--s-edit-ink);font-size:13.5px;font-weight:700;text-decoration:none;transition:transform .15s,opacity .15s}
+.made-with .mw-go:hover{transform:translateY(-1px);opacity:.9}
+body.is-preview #crumb,body.is-preview .doc-edit,body.is-preview .edit-form,body.is-preview .share-home{display:none!important}
+body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
+
+/* 직접 고른 배경 */
+.share-page.bg-custom .share-deco{display:none}
+.share-page.bg-dark{--s-onbg:#fff;--s-onbg-muted:rgba(255,255,255,.78);--s-edit:#fff;--s-edit-ink:var(--s-deep)}
+.share-page.bg-light{--s-onbg:#0d2640;--s-onbg-muted:#5d7690;--s-edit:var(--s-accent);--s-edit-ink:#fff}
+
+/* ─── 레이아웃 · 해양지부 (사이트 틀 그대로) ─── */
+.lay-marine{--s-width:100%}
+.lay-marine .share-top,.lay-marine .share-foot,.lay-marine .share-deco{display:none}
+.lay-marine .share-center{min-height:0;justify-content:flex-start;padding:0}
+.lay-marine .doc{border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:12px;box-shadow:var(--shadow);padding:0;overflow:hidden}
+.lay-marine .doc-head{padding:14px 18px 10px;background:linear-gradient(180deg,#f7fbff,#fff)}
+.lay-marine .doc-meta{margin:0;padding:8px 18px;border-top:1px solid var(--line);border-bottom:1px dashed var(--line);background:#fbfdff}
+.lay-marine .doc-tools{margin:0;padding:10px 14px;border-bottom:1px dashed var(--line);background:#fbfdff}
+.lay-marine .doc-btn{border-radius:8px}
+.lay-marine .doc-body{margin:0;padding:8px 22px 28px;font-size:15px;line-height:28px;min-height:200px;background-image:linear-gradient(to bottom,transparent 27px,var(--rule) 27px);background-size:100% 28px;background-position:0 8px}
+.lay-marine .doc-blocks{margin:0;padding:14px}
+.lay-marine .doc-sign{display:none}
+.lay-marine .doc.is-lock,.lay-marine .doc.is-msg{margin:30px auto 0;padding:28px 24px}
+.lay-marine .doc.is-lock .doc-head,.lay-marine .doc.is-msg .doc-head{background:none;padding:0}
+
+/* ─── 레이아웃 · 심플 ─── */
+.lay-plain{--s-bg:#fff;--s-accent:#444;--s-deep:#222;--s-line:#e5e5e5;--s-soft:#f5f5f5;--s-muted:#8a8a8a;--s-text:#222;--s-shadow:none;--s-radius:12px;--s-onbg:#222;--s-onbg-muted:#999;--s-edit:#333}
+.lay-plain .doc{border:1px solid var(--s-line)}
+.lay-plain .doc-tag{background:#efefef;color:#666}
+.lay-plain .doc-sign{display:none}
+
+/* ─── 레이아웃 · 수신 전문 ─── */
+.lay-transmit{--s-bg:radial-gradient(120% 80% at 50% 0%,#1d5ea6 0,#0b3566 55%,#061f3d 100%);--s-onbg:#fff;--s-onbg-muted:#a9c8e8;--s-edit:#fff;--s-edit-ink:#0b3566;--s-shadow:0 30px 70px -20px rgba(0,0,0,.55)}
+.lay-transmit .share-deco i:nth-child(1){inset:0;background:var(--banner) center 60%/cover;opacity:.18;mix-blend-mode:luminosity}
+.lay-transmit .share-deco i:nth-child(2),.lay-transmit .share-deco i:nth-child(3){left:50%;top:50%;width:1100px;height:1100px;margin:-550px 0 0 -550px;border-radius:50%;-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%)}
+.lay-transmit .share-deco i:nth-child(2){background:repeating-radial-gradient(circle,transparent 0 68px,rgba(143,200,255,.12) 68px 69px)}
+.lay-transmit .share-deco i:nth-child(3){background:conic-gradient(from 0deg,rgba(111,195,255,.18),transparent 18%);animation:s-spin 9s linear infinite}
+@keyframes s-spin{to{transform:rotate(1turn)}}
+.lay-transmit .doc{padding-top:44px}
+.lay-transmit .doc-mark{display:block;left:50%;top:-30px;width:60px;height:60px;margin-left:-30px;border-radius:50%;background:#fff var(--anchor-svg) center/46px no-repeat;box-shadow:0 6px 18px -6px rgba(11,53,102,.5)}
+.lay-transmit .doc-head{align-items:center;text-align:center}
+.lay-transmit .doc-kicker{letter-spacing:.22em}
+.lay-transmit .doc-kicker .doc-tag{display:none}
+.lay-transmit .doc-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:14px 0 0;border-top:1px solid var(--s-line);border-bottom:1px solid var(--s-line)}
+.lay-transmit .doc-meta div{flex-direction:column;align-items:center;gap:4px;padding:9px 4px;border-right:1px solid var(--s-line);text-align:center}
+.lay-transmit .doc-meta div:last-child{border-right:0}
+.lay-transmit .doc-meta dd{font-weight:700;color:var(--s-deep)}
+.lay-transmit .doc-body{background:#f7fafd;border-radius:12px;padding:16px 18px}
+.lay-transmit .doc-sign{display:none}
+
+/* ─── 레이아웃 · 항해일지 ─── */
+.lay-logbook{--s-bg:radial-gradient(circle at 50% 45%,rgba(255,255,255,.9),rgba(255,255,255,0) 60%),linear-gradient(rgba(26,99,176,.07) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,rgba(26,99,176,.07) 1px,transparent 1px) 0 0/40px 40px,#eef4fa;--s-radius:6px;--s-shadow:0 1px 0 #d6e2ee,0 22px 50px -24px rgba(11,53,102,.45)}
+.lay-logbook .share-deco i:nth-child(1){right:-60px;bottom:-60px;width:340px;height:340px;background:var(--rose-svg) center/contain no-repeat;opacity:.16}
+.lay-logbook .share-deco i:nth-child(2){left:-90px;top:70px;width:260px;height:260px;background:var(--rose-svg) center/contain no-repeat;opacity:.08}
+.lay-logbook .share-deco i:nth-child(3){inset:0}
+.lay-logbook .share-deco i:nth-child(3)::before,.lay-logbook .share-deco i:nth-child(3)::after{position:absolute;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;font:10px/1 var(--mono);letter-spacing:.3em;color:#8ea9c4}
+.lay-logbook .share-deco i:nth-child(3)::before{content:'LAT 48°52′S';left:18px}
+.lay-logbook .share-deco i:nth-child(3)::after{content:'LNG 123°23′W';right:18px}
+.lay-logbook .doc{padding:26px 30px 22px 58px}
+.lay-logbook .doc::before{content:'';position:absolute;left:38px;top:0;bottom:0;border-left:1.5px solid #f2c3c0}
+.lay-logbook .doc-deco i:nth-child(1){display:block;left:12px;top:12%;bottom:12%;width:12px;background:radial-gradient(circle,#e3eaf2 5.5px,transparent 6px) center/12px 33.33% repeat-y}
+.lay-logbook .doc-deco i:nth-child(2){display:block;right:34px;top:-6px;width:22px;height:70px;background:var(--s-accent);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%)}
+.lay-logbook .doc-mark{display:grid;place-content:center;right:70px;top:18px;width:78px;height:78px;border-radius:50%;border:2px solid rgba(26,99,176,.55);color:rgba(26,99,176,.8);text-align:center;font:600 8.5px/1.5 var(--mono);letter-spacing:.12em;transform:rotate(-12deg)}
+.lay-logbook .doc-mark::before{content:'FEARLESS\A RECEIVED';white-space:pre;font-size:8.5px}
+.lay-logbook .doc-mark::after{content:attr(data-date)}
+.lay-logbook .doc-head{padding:0 120px 12px 0;border-bottom:2px solid var(--s-deep)}
+.lay-logbook .doc-kicker .doc-tag{display:none}
+.lay-logbook .doc-meta{margin:0;padding:10px 0;border-bottom:1px dashed var(--s-line)}
+.lay-logbook .doc-sign{padding-top:10px;border-top:1px solid var(--rule)}
+.lay-logbook .doc.is-lock,.lay-logbook .doc.is-msg{padding:28px 26px 24px 52px}
+.lay-logbook .doc.is-lock .doc-head,.lay-logbook .doc.is-msg .doc-head{padding:0;border:0}
+.lay-logbook .doc.is-lock .doc-mark,.lay-logbook .doc.is-msg .doc-mark{display:none}
+
+/* ─── 레이아웃 · 수평선 ─── */
+.lay-horizon{--s-bg:linear-gradient(180deg,#eaf3fc 0,#f6faff 52%,#1a5ea6 52%,#0b3566 100%);--s-card:rgba(255,255,255,.97);--s-radius:20px;--s-title:25px;--s-shadow:0 30px 70px -30px rgba(5,25,55,.6)}
+.lay-horizon .share-deco i:nth-child(1){left:50%;top:52%;width:180px;height:180px;margin:-90px 0 0 -90px;border-radius:50%;background:radial-gradient(circle,#fff6dc 0,#ffe7b0 45%,rgba(255,231,176,0) 70%);clip-path:inset(0 0 50% 0)}
+.lay-horizon .share-deco i:nth-child(2){left:0;right:0;top:52%;height:1px;background:rgba(255,255,255,.7)}
+.lay-horizon .share-deco i:nth-child(3){left:0;right:0;top:52%;bottom:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.08) 0 1px,transparent 1px 14px);-webkit-mask:linear-gradient(180deg,#000,transparent 70%);mask:linear-gradient(180deg,#000,transparent 70%)}
+.lay-horizon:not(.bg-custom) .share-foot{color:#9dc2e8}
+.lay-horizon:not(.bg-custom) .doc-after,.lay-horizon:not(.bg-custom) .made-with{--s-onbg-muted:#bcd6f0;--s-edit:#fff;--s-edit-ink:#0b3566}
+.lay-horizon .doc{text-align:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.lay-horizon .doc-head{align-items:center}
+.lay-horizon .doc-kicker{justify-content:center}
+.lay-horizon .doc-kicker .doc-tag{display:none}
+.lay-horizon .doc-meta,.lay-horizon .doc-tools{justify-content:center}
+.lay-horizon .doc-tools .sp{flex:none;width:4px}
+.lay-horizon .doc-body{text-align:left;background:#f4f8fc;border-radius:14px;padding:16px 18px}
+.lay-horizon .doc-blocks{text-align:left}
+.lay-horizon .doc-sign{justify-content:center}
+.lay-horizon .doc-mark{display:block;left:50%;top:-1px;width:56px;height:3px;margin-left:-28px;background:var(--s-accent);border-radius:0 0 3px 3px}
+
+/* ─── 레이아웃 · 여백 편지지 ─── */
+.lay-sheet{--s-bg:#fff;--s-card:transparent;--s-shadow:none;--s-radius:0;--s-width:600px;--s-title:30px}
+.lay-sheet .share-deco i:nth-child(1){left:0;right:0;bottom:0;height:150px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160' preserveAspectRatio='none'%3E%3Cpath fill='%23eef5fc' d='M0 50 Q180 10 360 50 T720 50 T1080 50 T1440 50 V160 H0Z'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat}
+.lay-sheet .share-deco i:nth-child(2){left:0;right:0;bottom:0;height:110px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160' preserveAspectRatio='none'%3E%3Cpath fill='%23dceafa' d='M0 70 Q240 30 480 70 T960 70 T1440 70 V160 H0Z'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat}
+.lay-sheet .doc{padding:0}
+.lay-sheet .doc-kicker::before{content:'';width:22px;height:2px;background:var(--s-accent)}
+.lay-sheet .doc-kicker .doc-tag{display:none}
+.lay-sheet .doc-title{font-weight:800}
+.lay-sheet .doc-meta div{background:#f1f6fb;border-radius:999px;padding:4px 10px}
+.lay-sheet .doc-tools{margin-top:22px}
+.lay-sheet .doc-btn{background:#f1f6fb;border-color:transparent}
+.lay-sheet .doc-body{margin-top:20px;border-left:3px solid var(--s-accent);padding:4px 0 4px 18px;font-size:16px}
+.lay-sheet .doc-block{background:#fff}
+.lay-sheet .doc.is-lock,.lay-sheet .doc.is-msg,.lay-sheet.bg-custom .doc{background:rgba(255,255,255,.96);border:1px solid #e4edf6;border-radius:18px;padding:28px 26px 24px;box-shadow:0 24px 60px -30px rgba(0,0,0,.35)}
+
+@media (max-width:620px){
+  .share-top{top:14px;left:14px;right:14px}
+  .share-center{justify-content:flex-start;padding:76px 12px 58px}
+  .doc{padding:22px 18px 18px}
+  .doc-title{font-size:calc(var(--s-title) - 4px)}
+  .doc-body{font-size:15px}
+  .doc-after{flex-direction:column;align-items:stretch}
+  .doc-edit{justify-content:center}
+  .lay-marine .share-center{padding:0}
+  .lay-marine .doc{padding:0}
+  .lay-marine .doc-body{padding:8px 16px 24px}
+  .lay-transmit .share-center{padding-top:100px}
+  .lay-transmit .doc{padding-top:40px}
+  .lay-transmit .doc-meta dd{font-size:11.5px}
+  .lay-logbook .doc{padding:20px 16px 18px 40px}
+  .lay-logbook .doc::before{left:28px}
+  .lay-logbook .doc-deco i:nth-child(1){left:7px;width:10px;background-size:10px 33.33%}
+  .lay-logbook .doc-deco i:nth-child(2){right:16px}
+  .lay-logbook .doc-mark{right:30px;top:14px;width:60px;height:60px;font-size:7px}
+  .lay-logbook .doc-mark::before{font-size:7px}
+  .lay-logbook .doc-head{padding-right:82px}
+  .lay-logbook .share-deco i:nth-child(3){display:none}
+  .lay-horizon{--s-bg:linear-gradient(180deg,#eaf3fc 0,#f6faff 34%,#1a5ea6 34%,#0b3566 100%)}
+  .lay-horizon .share-deco i{top:34%!important}
+  .lay-horizon .doc{padding:22px 16px 18px}
+  .lay-sheet .doc{padding:0}
+  .lay-sheet.bg-custom .doc,.lay-sheet .doc.is-lock,.lay-sheet .doc.is-msg{padding:22px 18px 18px}
+}
+@media (prefers-reduced-motion:reduce){.lay-transmit .share-deco i:nth-child(3){animation:none}}
+
+/* ─── 편집기 · 공유 화면 고르기 ─── */
+.lay-pick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.lay-pick button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:5px 5px 6px;display:flex;flex-direction:column;gap:5px;font-size:11.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s}
+.lay-pick button:hover{border-color:var(--accent)}
+.lay-pick button.on{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 2px var(--soft)}
+.lay-thumb{position:relative;display:block;height:36px;border-radius:6px;overflow:hidden;border:1px solid #e3eaf2}
+.lay-thumb::after{content:'';position:absolute;left:28%;right:28%;top:26%;bottom:20%;background:#fff;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.18)}
+.lt-marine{background:linear-gradient(#0b3566 0 16%,#eef4fa 16% 80%,#4f93d4 80%)}
+.lt-marine::after{border-top:2px solid #1a63b0}
+.lt-plain{background:#fff}.lt-plain::after{box-shadow:0 0 0 1px #ddd}
+.lt-transmit{background:radial-gradient(circle at 50% 0,#2a6fb8,#061f3d)}
+.lt-logbook{background:linear-gradient(rgba(26,99,176,.16) 1px,transparent 1px) 0 0/6px 6px,linear-gradient(90deg,rgba(26,99,176,.16) 1px,transparent 1px) 0 0/6px 6px,#eef4fa}
+.lt-logbook::after{border-left:2px solid #f2c3c0}
+.lt-horizon{background:linear-gradient(#eaf3fc 55%,#1a5ea6 55%)}
+.lt-sheet{background:#fff}.lt-sheet::after{background:none;box-shadow:none;border-left:2px solid #1a63b0;left:30%;right:30%}
+.sub-lab{display:block;font-size:12px;font-weight:600;color:var(--muted);margin:8px 0 0}
+.palette{display:flex;flex-wrap:wrap;gap:7px}
+.palette[hidden],.photo-box[hidden],.photo-prev[hidden]{display:none}
+.sw{width:24px;height:24px;border-radius:50%;border:1px solid rgba(0,0,0,.14);padding:0;cursor:pointer;position:relative}
+.sw.on{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--accent)}
+.sw.custom{background:conic-gradient(#ff6b6b,#ffd93d,#6bcB77,#4d96ff,#c77dff,#ff6b6b);overflow:hidden}
+.sw.custom input{position:absolute;inset:-6px;width:calc(100% + 12px);height:calc(100% + 12px);opacity:0;cursor:pointer;border:0;padding:0}
+.photo-box{display:flex;flex-direction:column;gap:7px}
+.photo-row{display:flex;gap:6px}
+.photo-row .chip{flex:1}
+.bg-url{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:8px 10px;font-size:12.5px;outline:0;color:var(--ink)}
+.bg-url:focus{border-color:var(--accent)}
+.photo-prev{height:58px;border-radius:9px;border:1px solid var(--line);background:#eef4fa center/cover no-repeat}
+.css-toggle{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;width:max-content}
+.css-toggle input{width:16px;height:16px;accent-color:var(--accent);margin:0}
+
 </style>
 </head>
 <body>
@@ -413,27 +700,24 @@ body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4
     </div>
     <div class="cards">
       <article class="card">
-        <span class="no">FORM MN-01</span>
+        <span class="no">MN-01<i>OOC</i></span>
         <h2>OOC 기록 문서</h2>
         <p class="desc">아이디어가 담긴 OOC를 정리해 공유할 수 있는 창구입니다.</p>
-        <ul><li>PC · NPC 표기 삽입</li><li>PC ⇄ NPC 표기 일괄 전환</li><li>복사 · 링크 발급 · 비밀번호 봉인</li></ul>
-        <div class="meta"><span>즉시 발급</span><span>로그인 불필요</span></div>
+        <dl class="spec"><div><dt>MARK</dt><dd>PC · NPC 표기</dd></div><div><dt>SWAP</dt><dd>일괄 전환</dd></div><div><dt>COPY</dt><dd>지원</dd></div></dl>
         <button class="btn primary" data-go="ooc">이용하기 →</button>
       </article>
       <article class="card">
-        <span class="no">FORM MN-02</span>
+        <span class="no">MN-02<i>MEMO</i></span>
         <h2>신규 기록 문서</h2>
         <p class="desc">형식에 구애받지 않는 자유 기록을 메모장처럼 작성하고, 필요한 분께 공유할 수 있습니다.</p>
-        <ul><li>자유 형식 기록 작성</li><li>공유 링크 발급</li><li>비밀번호 봉인</li></ul>
-        <div class="meta"><span>즉시 발급</span><span>로그인 불필요</span></div>
+        <dl class="spec"><div><dt>FORM</dt><dd>자유 형식</dd></div><div><dt>LINK</dt><dd>짧은 링크</dd></div><div><dt>LOCK</dt><dd>비밀번호</dd></div></dl>
         <button class="btn primary" data-go="memo">이용하기 →</button>
       </article>
       <article class="card">
-        <span class="no">FORM MN-03</span>
+        <span class="no">MN-03<i>PROMPT</i></span>
         <h2>프롬프트 기록 문서</h2>
         <p class="desc">생성형 AI 제작에 필요한 프롬프트를 기록하여 전달할 수 있습니다.</p>
-        <ul><li>공통 프롬프트(메인) 등록</li><li>캐릭터 · 네거티브 블록 추가</li><li>블록별 복사 · 공유 링크 발급</li></ul>
-        <div class="meta"><span>즉시 발급</span><span>로그인 불필요</span></div>
+        <dl class="spec"><div><dt>MAIN</dt><dd>공통 프롬프트</dd></div><div><dt>BLOCK</dt><dd>캐릭터 · 네거티브</dd></div><div><dt>COPY</dt><dd>블록별</dd></div></dl>
         <button class="btn primary" data-go="prompt">이용하기 →</button>
       </article>
     </div>
@@ -451,9 +735,9 @@ body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4
   </section>
 
   <!-- OOC -->
-  <section id="v-ooc" class="view">
+  <section id="v-ooc" class="view"><div class="desk">
     <div class="sheet">
-      <div class="sheet-head"><span class="tag">OOC</span><input class="title" id="ooc-title" placeholder="제목 (선택)"></div>
+      <div class="sheet-head"><div class="sh-k"><span class="tag">OOC</span>MN-01 · OOC 기록 문서</div><input class="title" id="ooc-title" placeholder="제목 없는 기록"></div>
       <div class="toolbar">
         <button class="chip mono" data-ins="pc" id="ooc-ins-pc">PC</button>
         <button class="chip mono" data-ins="npc" id="ooc-ins-npc">NPC</button>
@@ -461,33 +745,39 @@ body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4
         <span class="sp"></span>
         <button class="chip" id="ooc-copy">복사하기</button>
       </div>
-      <details class="labels">
-        <summary>표기 설정</summary>
-        <div class="row">
-          <label>PC 표기 <input id="ooc-pc" value="PC"></label>
-          <label>NPC 표기 <input id="ooc-npc" value="NPC"></label>
-        </div>
-      </details>
       <textarea id="ooc-body" class="paper" placeholder="OOC 내용을 적어 주세요."></textarea>
       <div class="foot"><span id="ooc-count">0자</span><button class="txt" data-clear="ooc">새로 쓰기</button></div>
     </div>
-    <div class="share" data-for="ooc"></div>
-  </section>
+    <aside class="side">
+      <div class="panel"><h5>LOG STATUS</h5>
+        <div class="read"><div><span>DATE</span><b class="today">--.--</b></div><div><span>LENGTH</span><b><em data-len="ooc">0</em><small>자</small></b></div><div class="wide"><span>SAVE</span><b class="save-st" data-save="ooc">● 자동 저장됨</b></div></div>
+      </div>
+      <div class="panel"><h5>MARKING · 표기</h5>
+        <div class="pair"><label class="pf">PC 표기<input id="ooc-pc" value="PC"></label><label class="pf">NPC 표기<input id="ooc-npc" value="NPC"></label></div>
+      </div>
+      <div class="share" data-for="ooc"></div>
+    </aside>
+  </div></section>
 
   <!-- MEMO -->
-  <section id="v-memo" class="view">
+  <section id="v-memo" class="view"><div class="desk">
     <div class="sheet">
-      <div class="sheet-head"><span class="tag">MEMO</span><input class="title" id="memo-title" placeholder="제목 (선택)"></div>
+      <div class="sheet-head"><div class="sh-k"><span class="tag">MEMO</span>MN-02 · 신규 기록 문서</div><input class="title" id="memo-title" placeholder="제목 없는 기록"></div>
       <textarea id="memo-body" class="paper" placeholder="자유롭게 적어 주세요."></textarea>
       <div class="foot"><span id="memo-count">0자</span><button class="txt" data-clear="memo">새로 쓰기</button></div>
     </div>
-    <div class="share" data-for="memo"></div>
-  </section>
+    <aside class="side">
+      <div class="panel"><h5>LOG STATUS</h5>
+        <div class="read"><div><span>DATE</span><b class="today">--.--</b></div><div><span>LENGTH</span><b><em data-len="memo">0</em><small>자</small></b></div><div class="wide"><span>SAVE</span><b class="save-st" data-save="memo">● 자동 저장됨</b></div></div>
+      </div>
+      <div class="share" data-for="memo"></div>
+    </aside>
+  </div></section>
 
   <!-- PROMPT -->
-  <section id="v-prompt" class="view">
+  <section id="v-prompt" class="view"><div class="desk">
     <div class="sheet">
-      <div class="sheet-head"><span class="tag">PROMPT</span><input class="title" id="prompt-title" placeholder="제목 (선택)"><button class="chip" id="prompt-copyall">전체 복사</button></div>
+      <div class="sheet-head"><div class="sh-k"><span class="tag">PROMPT</span>MN-03 · 프롬프트 기록 문서</div><input class="title" id="prompt-title" placeholder="제목 없는 기록"></div>
       <div class="block main" data-k="common"><div class="block-head"><span class="badge">∗</span><input class="bname" value="공통 프롬프트"><span class="pill">MAIN</span><span class="cnt">0자</span><button type="button" class="chip copyb">복사</button></div><textarea class="paper" placeholder="모든 캐릭터에 공통으로 들어갈 메인 프롬프트"></textarea></div>
       <div class="p-divider"><span>추가 블록</span></div>
       <div id="p-list"><p class="p-empty">아래 버튼으로 캐릭터 · 네거티브 블록을 추가해 보세요.</p></div>
@@ -498,8 +788,14 @@ body:where(.share-plain){background:#fff;--line:#ececec;--sky:#e4e4e4;--soft:#f4
       </div>
       <div class="foot"><span>블록 이름은 눌러서 바꿀 수 있어요</span><button class="txt" data-clear="prompt">새로 쓰기</button></div>
     </div>
-    <div class="share" data-for="prompt"></div>
-  </section>
+    <aside class="side">
+      <div class="panel"><h5>LOG STATUS</h5>
+        <div class="read"><div><span>BLOCKS</span><b data-blocks>1</b></div><div><span>LENGTH</span><b><em data-len="prompt">0</em><small>자</small></b></div><div class="wide"><span>SAVE</span><b class="save-st" data-save="prompt">● 자동 저장됨</b></div></div>
+        <button class="chip fill wide-btn" id="prompt-copyall">전체 복사 (네거티브 제외)</button>
+      </div>
+      <div class="share" data-for="prompt"></div>
+    </aside>
+  </div></section>
 
   <!-- SHARED VIEW -->
   <section id="v-view" class="view"><div id="view-body"></div></section>
@@ -748,7 +1044,17 @@ function updateCounts(t){
   if (t === 'ooc') $('#ooc-count').textContent = count($('#ooc-body').value);
   if (t === 'memo') $('#memo-count').textContent = count($('#memo-body').value);
   if (t === 'prompt') $$('#v-prompt .block').forEach(b => b.querySelector('.cnt').textContent = count(b.querySelector('textarea').value));
+  // 오른쪽 계기판
+  const len = t === 'prompt' ? $$('#v-prompt .block textarea').reduce((n, x) => n + x.value.length, 0) : $('#' + t + '-body').value.length;
+  const le = $(`[data-len="${t}"]`); if (le) le.textContent = len.toLocaleString();
+  if (t === 'prompt'){ const bc = $('[data-blocks]'); if (bc) bc.textContent = $$('#v-prompt .block').length; }
 }
+function setSave(t, saving){
+  const el = $(`[data-save="${t}"]`); if (!el) return;
+  el.textContent = saving ? '○ 저장 중…' : '● 자동 저장됨';
+  el.classList.toggle('saving', saving);
+}
+{ const d = new Date(); $$('.today').forEach(x => x.textContent = String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0')); }
 function syncLabels(){
   const pc = $('#ooc-pc').value.trim() || 'PC', npc = $('#ooc-npc').value.trim() || 'NPC';
   $('#ooc-ins-pc').textContent = pc; $('#ooc-ins-npc').textContent = npc;
@@ -769,10 +1075,54 @@ function buildShare(t){
     el('div', { class:'linkrow' }, link, el('button', { class:'btn', text:'링크 복사', onclick(){ copy(link.value, '링크를 복사했어요'); } }), openA), hint);
   res.hidden = true;
   link.addEventListener('focus', () => link.select());
-  // 공유 화면 스타일: 해양지부 / 심플 / CSS
-  let sk = store.get('nd:sk') || 'marine';
-  const segBtns = [['marine','해양지부'],['plain','심플'],['css','CSS']].map(([k,label]) =>
-    el('button', { type:'button', 'data-sk':k, text:label, onclick(){ setSk(k); store.set('nd:sk', k); markStale(t); } }));
+  // ── 공유 화면: 레이아웃 · 배경 · CSS 덧입히기 ──
+  const legacy = store.get('nd:sk');
+  let lay = store.get('nd:lay') || (legacy === 'css' ? 'plain' : (LAYOUTS.some(x => x[0] === legacy) ? legacy : 'marine'));
+  let bg = normBg(store.get('nd:bg'));
+  let cssOn = store.get('nd:css-on') ?? (legacy === 'css');
+  const layBtns = LAYOUTS.map(([k, name]) => el('button', { type:'button', 'data-lay':k, title:name, onclick(){ setLay(k); store.set('nd:lay', k); markStale(t); } },
+    el('i', { class:'lay-thumb lt-' + k }), el('span', { text:name })));
+  function setLay(k){ lay = k; layBtns.forEach(b => b.classList.toggle('on', b.dataset.lay === k)); }
+  // 배경: 기본 / 단색 / 사진
+  const bgModes = [['none','기본'],['color','단색'],['photo','사진']].map(([k,l]) => el('button', { type:'button', 'data-bg':k, text:l, onclick(){ setBgMode(k, true); } }));
+  const sws = PALETTE.map(c => el('button', { type:'button', class:'sw', 'data-c':c, title:c, 'aria-label':'배경색 ' + c, onclick(){ setBg({ t:'color', v:c }); } }));
+  sws.forEach(b => b.style.background = b.dataset.c);
+  const picker = el('input', { type:'color', value:'#1a63b0', 'aria-label':'배경색 직접 고르기' });
+  picker.addEventListener('input', () => setBg({ t:'color', v:picker.value }));
+  const colorBox = el('div', { class:'palette' }, sws, el('label', { class:'sw custom', title:'직접 고르기' }, picker));
+  const urlIn = el('input', { class:'bg-url', type:'url', placeholder:'이미지 주소 붙여 넣기 (https://…)' });
+  urlIn.addEventListener('change', () => {
+    const v = urlIn.value.trim(); if (!v) return;
+    if (!/^https:\/\/[^\s"'()\\]+$/.test(v)) return toast('https:// 로 시작하는 이미지 주소를 넣어 주세요');
+    setBg({ t:'url', v });
+  });
+  const fileIn = el('input', { type:'file', accept:'image/*', hidden:'' });
+  fileIn.addEventListener('change', async () => {
+    const f = fileIn.files[0]; fileIn.value = ''; if (!f) return;
+    try { toast('사진을 줄이는 중이에요…'); setBg({ t:'img', v: await shrinkImage(f) }); toast('배경 사진을 넣었어요'); }
+    catch(e){ toast('이 사진은 쓸 수 없어요'); }
+  });
+  const photoPrev = el('div', { class:'photo-prev' });
+  const photoBox = el('div', { class:'photo-box' },
+    el('div', { class:'photo-row' },
+      el('button', { type:'button', class:'chip', text:'바다 사진', onclick(){ setBg({ t:'sea' }); } }),
+      el('button', { type:'button', class:'chip', text:'사진 올리기', onclick(){ fileIn.click(); } }), fileIn),
+    urlIn, photoPrev);
+  const bgModeOf = b => b.t === 'color' ? 'color' : b.t === 'none' ? 'none' : 'photo';
+  function setBgMode(k, user){
+    bgModes.forEach(b => b.classList.toggle('on', b.dataset.bg === k));
+    colorBox.hidden = k !== 'color'; photoBox.hidden = k !== 'photo';
+    if (user && k === 'none') setBg({ t:'none' });
+  }
+  function setBg(b, quiet){
+    bg = normBg(b);
+    if (!quiet){ store.set('nd:bg', bg); markStale(t); }
+    sws.forEach(x => x.classList.toggle('on', bg.t === 'color' && x.dataset.c === bg.v));
+    if (bg.t === 'color') picker.value = bg.v;
+    photoPrev.hidden = !['sea','url','img'].includes(bg.t);
+    photoPrev.style.backgroundImage = bg.t === 'sea' ? 'var(--banner)' : (bg.t === 'url' || bg.t === 'img') ? `url("${bg.v}")` : '';
+    urlIn.value = bg.t === 'url' ? bg.v : '';
+  }
   const tplSel = el('select', { class:'css-tpl', 'aria-label':'저장된 CSS 템플릿' });
   const cssIn = el('textarea', { class:'css-in', spellcheck:'false', placeholder: CSS_SAMPLE });
   cssIn.value = store.get('nd:css-last') ?? CSS_SAMPLE;
@@ -807,9 +1157,19 @@ function buildShare(t){
     el('div', { class:'css-row' }, tplSel, delBtn),
     el('div', { class:'css-row' }, tplName, el('button', { type:'button', class:'chip fill', text:'템플릿 저장', onclick: saveTpl })),
     cssIn,
-    el('p', { class:'hint', text:'공유 화면에만 적용돼요. 템플릿은 이 브라우저에 저장되어 다음에도 불러 쓸 수 있어요. 쓸 수 있는 이름: body · .sheet · .doc-title · .doc-text · .block · .bname · .tag' }));
-  function setSk(k){ sk = k; segBtns.forEach(b => b.classList.toggle('on', b.dataset.sk === k)); cssBox.hidden = k !== 'css'; }
-  setSk(sk);
+    el('p', { class:'hint', text:'고른 레이아웃 위에 덧입혀져요. 템플릿은 이 브라우저에 저장돼요. 이름표: .share-page · .share-deco i · .doc · .doc-mark · .doc-deco i · .doc-title · .doc-meta · .doc-tools · .doc-body · .doc-block · .doc-sign · .doc-after  /  변수: --s-bg · --s-card · --s-text · --s-accent · --s-radius · --s-width · --s-title' }));
+  const cssChk = el('input', { type:'checkbox' });
+  cssChk.addEventListener('change', () => { cssOn = cssChk.checked; store.set('nd:css-on', cssOn); cssBox.hidden = !cssOn; markStale(t); });
+  const cssToggle = el('label', { class:'css-toggle' }, cssChk, 'CSS 덧입히기');
+  function setCss(on){ cssOn = !!on; cssChk.checked = cssOn; cssBox.hidden = !cssOn; }
+  setLay(lay); setBgMode(bgModeOf(bg)); setBg(bg, true); setCss(cssOn);
+  // 링크·미리보기에 넣을 공유 화면 설정
+  function styleInto(d){
+    if (lay !== 'marine') d.sk = lay;
+    if (bg.t !== 'none') d.bg = bg;
+    if (cssOn && cssIn.value.trim()) d.css = cssIn.value.slice(0, 20000);
+    const f = flagOf(lay); return f ? '!' + f : '';
+  }
 
   // 편집 접속 번호: 나중에 같은 링크의 내용을 고칠 때 쓰는 작성자 전용 번호
   const keyin = el('input', { type:'password', placeholder:'4자 이상 · 나중에 수정할 때 필요', autocomplete:'new-password', class:'keyin', maxlength:'40' });
@@ -832,22 +1192,22 @@ function buildShare(t){
     res.hidden = true;
   }
   box._setEdit = setEdit;
-  box._setSk = (k, css) => { setSk(k); if (k === 'css' && css != null){ cssIn.value = css; } };
+  box._setStyle = d => { setLay(layoutOf(d)); const b = normBg(d.bg); setBgMode(bgModeOf(b)); setBg(b, true); if (d.css) cssIn.value = d.css; setCss(!!d.css); };
 
   box.append(
     editBar,
-    el('div', { class:'style-pick' }, el('span', { class:'lab', text:'공유 화면' }), el('div', { class:'seg' }, segBtns),
+    el('div', { class:'style-pick' },
+      el('span', { class:'lab', text:'공유 화면 레이아웃' }), el('div', { class:'lay-pick' }, layBtns),
+      el('span', { class:'sub-lab', text:'배경' }), el('div', { class:'seg' }, bgModes), colorBox, photoBox,
+      cssToggle, cssBox,
       el('button', { type:'button', class:'chip preview-btn', text:'미리보기', async onclick(){
         const d = F[t].get();
         if (F[t].empty(d)) return toast('내용을 먼저 적어 주세요');
         d.at = Date.now();
-        if (sk !== 'marine') d.sk = sk;
-        if (sk === 'css') d.css = cssIn.value.slice(0, 20000);
-        const sfx = sk === 'plain' ? '!p' : sk === 'css' ? '!c' : '';
+        const sfx = styleInto(d);
         // 미리보기는 저장하지 않고, 비밀번호 없이 화면만 보여 줌
-        openPreview(base() + '#/v/' + await pack(d, '') + sfx + '!x');
+        openPreview(base() + '#/v/' + await pack(d, '') + (sfx || '!m') + '!x');
       } })),
-    cssBox,
     el('div', { class:'share-row' },
       el('label', { class:'pw' }, el('span', { text:'비밀번호 (선택)' }), el('div', { class:'inwrap' }, pwin, eye)),
       keyLabel, make), res);
@@ -861,9 +1221,7 @@ function buildShare(t){
     if (!ed && key && key.length < 4) return toast('편집 접속 번호는 4자 이상이에요'), keyin.focus();
     store.set('nd:' + t, d);
     d.at = Date.now();
-    if (sk !== 'marine') d.sk = sk;
-    if (sk === 'css') d.css = cssIn.value.slice(0, 20000);
-    const sfx = sk === 'plain' ? '!p' : sk === 'css' ? '!c' : '';
+    const sfx = styleInto(d);
     make.disabled = true; make.textContent = ed ? '업데이트 중…' : '만드는 중…';
     try {
       const code = await pack(d, pw);
@@ -905,6 +1263,49 @@ function buildShare(t){
 }
 const editState = {};
 
+/* 공유 화면 레이아웃 · 배경 */
+const LAYOUTS = [['marine','해양지부',''],['plain','심플','p'],['transmit','수신 전문','t'],['logbook','항해일지','l'],['horizon','수평선','h'],['sheet','여백 편지지','s']];
+const LAY_FLAG = { p:'plain', c:'plain', t:'transmit', l:'logbook', h:'horizon', s:'sheet', m:'marine' };
+const flagOf = k => (LAYOUTS.find(x => x[0] === k) || [])[2] || '';
+const layoutOf = d => d.sk === 'css' ? 'plain' : (LAYOUTS.some(x => x[0] === d.sk) ? d.sk : 'marine');
+const FORM_NO = { ooc:'MN-01', memo:'MN-02', prompt:'MN-03' };
+const PALETTE = ['#ffffff','#f4f8fc','#eaf3fc','#cfe3f6','#f6efe3','#eef5ee','#f6e9ef','#1a63b0','#0b3566','#14171c'];
+function normBg(b){
+  if (!b || typeof b !== 'object') return { t:'none' };
+  if (b.t === 'color' && /^#[0-9a-f]{6}$/i.test(b.v || '')) return { t:'color', v: b.v.toLowerCase() };
+  if (b.t === 'sea') return { t:'sea' };
+  if (b.t === 'url' && /^https:\/\/[^\s"'()\\]+$/.test(b.v || '')) return { t:'url', v: b.v };
+  if (b.t === 'img' && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(b.v || '')) return { t:'img', v: b.v };
+  return { t:'none' };
+}
+const isDark = hex => { const n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + (n >> 8 & 255) * 587 + (n & 255) * 114) / 1000 < 140; };
+const bgIsDark = b => b.t !== 'color' || isDark(b.v);
+function bgCss(b){
+  const shade = 'linear-gradient(rgba(6,24,48,.26),rgba(6,24,48,.36))';
+  if (b.t === 'color') return b.v;
+  if (b.t === 'sea') return `${shade}, var(--banner) center/cover no-repeat, #0b3566`;
+  if (b.t === 'url' || b.t === 'img') return `${shade}, url("${b.v}") center/cover no-repeat, #0b3566`;
+  return '';
+}
+// 올린 사진은 링크에 담기 좋게 줄여서 씀 (긴 변 1280px 이하, 약 100KB 안쪽)
+async function shrinkImage(file){
+  const src = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
+    let max = 1280, q = .78, out = '';
+    for (let n = 0; n < 7; n++){
+      const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.naturalWidth * k)); c.height = Math.max(1, Math.round(img.naturalHeight * k));
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      out = c.toDataURL('image/jpeg', q);
+      if (out.length <= 140000) break;
+      max *= .8; q = Math.max(.5, q - .07);
+    }
+    return out;
+  } finally { URL.revokeObjectURL(src); }
+}
+
 /* 공유 화면 미리보기 (저장하지 않음) */
 let pv = null;
 function openPreview(url){
@@ -937,11 +1338,10 @@ function closePreview(){
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && pv && !pv.box.hidden) closePreview(); });
 
 /* CSS templates (이 브라우저에만 저장) */
-const CSS_SAMPLE = `/* 공유 화면에만 적용되는 CSS예요 */
-body { background: #faf6ef; }
-.sheet { border-radius: 4px; border-color: #e7dccb; }
-.doc-title { font-family: 'Nanum Myeongjo', serif; color: #4a3b2a; }
-.doc-text { color: #3d342a; }`;
+const CSS_SAMPLE = `/* 고른 레이아웃 위에 덧입혀지는 CSS예요 */
+.share-page { --s-accent: #b0563a; --s-title: 28px; }
+.doc { border-radius: 6px; }
+.doc-title { font-family: 'Nanum Myeongjo', serif; }`;
 const cssTemplates = () => { const v = store.get('nd:css-tpl'); return Array.isArray(v) ? v : []; };
 function refreshTemplates(selected){
   const list = cssTemplates();
@@ -968,7 +1368,8 @@ for (const t of Object.keys(F)){
   updateCounts(t);
   $('#v-' + t).addEventListener('input', () => {
     updateCounts(t); markStale(t);
-    clearTimeout(timers[t]); timers[t] = setTimeout(() => store.set('nd:' + t, F[t].get()), 300);
+    setSave(t, true);
+    clearTimeout(timers[t]); timers[t] = setTimeout(() => { store.set('nd:' + t, F[t].get()); setSave(t, false); }, 400);
   });
 }
 
@@ -1024,104 +1425,144 @@ $('#prompt-copyall').addEventListener('click', () => copy(F.prompt.get().blocks.
 
 /* ---------- shared view ---------- */
 const vb = () => $('#view-body');
-function msgCard(title, text){
-  return el('div', { class:'sheet lock' }, el('div', { class:'ico', text:'FEARLESS MARINE' }), el('h2', { text:title }), el('p', { text:text }),
-    el('a', { class:'btn', href:'#/', text:'처음으로' }));
+const svgAnchor = () => $('.brand svg').cloneNode(true);
+let shareLay = 'marine';
+// 레이아웃·배경·CSS를 화면에 적용
+function applyShareStyle(lay, css, bg){
+  shareLay = lay || 'marine';
+  const full = shareLay !== 'marine';
+  document.body.classList.toggle('share-full', full);
+  const b = normBg(bg), on = !full && b.t !== 'none';
+  document.body.classList.toggle('share-bg-on', on);
+  document.body.classList.toggle('share-bg-dark', on && bgIsDark(b));
+  if (on) document.body.style.setProperty('--page-bg', bgCss(b)); else document.body.style.removeProperty('--page-bg');
+  let st = $('#user-css');
+  if (css){ if (!st){ st = el('style', { id:'user-css' }); document.head.append(st); } st.textContent = css; }
+  else if (st) st.textContent = '';
+}
+// 공유 화면 뼈대: .share-page > .share-deco · .share-top · .share-center · .share-foot
+function sharePage(bg){
+  const lay = shareLay, b = normBg(bg);
+  const page = el('div', { class:'share-page lay-' + lay });
+  if (lay !== 'marine' && b.t !== 'none'){
+    page.classList.add('bg-custom', bgIsDark(b) ? 'bg-dark' : 'bg-light');
+    if (b.t !== 'color') page.classList.add('bg-photo');
+    page.style.setProperty('--s-bg', bgCss(b));
+  }
+  const center = el('div', { class:'share-center' });
+  page.append(
+    el('div', { class:'share-deco' }, el('i'), el('i'), el('i')),
+    el('div', { class:'share-top' },
+      el('a', { class:'share-brand', href:'#/' }, svgAnchor(), el('span', {}, el('small', { text:'FEARLESS MARINE' }), el('b', { text:'해양지부 신문고' }))),
+      el('a', { class:'share-home', href:'#/', text:'← 처음으로' })),
+    center,
+    el('div', { class:'share-foot', text:'해양지부 신문고 · FEARLESS MARINE' }));
+  vb().replaceChildren(page);
+  return center;
+}
+function docShell(kind, kicker, title){
+  return el('article', { class:'doc ' + kind },
+    el('span', { class:'doc-mark' }), el('div', { class:'doc-deco' }, el('i'), el('i'), el('i')),
+    el('header', { class:'doc-head' }, el('div', { class:'doc-kicker', text:kicker }), el('h1', { class:'doc-title', text:title })));
+}
+function showMsg(kicker, title, text, withHome = true){
+  const card = docShell('is-msg', kicker, title);
+  card.append(el('p', { class:'lock-desc', text }), withHome ? el('a', { class:'lock-go', href:'#/', text:'처음으로' }) : null);
+  sharePage().append(card);
 }
 // 짧은 링크(#/s/아이디): 보관소에서 기록을 받아 와서 보여 줌
 async function showStored(id){
-  const box = vb();
-  box.replaceChildren(el('div', { class:'sheet lock' }, el('div', { class:'ico', text:'LOADING' }), el('h2', { text:'기록을 불러오는 중이에요' }), el('p', { text:'잠시만 기다려 주세요.' })));
-  if (!live) return box.replaceChildren(msgCard('기록을 불러올 수 없어요', '기록 보관소가 연결되어 있지 않아요.'));
+  showMsg('LOADING', '기록을 불러오는 중이에요', '잠시만 기다려 주세요.', false);
+  if (!live) return showMsg('FEARLESS MARINE', '기록을 불러올 수 없어요', '기록 보관소가 연결되어 있지 않아요.');
   try {
     const r = await fetch(BOARD_URL + '?action=doc&id=' + encodeURIComponent(id));
     const d = await r.json();
     if (!d.ok) throw new Error(d.error);
     if (current !== null && !current.startsWith('#/s/' + id)) return; // 그새 다른 화면으로 이동함
     showView(d.data, id);
-  } catch(e){ box.replaceChildren(msgCard('기록을 찾을 수 없어요', '링크가 잘못되었거나 삭제된 기록이에요.')); }
-}
-// 공유 화면 스타일 적용
-function applyShareStyle(sk, css){
-  document.body.classList.toggle('share-plain', sk === 'plain' || sk === 'css');
-  let st = $('#user-css');
-  if (sk === 'css' && css){
-    if (!st){ st = el('style', { id:'user-css' }); document.head.append(st); }
-    st.textContent = css;
-  } else if (st) st.textContent = '';
+  } catch(e){ showMsg('FEARLESS MARINE', '기록을 찾을 수 없어요', '링크가 잘못되었거나 삭제된 기록이에요.'); }
 }
 async function showView(code, id){
-  const box = vb(); box.replaceChildren();
   let bytes;
   try { bytes = fromB64(code); if (!bytes.length || (bytes[0] !== 1 && bytes[0] !== 2)) throw 0; }
-  catch(e){ box.append(msgCard('링크가 올바르지 않아요', '주소가 중간에 잘리지 않았는지 확인해 주세요.')); return; }
-  if (bytes[0] === 2){ box.append(lockCard(bytes, id)); return; }
+  catch(e){ return showMsg('FEARLESS MARINE', '링크가 올바르지 않아요', '주소가 중간에 잘리지 않았는지 확인해 주세요.'); }
+  if (bytes[0] === 2) return lockCard(bytes, id);
   try { renderDoc(await unpack(bytes), { id }); }
-  catch(e){ box.append(msgCard('메모를 열 수 없어요', '링크가 손상되었거나 이 브라우저에서 지원하지 않는 형식이에요.')); }
+  catch(e){ showMsg('FEARLESS MARINE', '기록을 열 수 없어요', '링크가 손상되었거나 이 브라우저에서 지원하지 않는 형식이에요.'); }
 }
 function lockCard(bytes, id){
-  if (!(window.crypto && crypto.subtle)) return msgCard('잠긴 메모예요', '이 환경에선 잠금을 풀 수 없어요. https 주소로 열어 주세요.');
-  const input = el('input', { type:'password', placeholder:'비밀번호', autocomplete:'off' });
-  const err = el('p', { class:'err' });
-  const btn = el('button', { class:'btn primary', type:'submit', text:'열기' });
-  const card = el('div', { class:'sheet lock' },
-    el('div', { class:'ico', text:'LOCKED' }), el('h2', { text:'비밀번호가 걸린 메모예요' }), el('p', { text:'받은 비밀번호를 입력해 주세요.' }),
+  if (!canCrypto()) return showMsg('LOCKED RECORD', '잠긴 기록이에요', '이 환경에선 잠금을 풀 수 없어요. https 주소로 열어 주세요.');
+  const input = el('input', { class:'lock-field', type:'password', placeholder:'비밀번호', autocomplete:'off' });
+  const err = el('p', { class:'lock-err' });
+  const btn = el('button', { class:'lock-go', type:'submit', text:'열기' });
+  const card = docShell('is-lock', 'LOCKED RECORD', '비밀번호가 걸린 기록이에요');
+  card.append(el('p', { class:'lock-desc', text:'받은 비밀번호를 입력해 주세요.' }),
     el('form', { async onsubmit(e){
       e.preventDefault(); if (!input.value) return;
       btn.disabled = true; btn.textContent = '여는 중…'; err.textContent = '';
-      try { const pw = input.value; renderDoc(await unpack(bytes, pw), { id, pw }); input.value = ''; }
+      try { const pw = input.value; const d = await unpack(bytes, pw); input.value = ''; renderDoc(d, { id, pw }); }
       catch(_){ err.textContent = '비밀번호가 맞지 않아요'; card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); input.select(); }
       finally { btn.disabled = false; btn.textContent = '열기'; }
-    } }, el('div', { class:'inwrap' }, input), btn, err), homeLink());
+    } }, input, btn, err));
+  const center = sharePage();
+  center.append(card, homeLink());
   setTimeout(() => input.focus(), 50);
-  return card;
 }
-// 심플·CSS 화면에서도 사이트로 돌아와 직접 써 볼 수 있게 하는 작은 안내
+// 심플 등 사이트 틀이 없는 화면에서도 사이트로 돌아와 직접 써 볼 수 있게 하는 작은 안내
 const HOME_URL = 'https://legion-orca.github.io/memo/#/';
 function homeLink(){
   return el('div', { class:'made-with' },
     el('p', { class:'mw-sub', text:'본 문서는 해양지부 신문고에서 발행되었습니다' }),
     el('a', { class:'mw-go', href: HOME_URL, text:'새 기록 문서 작성하기 →' }));
 }
-function pre(text){ return el('pre', { class:'paper doc-text', text: text || '' }); }
 function renderDoc(d, ctx = {}){
-  const box = vb(); box.replaceChildren();
-  applyShareStyle(d.sk || 'marine', d.css);
-  const date = d.at ? new Date(d.at).toLocaleString('ko-KR', { dateStyle:'medium', timeStyle:'short' }) : '';
-  const sheet = el('div', { class:'sheet' },
-    el('div', { class:'sheet-head doc-head' }, el('span', { class:'tag', text: TAGS[d.t] }), el('h1', { class:'doc-title', text: d.title || '제목 없음' }), el('span', { class:'doc-date', text: date })));
-  document.title = (d.title || TYPES[d.t]) + (d.sk ? '' : ' · 해양지부 신문고');
-
+  const lay = layoutOf(d);
+  applyShareStyle(lay, d.css, d.bg);
+  const center = sharePage(d.bg);
+  const day = d.at ? new Date(d.at) : null;
+  const p2 = n => String(n).padStart(2, '0');
+  document.title = (d.title || TYPES[d.t]) + (lay === 'marine' ? ' · 해양지부 신문고' : '');
+  const mi = (k, v) => el('div', {}, el('dt', { text:k }), el('dd', { text:v }));
+  const card = el('article', { class:'doc', 'data-t': d.t },
+    el('span', { class:'doc-mark', 'data-date': day ? `${p2(day.getMonth() + 1)} · ${p2(day.getDate())}` : '' }),
+    el('div', { class:'doc-deco' }, el('i'), el('i'), el('i')),
+    el('header', { class:'doc-head' },
+      el('div', { class:'doc-kicker' }, el('span', { class:'doc-tag', text: TAGS[d.t] }), el('span', { class:'doc-form', text: `${FORM_NO[d.t]} · ${TYPES[d.t]}` })),
+      el('h1', { class:'doc-title', text: d.title || '제목 없음' })),
+    el('dl', { class:'doc-meta' }, mi('DATE', day ? day.toLocaleDateString('ko-KR') : '—'), mi('FROM', '해양지부 신문고'), mi('STATION', 'POINT NEMO')));
+  const bodyEl = txt => el('pre', { class:'doc-body', text: txt || '' });
   if (d.t === 'ooc'){
     const pc = d.pc || 'PC', npc = d.npc || 'NPC';
     let cur = d.body || '';
-    const body = pre(cur);
-    sheet.append(el('div', { class:'toolbar' },
-      el('button', { class:'chip mono fill', text:`${pc} ⇄ ${npc}`, onclick(){ const v = swapText(cur, pc, npc); if (v === cur) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`); cur = v; body.textContent = cur; toast(`${pc} ⇄ ${npc} 바꿨어요`); } }),
+    const body = bodyEl(cur);
+    card.append(el('div', { class:'doc-tools' },
+      el('button', { type:'button', class:'doc-btn mono fill', text:`${pc} ⇄ ${npc}`, onclick(){ const v = swapText(cur, pc, npc); if (v === cur) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`); cur = v; body.textContent = cur; toast(`${pc} ⇄ ${npc} 바꿨어요`); } }),
       el('span', { class:'sp' }),
-      el('button', { class:'chip', text:'복사하기', onclick(){ copy(cur); } })), body);
+      el('button', { type:'button', class:'doc-btn', text:'복사하기', onclick(){ copy(cur); } })), body);
   } else if (d.t === 'memo'){
-    sheet.append(pre(d.body));
+    card.append(bodyEl(d.body));
   } else {
     const all = (d.blocks || []).map((b,i) => ({ k: b.k || (i === 0 ? 'common' : 'char'), name: b.name, body: b.body || '' }));
     const blocks = all.filter(b => b.body.trim());
     const joinable = blocks.filter(b => b.k !== 'neg');
-    if (joinable.length > 1) sheet.querySelector('.sheet-head').append(el('button', { class:'chip', text:'전체 복사', onclick(){ copy(joinable.map(b => b.body.trim()).join('\n\n'), '전체 복사했어요 (네거티브 제외)'); } }));
+    if (joinable.length > 1) card.append(el('div', { class:'doc-tools' }, el('span', { class:'sp' }),
+      el('button', { type:'button', class:'doc-btn', text:'전체 복사', onclick(){ copy(joinable.map(b => b.body.trim()).join('\n\n'), '전체 복사했어요 (네거티브 제외)'); } })));
     let c = 0;
-    for (const b of blocks){
-      sheet.append(el('div', { class:'block' + (b.k === 'common' ? ' main' : ''), 'data-k': b.k },
-        el('div', { class:'block-head' }, el('span', { class:'badge', text: badgeFor(b.k, b.k === 'char' ? c++ : 0) }), el('span', { class:'bname', text: b.name || BLOCK_NAME[b.k] || '블록' }),
-          b.k === 'common' ? el('span', { class:'pill', text:'MAIN' }) : null,
-          el('span', { class:'cnt', text: count(b.body) }), el('button', { class:'chip', text:'복사', onclick(){ copy(b.body, `${b.name || '블록'} 복사했어요`); } })),
-        pre(b.body)));
-    }
+    card.append(el('div', { class:'doc-blocks' }, blocks.map(b => el('section', { class:'doc-block', 'data-k': b.k },
+      el('div', { class:'doc-block-head' },
+        el('span', { class:'doc-badge', text: badgeFor(b.k, b.k === 'char' ? c++ : 0) }),
+        el('span', { class:'doc-block-name', text: b.name || BLOCK_NAME[b.k] || '블록' }),
+        b.k === 'common' ? el('span', { class:'doc-pill', text:'MAIN' }) : null,
+        el('span', { class:'sp' }), el('span', { class:'doc-cnt', text: count(b.body) }),
+        el('button', { type:'button', class:'doc-btn', text:'복사', onclick(){ copy(b.body, `${b.name || '블록'} 복사했어요`); } })),
+      el('pre', { class:'doc-block-body', text: b.body })))));
   }
-  // 공유받은 사람은 읽기·복사만 가능 (편집기로 가져가는 기능 없음)
-  const actions = el('div', { class:'view-actions' },
-    el('span', { class:'ro', text:'공유된 기록은 읽기 전용이에요' }),
-    ctx.id ? el('button', { type:'button', class:'edit-btn', text:'작성자 수정', onclick(){ this.classList.toggle('on', toggleEditForm()); } }) : null,
-    el('a', { class:'btn', href:'#/', text:'처음으로' }));
-  box.append(sheet, actions, homeLink());
+  card.append(el('div', { class:'doc-sign' }, svgAnchor(), '해양지부 신문고 발행'));
+  // 공유받은 사람은 읽기·복사만 가능
+  const after = el('div', { class:'doc-after' },
+    el('span', { class:'doc-ro', text:'공유된 기록은 읽기 전용이에요' }),
+    ctx.id ? el('button', { type:'button', class:'doc-edit', text:'작성자 수정', onclick(){ this.classList.toggle('on', toggleEditForm()); } }) : null);
+  center.append(card, after, homeLink());
 
   // 작성자 수정: 편집 접속 번호 확인 후 편집기로 불러옴
   let ef = null;
@@ -1145,7 +1586,7 @@ function renderDoc(d, ctx = {}){
     } },
       el('p', { class:'edit-guide', text:'링크를 만들 때 정한 편집 접속 번호를 입력하면 이 기록을 수정할 수 있어요.' }),
       el('div', { class:'edit-row' }, el('div', { class:'inwrap' }, kin), ok), msg);
-    box.insertBefore(ef, actions.nextSibling); kin.focus();
+    center.insertBefore(ef, after.nextSibling); kin.focus();
     return true;
   }
 }
@@ -1182,10 +1623,10 @@ function showAdminKeyMaker(){
 function enterEdit(d, id, proof, pw){
   const t = d.t, cur = F[t].get();
   if (!F[t].empty(cur) && !confirm(`작성 중인 ${TYPES[t]} 내용이 이 기록으로 바뀌어요. 계속할까요?`)) return;
-  const copyD = { ...d }; delete copyD.at; delete copyD.sk; delete copyD.css;
+  const copyD = { ...d }; delete copyD.at; delete copyD.sk; delete copyD.css; delete copyD.bg;
   F[t].set(copyD); updateCounts(t); store.set('nd:' + t, F[t].get());
   const box = $(`.share[data-for="${t}"]`);
-  box._setSk(d.sk || 'marine', d.css); box._setEdit({ id, proof, pw: pw || '' });
+  box._setStyle(d); box._setEdit({ id, proof, pw: pw || '' });
   go('#/' + t); toast('수정 모드로 열었어요. 고친 뒤 업데이트를 눌러 주세요');
 }
 
@@ -1325,8 +1766,8 @@ function render(h){
   } else if (h.startsWith('#/v/') || h.startsWith('#/s/')){
     const [code, flag, px] = h.slice(4).split('!');
     document.body.classList.toggle('is-preview', px === 'x' || flag === 'x');
-    // 잠금 화면 등 내용을 열기 전에도 고른 스타일의 바탕을 먼저 깔아 둠
-    applyShareStyle(flag === 'p' ? 'plain' : flag === 'c' ? 'css' : 'marine');
+    // 잠금 화면 등 내용을 열기 전에도 고른 레이아웃의 바탕을 먼저 깔아 둠
+    applyShareStyle(LAY_FLAG[flag] || 'marine');
     $('#v-view').classList.add('on'); document.title = '공유된 기록';
     crumb.append(el('a', { href:'#/', text:'← 처음으로' }));
     h.startsWith('#/s/') ? showStored(code) : showView(code);
