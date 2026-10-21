@@ -436,6 +436,7 @@ body.share-full main{max-width:none;padding:0}
 body.share-bg-on{background:var(--page-bg)!important;background-attachment:fixed!important}
 body.share-bg-dark .top .brand b,body.share-bg-dark #crumb a{color:#fff}
 body.share-bg-dark .top .brand small{color:#bfe0ff}
+body.share-full #toast{background:#fff;color:#0b3566;box-shadow:0 10px 30px -8px rgba(0,0,0,.35)}
 
 .share-page{
   --s-bg:transparent; --s-card:#fff; --s-text:var(--ink); --s-muted:var(--muted); --s-accent:var(--accent); --s-deep:var(--deep);
@@ -672,6 +673,44 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
 .css-toggle{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;width:max-content}
 .css-toggle input{width:16px;height:16px;accent-color:var(--accent);margin:0}
 
+/* 꾸밈 글 칸 · 꾸미기 도구 */
+.rich{cursor:text;overflow-wrap:anywhere}
+.rich:focus{outline:0}
+.rich:empty::before{content:attr(data-ph);color:#9db0c4;pointer-events:none}
+.rich mark,.doc-body mark,.doc-block-body mark{color:#13263b;border-radius:3px;padding:0 .08em}
+.fmt-hint{color:#9db0c4}
+.fmt-bar{position:fixed;z-index:90;display:flex;align-items:center;flex-wrap:wrap;gap:4px;max-width:calc(100vw - 16px);padding:6px 8px;background:#0b2a4f;border-radius:12px;box-shadow:0 12px 30px -10px rgba(5,25,55,.6)}
+.fmt-bar[hidden]{display:none}
+.fb{border:0;background:transparent;color:#fff;min-width:28px;height:28px;border-radius:7px;font-size:13px;font-weight:700;padding:0 7px;cursor:pointer}
+.fb:hover{background:rgba(255,255,255,.14)}
+.fb-i{font-style:italic;font-family:Georgia,serif}
+.fb-x{font-size:11.5px;font-weight:600;color:#bcd6f0}
+.fb-sep{width:1px;height:18px;background:rgba(255,255,255,.18);margin:0 3px}
+.fb-lab{font:600 9.5px/1 var(--mono);letter-spacing:.08em;color:#8fb6dc;margin-right:1px}
+.fb-c,.fb-m{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.85);background:var(--c);cursor:pointer;padding:0}
+.fb-m{border-radius:5px;border-color:rgba(255,255,255,.5)}
+.fb-c:hover,.fb-m:hover{transform:scale(1.15)}
+@media (max-width:560px){.fmt-bar{gap:3px;padding:5px 6px}.fb-lab{display:none}.fb{min-width:24px;padding:0 5px}.fb-c,.fb-m{width:19px;height:19px}.fb-sep{margin:0 1px}}
+/* 접는 계기판 칸 */
+details.fold > summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;-webkit-user-select:none}
+details.fold > summary::-webkit-details-marker{display:none}
+details.fold > summary h5{margin:0!important;flex:none}
+details.fold > summary::after{content:'';flex:none;width:7px;height:7px;margin:0 2px 3px 4px;border-right:1.5px solid #8ea3b8;border-bottom:1.5px solid #8ea3b8;transform:rotate(45deg);transition:transform .2s}
+details.fold[open] > summary::after{transform:rotate(-135deg);margin-bottom:-3px}
+details.fold[open] > summary{margin-bottom:12px}
+details.fold:not([open]){padding-top:13px;padding-bottom:13px}
+details.fold:not([open]):hover{border-color:var(--sky)}
+.fold-sum{margin-left:auto;min-width:0;font-size:11.5px;font-weight:600;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fold-sum em{font-style:normal;font-family:var(--mono)}
+.fold-sum .save-st{color:var(--accent)}
+.fold-sum .save-st.saving{color:var(--muted)}
+.fold-sum.on{color:var(--accent)}
+.fold-body.style-pick{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin:0}
+.fold-body .lab{font-size:12px;font-weight:600;color:var(--muted)}
+.fold-body .seg{display:flex}.fold-body .seg button{flex:1;white-space:nowrap}
+.side details .css-box{margin:0}
+.sh-k #prompt-copyall{margin-left:auto;font-family:Pretendard,sans-serif;letter-spacing:0}
+.side .share-row .preview-btn{width:100%}
 </style>
 </head>
 <body>
@@ -745,16 +784,16 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
         <span class="sp"></span>
         <button class="chip" id="ooc-copy">복사하기</button>
       </div>
-      <textarea id="ooc-body" class="paper" placeholder="OOC 내용을 적어 주세요."></textarea>
-      <div class="foot"><span id="ooc-count">0자</span><button class="txt" data-clear="ooc">새로 쓰기</button></div>
+      <div id="ooc-body" class="paper rich" contenteditable="true" spellcheck="false" data-ph="OOC 내용을 적어 주세요."></div>
+      <div class="foot"><span><span id="ooc-count">0자</span><span class="fmt-hint"> · 글자를 드래그하면 꾸밀 수 있어요</span></span><button class="txt" data-clear="ooc">새로 쓰기</button></div>
     </div>
     <aside class="side">
-      <div class="panel"><h5>LOG STATUS</h5>
-        <div class="read"><div><span>DATE</span><b class="today">--.--</b></div><div><span>LENGTH</span><b><em data-len="ooc">0</em><small>자</small></b></div><div class="wide"><span>SAVE</span><b class="save-st" data-save="ooc">● 자동 저장됨</b></div></div>
-      </div>
-      <div class="panel"><h5>MARKING · 표기</h5>
-        <div class="pair"><label class="pf">PC 표기<input id="ooc-pc" value="PC"></label><label class="pf">NPC 표기<input id="ooc-npc" value="NPC"></label></div>
-      </div>
+      <details class="panel fold" data-fold="status"><summary><h5>LOG STATUS</h5><span class="fold-sum"><em data-len="ooc">0</em>자 · <span class="save-st" data-save="ooc">● 자동 저장됨</span></span></summary>
+        <div class="fold-body"><div class="read"><div><span>DATE</span><b class="today">--.--</b></div><div><span>LENGTH</span><b><em data-len="ooc">0</em><small>자</small></b></div><div class="wide"><span>SAVE</span><b class="save-st" data-save="ooc">● 자동 저장됨</b></div></div></div>
+      </details>
+      <details class="panel fold" data-fold="marking"><summary><h5>MARKING · 표기</h5><span class="fold-sum" id="mark-sum">PC / NPC</span></summary>
+        <div class="fold-body"><div class="pair"><label class="pf">PC 표기<input id="ooc-pc" value="PC"></label><label class="pf">NPC 표기<input id="ooc-npc" value="NPC"></label></div></div>
+      </details>
       <div class="share" data-for="ooc"></div>
     </aside>
   </div></section>
@@ -763,13 +802,13 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
   <section id="v-memo" class="view"><div class="desk">
     <div class="sheet">
       <div class="sheet-head"><div class="sh-k"><span class="tag">MEMO</span>MN-02 · 신규 기록 문서</div><input class="title" id="memo-title" placeholder="제목 없는 기록"></div>
-      <textarea id="memo-body" class="paper" placeholder="자유롭게 적어 주세요."></textarea>
-      <div class="foot"><span id="memo-count">0자</span><button class="txt" data-clear="memo">새로 쓰기</button></div>
+      <div id="memo-body" class="paper rich" contenteditable="true" spellcheck="false" data-ph="자유롭게 적어 주세요."></div>
+      <div class="foot"><span><span id="memo-count">0자</span><span class="fmt-hint"> · 글자를 드래그하면 꾸밀 수 있어요</span></span><button class="txt" data-clear="memo">새로 쓰기</button></div>
     </div>
     <aside class="side">
-      <div class="panel"><h5>LOG STATUS</h5>
-        <div class="read"><div><span>DATE</span><b class="today">--.--</b></div><div><span>LENGTH</span><b><em data-len="memo">0</em><small>자</small></b></div><div class="wide"><span>SAVE</span><b class="save-st" data-save="memo">● 자동 저장됨</b></div></div>
-      </div>
+      <details class="panel fold" data-fold="status"><summary><h5>LOG STATUS</h5><span class="fold-sum"><em data-len="memo">0</em>자 · <span class="save-st" data-save="memo">● 자동 저장됨</span></span></summary>
+        <div class="fold-body"><div class="read"><div><span>DATE</span><b class="today">--.--</b></div><div><span>LENGTH</span><b><em data-len="memo">0</em><small>자</small></b></div><div class="wide"><span>SAVE</span><b class="save-st" data-save="memo">● 자동 저장됨</b></div></div></div>
+      </details>
       <div class="share" data-for="memo"></div>
     </aside>
   </div></section>
@@ -777,8 +816,8 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
   <!-- PROMPT -->
   <section id="v-prompt" class="view"><div class="desk">
     <div class="sheet">
-      <div class="sheet-head"><div class="sh-k"><span class="tag">PROMPT</span>MN-03 · 프롬프트 기록 문서</div><input class="title" id="prompt-title" placeholder="제목 없는 기록"></div>
-      <div class="block main" data-k="common"><div class="block-head"><span class="badge">∗</span><input class="bname" value="공통 프롬프트"><span class="pill">MAIN</span><span class="cnt">0자</span><button type="button" class="chip copyb">복사</button></div><textarea class="paper" placeholder="모든 캐릭터에 공통으로 들어갈 메인 프롬프트"></textarea></div>
+      <div class="sheet-head"><div class="sh-k"><span class="tag">PROMPT</span>MN-03 · 프롬프트 기록 문서<button type="button" class="chip" id="prompt-copyall" title="네거티브 블록은 빼고 복사해요">전체 복사</button></div><input class="title" id="prompt-title" placeholder="제목 없는 기록"></div>
+      <div class="block main" data-k="common"><div class="block-head"><span class="badge">∗</span><input class="bname" value="공통 프롬프트"><span class="pill">MAIN</span><span class="cnt">0자</span><button type="button" class="chip copyb">복사</button></div><div class="paper rich" contenteditable="true" spellcheck="false" data-ph="모든 캐릭터에 공통으로 들어갈 메인 프롬프트"></div></div>
       <div class="p-divider"><span>추가 블록</span></div>
       <div id="p-list"><p class="p-empty">아래 버튼으로 캐릭터 · 네거티브 블록을 추가해 보세요.</p></div>
       <div class="p-add">
@@ -786,13 +825,12 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
         <button type="button" class="chip neg" data-add="neg">＋ 네거티브</button>
         <button type="button" class="chip" data-add="free">＋ 빈 블록</button>
       </div>
-      <div class="foot"><span>블록 이름은 눌러서 바꿀 수 있어요</span><button class="txt" data-clear="prompt">새로 쓰기</button></div>
+      <div class="foot"><span>블록 이름은 눌러서 바꾸고, 글자는 드래그해서 꾸밀 수 있어요</span><button class="txt" data-clear="prompt">새로 쓰기</button></div>
     </div>
     <aside class="side">
-      <div class="panel"><h5>LOG STATUS</h5>
-        <div class="read"><div><span>BLOCKS</span><b data-blocks>1</b></div><div><span>LENGTH</span><b><em data-len="prompt">0</em><small>자</small></b></div><div class="wide"><span>SAVE</span><b class="save-st" data-save="prompt">● 자동 저장됨</b></div></div>
-        <button class="chip fill wide-btn" id="prompt-copyall">전체 복사 (네거티브 제외)</button>
-      </div>
+      <details class="panel fold" data-fold="status"><summary><h5>LOG STATUS</h5><span class="fold-sum"><em data-len="prompt">0</em>자 · <span class="save-st" data-save="prompt">● 자동 저장됨</span></span></summary>
+        <div class="fold-body"><div class="read"><div><span>BLOCKS</span><b data-blocks>1</b></div><div><span>LENGTH</span><b><em data-len="prompt">0</em><small>자</small></b></div><div class="wide"><span>SAVE</span><b class="save-st" data-save="prompt">● 자동 저장됨</b></div></div></div>
+      </details>
       <div class="share" data-for="prompt"></div>
     </aside>
   </div></section>
@@ -971,27 +1009,142 @@ async function unpack(bytes, pw){
   return d;
 }
 
+/* ---------- 꾸밈 글: 굵게 · 기울임 · 글자색 · 형광펜 ---------- */
+const okColor = v => { v = (v || '').trim(); return (/^#[0-9a-f]{3,8}$/i.test(v) || /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*(0|1|0?\.\d+)\s*)?\)$/i.test(v)) ? v : ''; };
+const isClearColor = v => !v || /^(transparent|initial|inherit|rgba\(\s*0\s*,\s*0\s*,\s*0\s*,\s*0\s*\))$/i.test(v.trim());
+// 어떤 HTML이 와도 굵게·기울임·글자색·형광펜·줄바꿈만 남겨 새로 만듦 (공유 화면에서도 같은 걸 거침)
+function cleanRich(src){
+  const out = document.createDocumentFragment();
+  const br = () => document.createElement('br');
+  (function walk(node, parent){
+    for (const n of node.childNodes){
+      if (n.nodeType === 3){ if (n.nodeValue) parent.append(n.nodeValue); continue; }
+      if (n.nodeType !== 1) continue;
+      const tag = n.tagName;
+      if (tag === 'BR'){ parent.append(br()); continue; }
+      if (/^(SCRIPT|STYLE|TEMPLATE|IFRAME|OBJECT|SVG|IMG|VIDEO|AUDIO)$/.test(tag)) continue;
+      if (/^(DIV|P|LI|H[1-6]|BLOCKQUOTE)$/.test(tag)){
+        if (parent.childNodes.length) parent.append(br());
+        if (n.childNodes.length === 1 && n.firstChild.nodeName === 'BR') continue;
+        walk(n, parent); continue;
+      }
+      const st = n.style || {}, fw = st.fontWeight || '';
+      const b = tag === 'B' || tag === 'STRONG' || fw === 'bold' || fw === 'bolder' || +fw >= 600;
+      const i = tag === 'I' || tag === 'EM' || st.fontStyle === 'italic';
+      const c = okColor(n.getAttribute && n.getAttribute('color')) || okColor(st.color);
+      const hb = st.backgroundColor || '';
+      const h = isClearColor(hb) ? (tag === 'MARK' && !hb ? '#fff3a3' : '') : okColor(hb);
+      let target = parent;
+      const wrap = w => { target.append(w); target = w; };
+      if (b) wrap(document.createElement('b'));
+      if (i) wrap(document.createElement('i'));
+      if (c){ const x = document.createElement('span'); x.style.color = c; wrap(x); }
+      if (h){ const x = document.createElement('mark'); x.style.backgroundColor = h; wrap(x); }
+      walk(n, target);
+    }
+  })(src, out);
+  return out;
+}
+function richText(node){ let s = ''; (function w(n){ for (const c of n.childNodes){ if (c.nodeType === 3) s += c.nodeValue; else if (c.nodeName === 'BR') s += '\n'; else w(c); } })(node); return s; }
+function parseRich(html){ const doc = new DOMParser().parseFromString('<div>' + String(html) + '</div>', 'text/html'); return cleanRich(doc.body.firstChild || doc.body); }
+function fragHtml(frag){ const d = document.createElement('div'); d.append(frag); return d.innerHTML; }
+function fillRich(target, text, html){ if (html) target.replaceChildren(parseRich(html)); else target.textContent = text || ''; }
+// 꾸밈 글 칸: textarea처럼 .value(글자만)와 .html(꾸밈 포함)로 읽고 씀
+function enhanceRich(d){
+  if (d._rich) return d; d._rich = true;
+  Object.defineProperty(d, 'value', { configurable:true,
+    get(){ return richText(cleanRich(d)).replace(/\n$/, ''); },
+    set(v){ d.textContent = v || ''; } });
+  Object.defineProperty(d, 'html', { configurable:true,
+    get(){ const f = cleanRich(d); return f.querySelector('b,i,span,mark') ? fragHtml(f) : ''; },
+    set(v){ fillRich(d, '', v); } });
+  d.addEventListener('paste', e => { e.preventDefault(); document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain')); });
+  d.addEventListener('drop', e => e.preventDefault());
+  d.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && !e.shiftKey){ e.preventDefault(); document.execCommand('insertLineBreak'); } });
+  return d;
+}
+function makeRich(ph){ return enhanceRich(el('div', { class:'paper rich', contenteditable:'true', spellcheck:'false', 'data-ph': ph || '' })); }
+function swapRich(root, a, b, notify){
+  let changed = false;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  for (let n; (n = w.nextNode());){ const v = swapText(n.nodeValue, a, b); if (v !== n.nodeValue){ n.nodeValue = v; changed = true; } }
+  if (changed && notify) root.dispatchEvent(new Event('input', { bubbles:true }));
+  return changed;
+}
+$$('.rich').forEach(enhanceRich);
+
+// 드래그하면 뜨는 꾸미기 도구
+const FMT_COLORS = [['#d64545','빨강'],['#e8871e','주황'],['#2f9e6b','초록'],['#1a63b0','파랑'],['#7b4fd6','보라'],['#8a96a3','회색']];
+const FMT_MARKS = [['#fff3a3','노랑'],['#c9f2dc','민트'],['#ffd6e5','분홍'],['#d4e8ff','하늘']];
+let fmtHost = null;
+const fmtBar = el('div', { class:'fmt-bar', role:'toolbar', 'aria-label':'글자 꾸미기' },
+  el('button', { type:'button', class:'fb fb-b', title:'굵게 (Ctrl+B)', text:'B', onclick(){ fmt('bold'); } }),
+  el('button', { type:'button', class:'fb fb-i', title:'기울임 (Ctrl+I)', text:'I', onclick(){ fmt('italic'); } }),
+  el('span', { class:'fb-sep' }),
+  el('span', { class:'fb-lab', text:'글자' }),
+  FMT_COLORS.map(([c, n]) => el('button', { type:'button', class:'fb-c', title:'글자색 · ' + n, 'aria-label':'글자색 ' + n, style:'--c:' + c, onclick(){ fmt('foreColor', c); } })),
+  el('span', { class:'fb-sep' }),
+  el('span', { class:'fb-lab', text:'형광' }),
+  FMT_MARKS.map(([c, n]) => el('button', { type:'button', class:'fb-m', title:'형광펜 · ' + n, 'aria-label':'형광펜 ' + n, style:'--c:' + c, onclick(){ fmt('hiliteColor', c); } })),
+  el('span', { class:'fb-sep' }),
+  el('button', { type:'button', class:'fb fb-x', title:'꾸밈 지우기', text:'지우기', onclick(){ fmt('removeFormat'); } }));
+fmtBar.hidden = true;
+document.body.append(fmtBar);
+fmtBar.addEventListener('pointerdown', e => e.preventDefault());
+function fmt(cmd, val){
+  if (!fmtHost) return;
+  document.execCommand('styleWithCSS', false, true);
+  document.execCommand(cmd, false, val);
+  if (cmd === 'removeFormat') document.execCommand('hiliteColor', false, 'transparent');
+  fmtHost.dispatchEvent(new Event('input', { bubbles:true }));
+  placeFmt();
+}
+function placeFmt(){
+  const s = getSelection();
+  const hide = () => { fmtBar.hidden = true; fmtHost = null; };
+  if (!s.rangeCount || s.isCollapsed) return hide();
+  const r = s.getRangeAt(0), node = r.commonAncestorContainer;
+  const host = (node.nodeType === 1 ? node : node.parentElement);
+  const rich = host && host.closest('.rich');
+  if (!rich || !rich.isContentEditable) return hide();
+  fmtHost = rich; fmtBar.hidden = false;
+  const rect = r.getBoundingClientRect(), bw = fmtBar.offsetWidth, bh = fmtBar.offsetHeight;
+  const below = matchMedia('(pointer:coarse)').matches || rect.top - bh - 10 < 8;
+  fmtBar.style.top = Math.min(innerHeight - bh - 8, below ? rect.bottom + 10 : rect.top - bh - 10) + 'px';
+  fmtBar.style.left = Math.min(Math.max(8, rect.left + rect.width / 2 - bw / 2), innerWidth - bw - 8) + 'px';
+}
+document.addEventListener('selectionchange', placeFmt);
+addEventListener('scroll', () => { if (!fmtBar.hidden) placeFmt(); }, true);
+addEventListener('resize', () => { if (!fmtBar.hidden) placeFmt(); });
+
+// 접었다 폈다 하는 계기판 칸 (열림 상태는 이 브라우저에 기억)
+function initFold(d, key){
+  d.open = !!store.get('nd:fold:' + key);
+  d.addEventListener('toggle', () => store.set('nd:fold:' + key, d.open));
+}
+$$('details.fold[data-fold]').forEach(d => initFold(d, d.dataset.fold));
+
 /* ---------- editors ---------- */
 const F = {
   ooc: {
-    get: () => ({ t:'ooc', title: $('#ooc-title').value.trim(), body: $('#ooc-body').value, pc: $('#ooc-pc').value.trim() || 'PC', npc: $('#ooc-npc').value.trim() || 'NPC' }),
-    set: d => { $('#ooc-title').value = d.title || ''; $('#ooc-body').value = d.body || ''; $('#ooc-pc').value = d.pc || 'PC'; $('#ooc-npc').value = d.npc || 'NPC'; syncLabels(); },
+    get: () => ({ t:'ooc', title: $('#ooc-title').value.trim(), body: $('#ooc-body').value, rich: $('#ooc-body').html, pc: $('#ooc-pc').value.trim() || 'PC', npc: $('#ooc-npc').value.trim() || 'NPC' }),
+    set: d => { $('#ooc-title').value = d.title || ''; fillRich($('#ooc-body'), d.body, d.rich); $('#ooc-pc').value = d.pc || 'PC'; $('#ooc-npc').value = d.npc || 'NPC'; syncLabels(); },
     empty: d => !d.body.trim()
   },
   memo: {
-    get: () => ({ t:'memo', title: $('#memo-title').value.trim(), body: $('#memo-body').value }),
-    set: d => { $('#memo-title').value = d.title || ''; $('#memo-body').value = d.body || ''; },
+    get: () => ({ t:'memo', title: $('#memo-title').value.trim(), body: $('#memo-body').value, rich: $('#memo-body').html }),
+    set: d => { $('#memo-title').value = d.title || ''; fillRich($('#memo-body'), d.body, d.rich); },
     empty: d => !d.body.trim()
   },
   prompt: {
     get: () => ({ t:'prompt', title: $('#prompt-title').value.trim(),
-      blocks: $$('#v-prompt .block').map(b => ({ k: b.dataset.k, name: b.querySelector('.bname').value.trim() || BLOCK_NAME[b.dataset.k] || '블록', body: b.querySelector('textarea').value })) }),
+      blocks: $$('#v-prompt .block').map(b => ({ k: b.dataset.k, name: b.querySelector('.bname').value.trim() || BLOCK_NAME[b.dataset.k] || '블록', body: b.querySelector('.rich').value, rich: b.querySelector('.rich').html })) }),
     set: d => {
       $('#prompt-title').value = d.title || '';
       const blocks = normBlocks(d.blocks);
       const main = $('#v-prompt .block.main');
       main.querySelector('.bname').value = blocks[0].name || BLOCK_NAME.common;
-      main.querySelector('textarea').value = blocks[0].body || '';
+      fillRich(main.querySelector('.rich'), blocks[0].body, blocks[0].rich);
       const list = $('#p-list');
       list.querySelectorAll('.block').forEach(n => n.remove());
       blocks.slice(1).forEach(b => list.append(makeBlock(b)));
@@ -1006,7 +1159,7 @@ const BLOCK_NAME = { common:'공통 프롬프트', neg:'네거티브', free:'새
 const BLOCK_HINT = { char:'캐릭터 프롬프트', neg:'들어가면 안 되는 요소 (네거티브 프롬프트)', free:'자유롭게 적어 주세요' };
 // 예전 형식(종류 표시 없음)도 읽을 수 있게: 첫 블록은 공통, 나머지는 캐릭터
 function normBlocks(blocks){
-  const arr = (blocks || []).map((b,i) => ({ k: b.k || (i === 0 ? 'common' : 'char'), name: b.name, body: b.body || '' }));
+  const arr = (blocks || []).map((b,i) => ({ k: b.k || (i === 0 ? 'common' : 'char'), name: b.name, body: b.body || '', rich: b.rich || '' }));
   const common = arr.find(b => b.k === 'common') || { k:'common', name: BLOCK_NAME.common, body:'' };
   const rest = arr.filter(b => b !== common && !(b.k === 'char' && !blocks[arr.indexOf(b)].k && !b.body.trim()));
   return [common, ...rest];
@@ -1016,8 +1169,8 @@ function nextCharName(){
   for (let i = 0; i < 26; i++){ const n = '캐릭터 ' + String.fromCharCode(65 + i); if (!used.has(n)) return n; }
   return '캐릭터';
 }
-function makeBlock({ k, name, body }){
-  const ta = el('textarea', { class:'paper', placeholder: BLOCK_HINT[k] || '' }); ta.value = body || '';
+function makeBlock({ k, name, body, rich }){
+  const ta = makeRich(BLOCK_HINT[k]); fillRich(ta, body, rich);
   const nm = el('input', { class:'bname' }); nm.value = name || (k === 'char' ? nextCharName() : BLOCK_NAME[k]);
   return el('div', { class:'block', 'data-k': k },
     el('div', { class:'block-head' }, el('span', { class:'badge' }), nm, el('span', { class:'cnt', text: count(body) }),
@@ -1043,22 +1196,21 @@ const promptChanged = () => $('#v-prompt').dispatchEvent(new Event('input'));
 function updateCounts(t){
   if (t === 'ooc') $('#ooc-count').textContent = count($('#ooc-body').value);
   if (t === 'memo') $('#memo-count').textContent = count($('#memo-body').value);
-  if (t === 'prompt') $$('#v-prompt .block').forEach(b => b.querySelector('.cnt').textContent = count(b.querySelector('textarea').value));
+  if (t === 'prompt') $$('#v-prompt .block').forEach(b => b.querySelector('.cnt').textContent = count(b.querySelector('.rich').value));
   // 오른쪽 계기판
-  const len = t === 'prompt' ? $$('#v-prompt .block textarea').reduce((n, x) => n + x.value.length, 0) : $('#' + t + '-body').value.length;
-  const le = $(`[data-len="${t}"]`); if (le) le.textContent = len.toLocaleString();
+  const len = t === 'prompt' ? $$('#v-prompt .block .rich').reduce((n, x) => n + x.value.length, 0) : $('#' + t + '-body').value.length;
+  $$(`[data-len="${t}"]`).forEach(x => x.textContent = len.toLocaleString());
   if (t === 'prompt'){ const bc = $('[data-blocks]'); if (bc) bc.textContent = $$('#v-prompt .block').length; }
 }
 function setSave(t, saving){
-  const el = $(`[data-save="${t}"]`); if (!el) return;
-  el.textContent = saving ? '○ 저장 중…' : '● 자동 저장됨';
-  el.classList.toggle('saving', saving);
+  $$(`[data-save="${t}"]`).forEach(x => { x.textContent = saving ? '○ 저장 중…' : '● 자동 저장됨'; x.classList.toggle('saving', saving); });
 }
 { const d = new Date(); $$('.today').forEach(x => x.textContent = String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0')); }
 function syncLabels(){
   const pc = $('#ooc-pc').value.trim() || 'PC', npc = $('#ooc-npc').value.trim() || 'NPC';
   $('#ooc-ins-pc').textContent = pc; $('#ooc-ins-npc').textContent = npc;
   $('#ooc-swap').textContent = `${pc} ⇄ ${npc}`;
+  const ms = $('#mark-sum'); if (ms) ms.textContent = `${pc} / ${npc}`;
 }
 
 /* share panel */
@@ -1079,10 +1231,9 @@ function buildShare(t){
   const legacy = store.get('nd:sk');
   let lay = store.get('nd:lay') || (legacy === 'css' ? 'plain' : (LAYOUTS.some(x => x[0] === legacy) ? legacy : 'marine'));
   let bg = normBg(store.get('nd:bg'));
-  let cssOn = store.get('nd:css-on') ?? (legacy === 'css');
   const layBtns = LAYOUTS.map(([k, name]) => el('button', { type:'button', 'data-lay':k, title:name, onclick(){ setLay(k); store.set('nd:lay', k); markStale(t); } },
     el('i', { class:'lay-thumb lt-' + k }), el('span', { text:name })));
-  function setLay(k){ lay = k; layBtns.forEach(b => b.classList.toggle('on', b.dataset.lay === k)); }
+  function setLay(k){ lay = k; layBtns.forEach(b => b.classList.toggle('on', b.dataset.lay === k)); updViewSum(); }
   // 배경: 기본 / 단색 / 사진
   const bgModes = [['none','기본'],['color','단색'],['photo','사진']].map(([k,l]) => el('button', { type:'button', 'data-bg':k, text:l, onclick(){ setBgMode(k, true); } }));
   const sws = PALETTE.map(c => el('button', { type:'button', class:'sw', 'data-c':c, title:c, 'aria-label':'배경색 ' + c, onclick(){ setBg({ t:'color', v:c }); } }));
@@ -1122,52 +1273,54 @@ function buildShare(t){
     photoPrev.hidden = !['sea','url','img'].includes(bg.t);
     photoPrev.style.backgroundImage = bg.t === 'sea' ? 'var(--banner)' : (bg.t === 'url' || bg.t === 'img') ? `url("${bg.v}")` : '';
     urlIn.value = bg.t === 'url' ? bg.v : '';
+    updViewSum();
   }
-  const tplSel = el('select', { class:'css-tpl', 'aria-label':'저장된 CSS 템플릿' });
+  const tplSel = el('select', { class:'css-tpl', 'aria-label':'저장된 CSS 프리셋' });
   const cssIn = el('textarea', { class:'css-in', spellcheck:'false', placeholder: CSS_SAMPLE });
-  cssIn.value = store.get('nd:css-last') ?? CSS_SAMPLE;
-  cssIn.addEventListener('input', () => store.set('nd:css-last', cssIn.value));
-  const tplName = el('input', { class:'css-name', placeholder:'템플릿 이름', maxlength:'30' });
+  cssIn.value = store.get('nd:css2') ?? ((store.get('nd:css-on') || legacy === 'css') ? (store.get('nd:css-last') || '') : '');
+  cssIn.addEventListener('input', () => { store.set('nd:css2', cssIn.value); updCssSum(); });
+  const tplName = el('input', { class:'css-name', placeholder:'프리셋 이름', maxlength:'30' });
   tplSel.addEventListener('change', () => {
     const tp = cssTemplates().find(x => x.name === tplSel.value);
     tplName.value = tp ? tp.name : '';
-    if (tp){ cssIn.value = tp.css; store.set('nd:css-last', tp.css); markStale(t); toast(`'${tp.name}' 템플릿을 불러왔어요`); }
+    if (tp){ cssIn.value = tp.css; store.set('nd:css2', tp.css); updCssSum(); markStale(t); toast(`'${tp.name}' 프리셋을 불러왔어요`); }
   });
   function saveTpl(){
     const css = cssIn.value.trim(); if (!css) return toast('저장할 CSS가 없어요');
-    const name = tplName.value.trim(); if (!name){ tplName.focus(); return toast('템플릿 이름을 먼저 적어 주세요'); }
+    const name = tplName.value.trim(); if (!name){ tplName.focus(); return toast('프리셋 이름을 먼저 적어 주세요'); }
     const old = cssTemplates(), had = old.some(x => x.name === name);
     store.set('nd:css-tpl', [...old.filter(x => x.name !== name), { name, css: cssIn.value }]);
-    refreshTemplates(name); toast(had ? `'${name}' 템플릿을 덮어썼어요` : `'${name}' 템플릿을 저장했어요`);
+    refreshTemplates(name); toast(had ? `'${name}' 프리셋을 덮어썼어요` : `'${name}' 프리셋을 저장했어요`);
   }
   tplName.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); saveTpl(); } });
   // 삭제는 브라우저 팝업 대신 버튼을 한 번 더 누르면 확정
   let delTimer = null;
   const delBtn = el('button', { type:'button', class:'chip', text:'삭제', onclick(){
-    const name = tplSel.value; if (!name) return toast('삭제할 템플릿을 골라 주세요');
+    const name = tplSel.value; if (!name) return toast('삭제할 프리셋을 골라 주세요');
     if (!delBtn.classList.contains('arm')){
       delBtn.classList.add('arm'); delBtn.textContent = '한 번 더 누르면 삭제';
       clearTimeout(delTimer); delTimer = setTimeout(() => { delBtn.classList.remove('arm'); delBtn.textContent = '삭제'; }, 3000);
       return;
     }
     clearTimeout(delTimer); delBtn.classList.remove('arm'); delBtn.textContent = '삭제';
-    store.set('nd:css-tpl', cssTemplates().filter(x => x.name !== name)); refreshTemplates(''); tplName.value = ''; toast(`'${name}' 템플릿을 지웠어요`);
+    store.set('nd:css-tpl', cssTemplates().filter(x => x.name !== name)); refreshTemplates(''); tplName.value = ''; toast(`'${name}' 프리셋을 지웠어요`);
   } });
   const cssBox = el('div', { class:'css-box' },
     el('div', { class:'css-row' }, tplSel, delBtn),
-    el('div', { class:'css-row' }, tplName, el('button', { type:'button', class:'chip fill', text:'템플릿 저장', onclick: saveTpl })),
+    el('div', { class:'css-row' }, tplName, el('button', { type:'button', class:'chip fill', text:'프리셋 저장', onclick: saveTpl })),
     cssIn,
-    el('p', { class:'hint', text:'고른 레이아웃 위에 덧입혀져요. 템플릿은 이 브라우저에 저장돼요. 이름표: .share-page · .share-deco i · .doc · .doc-mark · .doc-deco i · .doc-title · .doc-meta · .doc-tools · .doc-body · .doc-block · .doc-sign · .doc-after  /  변수: --s-bg · --s-card · --s-text · --s-accent · --s-radius · --s-width · --s-title' }));
-  const cssChk = el('input', { type:'checkbox' });
-  cssChk.addEventListener('change', () => { cssOn = cssChk.checked; store.set('nd:css-on', cssOn); cssBox.hidden = !cssOn; markStale(t); });
-  const cssToggle = el('label', { class:'css-toggle' }, cssChk, 'CSS 덧입히기');
-  function setCss(on){ cssOn = !!on; cssChk.checked = cssOn; cssBox.hidden = !cssOn; }
-  setLay(lay); setBgMode(bgModeOf(bg)); setBg(bg, true); setCss(cssOn);
+    el('p', { class:'hint', text:'적어 두면 고른 레이아웃 위에 덧입혀지고, 비워 두면 적용되지 않아요. 프리셋은 이 브라우저에 저장돼요. 이름표: .share-page · .share-deco i · .doc · .doc-mark · .doc-deco i · .doc-title · .doc-meta · .doc-tools · .doc-body · .doc-block · .doc-sign · .doc-after  /  변수: --s-bg · --s-card · --s-text · --s-accent · --s-radius · --s-width · --s-title' }));
+  // 접는 칸: 공유 화면(레이아웃·배경) / CSS
+  const viewSum = el('span', { class:'fold-sum' }), cssSum = el('span', { class:'fold-sum' });
+  const BG_NAME = { color:'단색', sea:'바다 사진', url:'사진', img:'사진' };
+  function updViewSum(){ viewSum.textContent = ((LAYOUTS.find(x => x[0] === lay) || [])[1] || '') + (bg && bg.t !== 'none' ? ' · ' + BG_NAME[bg.t] : ''); }
+  function updCssSum(){ cssSum.textContent = cssIn.value.trim() ? '적용 중' : '없음'; cssSum.classList.toggle('on', !!cssIn.value.trim()); }
+  setLay(lay); setBgMode(bgModeOf(bg)); setBg(bg, true); updCssSum();
   // 링크·미리보기에 넣을 공유 화면 설정
   function styleInto(d){
     if (lay !== 'marine') d.sk = lay;
     if (bg.t !== 'none') d.bg = bg;
-    if (cssOn && cssIn.value.trim()) d.css = cssIn.value.slice(0, 20000);
+    if (cssIn.value.trim()) d.css = cssIn.value.slice(0, 20000);
     const f = flagOf(lay); return f ? '!' + f : '';
   }
 
@@ -1192,22 +1345,18 @@ function buildShare(t){
     res.hidden = true;
   }
   box._setEdit = setEdit;
-  box._setStyle = d => { setLay(layoutOf(d)); const b = normBg(d.bg); setBgMode(bgModeOf(b)); setBg(b, true); if (d.css) cssIn.value = d.css; setCss(!!d.css); };
+  box._setStyle = d => { setLay(layoutOf(d)); const b = normBg(d.bg); setBgMode(bgModeOf(b)); setBg(b, true); cssIn.value = d.css || ''; updCssSum(); };
 
   box.append(
     editBar,
-    el('div', { class:'style-pick' },
-      el('span', { class:'lab', text:'공유 화면 레이아웃' }), el('div', { class:'lay-pick' }, layBtns),
-      el('span', { class:'sub-lab', text:'배경' }), el('div', { class:'seg' }, bgModes), colorBox, photoBox,
-      cssToggle, cssBox,
-      el('button', { type:'button', class:'chip preview-btn', text:'미리보기', async onclick(){
+    el('button', { type:'button', class:'chip preview-btn', text:'미리보기', async onclick(){
         const d = F[t].get();
         if (F[t].empty(d)) return toast('내용을 먼저 적어 주세요');
         d.at = Date.now();
         const sfx = styleInto(d);
         // 미리보기는 저장하지 않고, 비밀번호 없이 화면만 보여 줌
         openPreview(base() + '#/v/' + await pack(d, '') + (sfx || '!m') + '!x');
-      } })),
+      } }),
     el('div', { class:'share-row' },
       el('label', { class:'pw' }, el('span', { text:'비밀번호 (선택)' }), el('div', { class:'inwrap' }, pwin, eye)),
       keyLabel, make), res);
@@ -1257,6 +1406,16 @@ function buildShare(t){
     } catch(e){ toast('링크를 만들지 못했어요'); }
     finally { make.disabled = false; make.textContent = editState[t] ? '수정 내용 업데이트' : '저장하고 링크 만들기'; }
   });
+  const viewPanel = el('details', { class:'panel fold' },
+    el('summary', {}, el('h5', { text:'VIEW · 공유 화면' }), viewSum),
+    el('div', { class:'fold-body style-pick' },
+      el('span', { class:'lab', text:'레이아웃' }), el('div', { class:'lay-pick' }, layBtns),
+      el('span', { class:'sub-lab', text:'배경' }), el('div', { class:'seg' }, bgModes), colorBox, photoBox));
+  const cssPanel = el('details', { class:'panel fold' },
+    el('summary', {}, el('h5', { text:'CSS · 덧입히기' }), cssSum),
+    el('div', { class:'fold-body' }, cssBox));
+  initFold(viewPanel, 'view'); initFold(cssPanel, 'css');
+  box.before(viewPanel, cssPanel);
   box._res = res; box._hint = hint; box._pw = pwin; box._key = keyin;
 
   setEdit(null);
@@ -1347,7 +1506,7 @@ function refreshTemplates(selected){
   const list = cssTemplates();
   $$('.css-tpl').forEach(s => {
     const keep = selected ?? s.value;
-    s.replaceChildren(el('option', { value:'', text: list.length ? '저장된 템플릿 선택…' : '저장된 템플릿 없음' }), ...list.map(x => el('option', { value:x.name, text:x.name })));
+    s.replaceChildren(el('option', { value:'', text: list.length ? '저장된 프리셋 선택…' : '저장된 프리셋 없음' }), ...list.map(x => el('option', { value:x.name, text:x.name })));
     s.value = list.some(x => x.name === keep) ? keep : '';
   });
 }
@@ -1389,9 +1548,8 @@ $$('#v-ooc [data-ins]').forEach(b => b.addEventListener('click', () => {
 }));
 $('#ooc-swap').addEventListener('click', () => {
   const ta = $('#ooc-body'), pc = $('#ooc-pc').value.trim() || 'PC', npc = $('#ooc-npc').value.trim() || 'NPC';
-  const v = swapText(ta.value, pc, npc);
-  if (v === ta.value) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`);
-  replaceAll(ta, v); toast(`${pc} ⇄ ${npc} 바꿨어요`);
+  if (!swapRich(ta, pc, npc, true)) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`);
+  toast(`${pc} ⇄ ${npc} 바꿨어요`);
 });
 $('#ooc-copy').addEventListener('click', () => copy($('#ooc-body').value));
 ['#ooc-pc', '#ooc-npc'].forEach(s => $(s).addEventListener('input', syncLabels));
@@ -1402,16 +1560,16 @@ $('#v-prompt').addEventListener('click', e => {
   if (add){
     const b = makeBlock({ k: add.dataset.add, body:'' });
     $('#p-list').append(b); refreshBlocks(); promptChanged();
-    b.querySelector('textarea').focus(); b.scrollIntoView({ block:'nearest', behavior:'smooth' });
+    b.querySelector('.rich').focus(); b.scrollIntoView({ block:'nearest', behavior:'smooth' });
     return;
   }
   const blk = e.target.closest('.block');
   if (!blk) return;
-  if (e.target.closest('.copyb')) return copy(blk.querySelector('textarea').value, `${blk.querySelector('.bname').value || '블록'} 복사했어요`);
+  if (e.target.closest('.copyb')) return copy(blk.querySelector('.rich').value, `${blk.querySelector('.bname').value || '블록'} 복사했어요`);
   const act = e.target.closest('[data-act]')?.dataset.act;
   if (!act) return;
   if (act === 'del'){
-    if (blk.querySelector('textarea').value.trim() && !confirm(`'${blk.querySelector('.bname').value}' 블록을 지울까요?`)) return;
+    if (blk.querySelector('.rich').value.trim() && !confirm(`'${blk.querySelector('.bname').value}' 블록을 지울까요?`)) return;
     blk.remove();
   } else if (act === 'up' && blk.previousElementSibling?.classList.contains('block')){
     blk.parentNode.insertBefore(blk, blk.previousElementSibling);
@@ -1530,19 +1688,18 @@ function renderDoc(d, ctx = {}){
       el('div', { class:'doc-kicker' }, el('span', { class:'doc-tag', text: TAGS[d.t] }), el('span', { class:'doc-form', text: `${FORM_NO[d.t]} · ${TYPES[d.t]}` })),
       el('h1', { class:'doc-title', text: d.title || '제목 없음' })),
     el('dl', { class:'doc-meta' }, mi('DATE', day ? day.toLocaleDateString('ko-KR') : '—'), mi('FROM', '해양지부 신문고'), mi('STATION', 'POINT NEMO')));
-  const bodyEl = txt => el('pre', { class:'doc-body', text: txt || '' });
+  const bodyEl = (txt, html) => { const p = el('pre', { class:'doc-body' }); fillRich(p, txt, html); return p; };
   if (d.t === 'ooc'){
     const pc = d.pc || 'PC', npc = d.npc || 'NPC';
-    let cur = d.body || '';
-    const body = bodyEl(cur);
+    const body = bodyEl(d.body, d.rich);
     card.append(el('div', { class:'doc-tools' },
-      el('button', { type:'button', class:'doc-btn mono fill', text:`${pc} ⇄ ${npc}`, onclick(){ const v = swapText(cur, pc, npc); if (v === cur) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`); cur = v; body.textContent = cur; toast(`${pc} ⇄ ${npc} 바꿨어요`); } }),
+      el('button', { type:'button', class:'doc-btn mono fill', text:`${pc} ⇄ ${npc}`, onclick(){ if (!swapRich(body, pc, npc)) return toast(`바꿀 ${pc} / ${npc} 표기가 없어요`); toast(`${pc} ⇄ ${npc} 바꿨어요`); } }),
       el('span', { class:'sp' }),
-      el('button', { type:'button', class:'doc-btn', text:'복사하기', onclick(){ copy(cur); } })), body);
+      el('button', { type:'button', class:'doc-btn', text:'복사하기', onclick(){ copy(richText(body)); } })), body);
   } else if (d.t === 'memo'){
-    card.append(bodyEl(d.body));
+    card.append(bodyEl(d.body, d.rich));
   } else {
-    const all = (d.blocks || []).map((b,i) => ({ k: b.k || (i === 0 ? 'common' : 'char'), name: b.name, body: b.body || '' }));
+    const all = (d.blocks || []).map((b,i) => ({ k: b.k || (i === 0 ? 'common' : 'char'), name: b.name, body: b.body || '', rich: b.rich || '' }));
     const blocks = all.filter(b => b.body.trim());
     const joinable = blocks.filter(b => b.k !== 'neg');
     if (joinable.length > 1) card.append(el('div', { class:'doc-tools' }, el('span', { class:'sp' }),
@@ -1555,7 +1712,7 @@ function renderDoc(d, ctx = {}){
         b.k === 'common' ? el('span', { class:'doc-pill', text:'MAIN' }) : null,
         el('span', { class:'sp' }), el('span', { class:'doc-cnt', text: count(b.body) }),
         el('button', { type:'button', class:'doc-btn', text:'복사', onclick(){ copy(b.body, `${b.name || '블록'} 복사했어요`); } })),
-      el('pre', { class:'doc-block-body', text: b.body })))));
+      (() => { const p = el('pre', { class:'doc-block-body' }); fillRich(p, b.body, b.rich); return p; })()))));
   }
   card.append(el('div', { class:'doc-sign' }, svgAnchor(), '해양지부 신문고 발행'));
   // 공유받은 사람은 읽기·복사만 가능
