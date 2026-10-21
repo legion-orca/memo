@@ -505,6 +505,11 @@ body.share-full .share-page{min-height:100vh}
 .lock-go{display:block;width:100%;margin-top:10px;border:0;background:var(--s-deep);color:#fff;font-weight:700;font-size:14px;padding:12px;border-radius:12px;cursor:pointer;text-decoration:none}
 .lock-err{min-height:18px;margin:8px 0 0;font-size:12.5px;color:var(--danger)}
 .made-with{display:none}
+.mini-note{margin:6px 0 0;font-size:11.5px;line-height:1.5;color:var(--muted)}
+.share-src{position:absolute;z-index:3;left:50%;bottom:3px;translate:-50% 0;white-space:nowrap;color:var(--s-onbg-muted);text-decoration:none;opacity:.8}
+.share-src:hover{text-decoration:underline}
+body.share-full .share-page:has(.share-src) .share-foot{bottom:20px}
+body.is-preview .share-src{pointer-events:none}
 body.share-full .made-with{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;margin:34px 0 0;text-align:center}
 .made-with .mw-sub{margin:0;font-size:12px;color:var(--s-onbg-muted)}
 .made-with .mw-go{display:inline-flex;padding:10px 22px;border-radius:999px;background:var(--s-edit);color:var(--s-edit-ink);font-size:13.5px;font-weight:700;text-decoration:none;transition:transform .15s,opacity .15s}
@@ -1310,6 +1315,10 @@ function buildShare(t){
       el('button', { type:'button', class:'chip', text:'바다 사진', onclick(){ setBg({ t:'sea' }); } }),
       el('button', { type:'button', class:'chip', text:'사진 올리기', onclick(){ fileIn.click(); } }), fileIn),
     urlIn, photoPrev);
+  // 맨 아래 발행 안내(문구 + 작성하기 버튼) 켜기/끄기 — 끄면 맨 아래에 작은 출처만 남음
+  let mw = store.get('nd:mw') !== 0;
+  const mwBtns = [[true,'보이기'],[false,'출처만']].map(([v,l]) => el('button', { type:'button', 'data-mw':String(v), text:l, onclick(){ setMw(v); store.set('nd:mw', v ? 1 : 0); markStale(t); } }));
+  function setMw(v){ mw = v; mwBtns.forEach(b => b.classList.toggle('on', b.dataset.mw === String(v))); updViewSum(); }
   // 머리 사진 (공문 카드 등 머리 띠가 있는 레이아웃)
   let hd = normBg(store.get('nd:hd')); if (hd.t === 'color') hd = { t:'none' };
   const hdUrl = el('input', { class:'bg-url', type:'url', placeholder:'이미지 주소 붙여 넣기 (https://…)' });
@@ -1405,14 +1414,15 @@ function buildShare(t){
   // 접는 칸: 공유 화면(레이아웃·배경) / CSS
   const viewSum = el('span', { class:'fold-sum' }), cssSum = el('span', { class:'fold-sum' });
   const BG_NAME = { color:'단색', sea:'바다 사진', url:'사진', img:'사진' };
-  function updViewSum(){ viewSum.textContent = ((LAYOUTS.find(x => x[0] === lay) || [])[1] || '') + (lay === 'official' && hd && hd.t !== 'none' ? ' · 머리 사진' : '') + (bg && bg.t !== 'none' ? ' · ' + BG_NAME[bg.t] : ''); }
+  function updViewSum(){ viewSum.textContent = ((LAYOUTS.find(x => x[0] === lay) || [])[1] || '') + (lay === 'official' && hd && hd.t !== 'none' ? ' · 머리 사진' : '') + (bg && bg.t !== 'none' ? ' · ' + BG_NAME[bg.t] : '') + (mw ? '' : ' · 출처만'); }
   function updCssSum(){ cssSum.textContent = cssIn.value.trim() ? '적용 중' : '없음'; cssSum.classList.toggle('on', !!cssIn.value.trim()); }
-  setHd(hd, true); setLay(lay); setBgMode(bgModeOf(bg)); setBg(bg, true); updCssSum();
+  setHd(hd, true); setLay(lay); setBgMode(bgModeOf(bg)); setBg(bg, true); setMw(mw); updCssSum();
   // 링크·미리보기에 넣을 공유 화면 설정
   function styleInto(d){
     if (lay !== 'marine') d.sk = lay;
     if (bg.t !== 'none') d.bg = bg;
     if (lay === 'official' && hd.t !== 'none') d.hd = hd;
+    if (!mw) d.mw = 0;
     if (cssIn.value.trim()) d.css = cssIn.value.slice(0, 20000);
     const f = flagOf(lay); return f ? '!' + f : '';
   }
@@ -1438,7 +1448,7 @@ function buildShare(t){
     res.hidden = true;
   }
   box._setEdit = setEdit;
-  box._setStyle = d => { setHd(d.hd || { t:'none' }, true); setLay(layoutOf(d)); const b = normBg(d.bg); setBgMode(bgModeOf(b)); setBg(b, true); cssIn.value = d.css || ''; updCssSum(); };
+  box._setStyle = d => { setHd(d.hd || { t:'none' }, true); setLay(layoutOf(d)); setMw(d.mw !== 0); const b = normBg(d.bg); setBgMode(bgModeOf(b)); setBg(b, true); cssIn.value = d.css || ''; updCssSum(); };
 
   box.append(
     editBar,
@@ -1503,7 +1513,9 @@ function buildShare(t){
     el('summary', {}, el('h5', { text:'VIEW · 공유 화면' }), viewSum),
     el('div', { class:'fold-body style-pick' },
       el('span', { class:'lab', text:'레이아웃' }), el('div', { class:'lay-pick' }, layBtns),
-      headBox, el('span', { class:'sub-lab', text:'배경' }), el('div', { class:'seg' }, bgModes), colorBox, photoBox));
+      headBox, el('span', { class:'sub-lab', text:'배경' }), el('div', { class:'seg' }, bgModes), colorBox, photoBox,
+      el('span', { class:'sub-lab', text:'맨 아래 발행 안내' }), el('div', { class:'seg' }, mwBtns),
+      el('p', { class:'mini-note', text:'끄면 문구와 작성하기 버튼 대신 맨 아래에 "해당 링크는 해양지부 신문고에서 발행되었습니다."만 작게 남아요. (해양지부 레이아웃은 원래 안 보여요)' })));
   const cssPanel = el('details', { class:'panel fold' },
     el('summary', {}, el('h5', { text:'CSS · 덧입히기' }), cssSum),
     el('div', { class:'fold-body' }, cssBox));
@@ -1525,8 +1537,7 @@ const TX = [
   ['date','DATE','날짜 칸 이름'], ['from','FROM','발신 칸 이름'], ['from-v','해양지부 신문고','발신 칸 내용'],
   ['station','STATION','기지 칸 이름'], ['station-v','POINT NEMO','기지 칸 내용'],
   ['sign','해양지부 신문고 발행','카드 아래 서명'], ['ro','공유된 기록은 읽기 전용이에요','읽기 전용 안내'],
-  ['edit','작성자 수정','작성자 수정 버튼'], ['made','본 문서는 해양지부 신문고에서 발행되었습니다','맨 아래 안내'],
-  ['made-btn','새 기록 문서 작성하기 →','맨 아래 버튼'],
+  ['edit','작성자 수정','작성자 수정 버튼'],
   ['lock-kicker','LOCKED RECORD','잠금 화면 윗줄'], ['lock-title','비밀번호가 걸린 기록이에요','잠금 화면 제목'], ['lock-desc','받은 비밀번호를 입력해 주세요.','잠금 화면 안내'],
 ];
 const TX_PSEUDO = [['ro-badge','READ ONLY','읽기 전용 꼬리표'], ['badge','FEARLESS LOG','해양지부 카드 배지'], ['stamp','FEARLESS\\A RECEIVED','항해일지 도장 (\\A = 줄바꿈)']];
@@ -1789,10 +1800,20 @@ function lockCard(bytes, id){
 }
 // 심플 등 사이트 틀이 없는 화면에서도 사이트로 돌아와 직접 써 볼 수 있게 하는 작은 안내
 const HOME_URL = 'https://legion-orca.github.io/memo/#/';
-function homeLink(){
-  return el('div', { class:'made-with' },
-    el('p', { class:'mw-sub' }, tx('made')),
-    el('a', { class:'mw-go', href: HOME_URL }, tx('made-btn')));
+// 발행 안내를 끈 기록: 화면 맨 아래에 작은 출처 한 줄 (CSS로 숨기거나 바꿀 수 없음)
+function srcNote(){
+  if (!document.body.classList.contains('share-full')) return null;
+  const keep = 'display:block!important;visibility:visible!important;opacity:1!important;filter:none!important;clip-path:none!important;transform:none!important;text-indent:0!important;font-size:11px!important;letter-spacing:0!important;width:auto!important;height:auto!important;overflow:visible!important;';
+  return el('a', { class:'share-src', href: HOME_URL, style: keep }, '해당 링크는 해양지부 신문고에서 발행되었습니다.');
+}
+function homeLink(show){
+  // 출처 안내는 CSS로 숨기거나 문구를 바꿀 수 없게 고정 (인라인 !important는 어떤 CSS보다 우선)
+  const keep = 'visibility:visible!important;opacity:1!important;filter:none!important;clip-path:none!important;transform:none!important;position:static!important;text-indent:0!important;letter-spacing:normal!important;width:auto!important;height:auto!important;max-height:none!important;overflow:visible!important;';
+  const full = document.body.classList.contains('share-full');
+  if (show === false) return null;
+  return el('div', { class:'made-with', style: full ? keep + 'display:flex!important;' : '' },
+    el('p', { class:'mw-sub', style: keep + 'display:block!important;font-size:12px!important;' }, '본 문서는 해양지부 신문고에서 발행되었습니다'),
+    el('a', { class:'mw-go', href: HOME_URL, style: keep + 'display:inline-flex!important;font-size:13.5px!important;' }, '새 기록 문서 작성하기 →'));
 }
 function renderDoc(d, ctx = {}){
   const lay = layoutOf(d);
@@ -1840,7 +1861,8 @@ function renderDoc(d, ctx = {}){
   const after = el('div', { class:'doc-after' },
     el('span', { class:'doc-ro' }, tx('ro')),
     ctx.id ? el('button', { type:'button', class:'doc-edit', onclick(){ this.classList.toggle('on', toggleEditForm()); } }, tx('edit')) : null);
-  center.append(card, after, homeLink());
+  center.append(...[card, after, homeLink(d.mw !== 0)].filter(Boolean));
+  if (d.mw === 0){ const sn = srcNote(); if (sn) center.parentNode.append(sn); }
 
   // 작성자 수정: 편집 접속 번호 확인 후 편집기로 불러옴
   let ef = null;
