@@ -800,6 +800,16 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
 .att-add:hover,.att-add.drop-on{border-color:var(--accent);background:var(--soft)}
 /* 공유 화면 사진은 끌어가기·길게 눌러 저장·우클릭 저장 막기 */
 .share-page img,.lightbox img,.pin-win img,.att-thumb{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+/* 예시 사진 창 (OOC·프롬프트 공유 화면: 문서 아래에 붙음) */
+.doc-gallery{width:min(var(--s-width),100%);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
+.gal-win{margin:0;display:flex;flex-direction:column;background:var(--s-card);color:var(--s-text);border:1px solid var(--s-line);border-radius:min(var(--s-radius),14px);box-shadow:var(--s-shadow);overflow:hidden}
+.gal-head{display:flex;align-items:center;gap:6px;padding:7px 7px 7px 12px;border-bottom:1px solid var(--s-line);font-size:12.5px;font-weight:700}
+.gal-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gal-name::before{content:'';display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px;background:var(--s-accent);-webkit-mask:var(--ico-img) center/contain no-repeat;mask:var(--ico-img) center/contain no-repeat}
+.gal-head button{appearance:none;border:0;background:transparent;color:inherit;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:13px;opacity:.65}
+.gal-head button:hover{opacity:1;background:rgba(127,127,127,.15)}
+.gal-img{display:block;width:100%;height:auto;max-height:560px;object-fit:contain;background:var(--s-soft);cursor:zoom-in}
+@media (min-width:900px){.gal-win.is-pinned{display:none}.doc-gallery.all-pinned{display:none}}
 /* 띄운 사진 창 (공유 화면) */
 .pin-win{position:fixed;z-index:60;left:0;top:0;display:flex;flex-direction:column;background:var(--pin-card,#fff);color:var(--pin-text,#14263d);border:1px solid var(--pin-line,#dbe6f2);border-radius:12px;box-shadow:0 18px 40px -16px rgba(6,24,48,.45);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
 .pin-head{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 11px;cursor:grab;border-bottom:1px solid var(--pin-line,#dbe6f2);font-size:12px;font-weight:700}
@@ -1345,7 +1355,8 @@ function buildAttach(t){
   const list = el('div', { class:'att-edit' });
   const sum = el('span', { class:'fold-sum', text:'없음' });
   const file = el('input', { type:'file', accept:'image/*', multiple:'', hidden:'' });
-  const add = el('button', { type:'button', class:'att-add' }, el('span', { text:'＋ 사진 첨부' }), el('small', { text:'공유 화면에서 문서 옆에 첨부파일처럼 보여요 · 최대 ' + ATT_MAX + '장 · 받는 사람은 저장할 수 없어요' }));
+  const where = t === 'memo' ? '공유 화면에서 문서 옆에 첨부파일처럼 보여요' : '공유 화면에 예시 사진 창으로 떠요 (모바일은 문서 아래)';
+  const add = el('button', { type:'button', class:'att-add' }, el('span', { text: t === 'memo' ? '＋ 사진 첨부' : '＋ 예시 사진 추가' }), el('small', { text: where + ' · 최대 ' + ATT_MAX + '장 · 받는 사람은 저장할 수 없어요' }));
   const changed = () => { refresh(); $('#v-' + t).dispatchEvent(new Event('input')); };
   function refresh(){
     const rows = [...list.children];
@@ -1353,7 +1364,7 @@ function buildAttach(t){
     sum.textContent = rows.length ? `${rows.length}장 · ${fmtKB(kb)}` : '없음'; sum.classList.toggle('on', rows.length > 0);
     rows.forEach(r => {
       r._pin.classList.toggle('on', !!r._f);
-      r._info.replaceChildren(`${imgType(r._v)} · ${fmtKB(imgKB(r._v))}`, ...(r._f ? [' · ', el('span', { class:'pinned', text:'띄움' })] : []));
+      r._info.replaceChildren(`${imgType(r._v)} · ${fmtKB(imgKB(r._v))}`, ...(r._f && t === 'memo' ? [' · ', el('span', { class:'pinned', text:'띄움' })] : []));
     });
     note.hidden = !rows.some(r => r._f); nameNote.hidden = !rows.length;
     rows.forEach((r, i) => { r.querySelector('[data-act=up]').disabled = i === 0; r.querySelector('[data-act=down]').disabled = i === rows.length - 1; const inp = r.querySelector('input'); inp.placeholder = '표시 이름'; inp.title = '공유 화면에 보이는 이름이에요. 비우면 「사진 ' + (i + 1) + '」로 보여요. 파일 이름은 보이지 않아요.'; });
@@ -1371,7 +1382,9 @@ function buildAttach(t){
         el('button', { type:'button', class:'icon-btn', 'data-act':'up', title:'위로', text:'↑', onclick(){ r.previousElementSibling && r.previousElementSibling.before(r); changed(); } }),
         el('button', { type:'button', class:'icon-btn', 'data-act':'down', title:'아래로', text:'↓', onclick(){ r.nextElementSibling && r.nextElementSibling.after(r); changed(); } }),
         el('button', { type:'button', class:'icon-btn del', title:'첨부 빼기', text:'✕', onclick(){ r.remove(); changed(); } })));
-    r._v = v; r._f = f || null; r._info = info; r._pin = pin; return r;
+    r._v = v; r._f = f || (t !== 'memo' ? defaultPin(list.children.length) : null); r._info = info; r._pin = pin;
+    if (t !== 'memo') pin.style.display = 'none';   // OOC·프롬프트는 모든 사진이 창이라 띄우기 버튼이 필요 없음
+    return r;
   }
   async function addFiles(files){
     const room = ATT_MAX - list.children.length;
@@ -1389,15 +1402,17 @@ function buildAttach(t){
   add.addEventListener('drop', e => { e.preventDefault(); add.classList.remove('drop-on'); addFiles(e.dataTransfer.files || []); });
   const get = () => [...list.children].map(r => { const a = { v: r._v, n: r.querySelector('input').value.trim() }; if (r._f) a.f = r._f; return a; });
   const nameNote = el('p', { class:'att-note', text:'✎ 사진 옆 「표시 이름」 칸을 눌러 공유 화면에 보일 이름을 바꿀 수 있어요. 비워 두면 「사진 1」처럼 순서대로 보여요.' });
-  const note = el('p', { class:'att-note', text:'⧉ 띄운 사진은 공유 화면 옆에 사진 창으로 계속 떠 있어요. 미리보기에서 사진 창을 끌어다 위치를, 오른쪽 아래 모서리로 크기를 정해요.' });
+  const note = el('p', { class:'att-note', text: t === 'memo'
+    ? '⧉ 띄운 사진은 공유 화면 옆에 사진 창으로 계속 떠 있어요. 미리보기에서 사진 창을 끌어다 위치를, 오른쪽 아래 모서리로 크기를 정해요.'
+    : '⧉ 예시 사진은 넓은 화면에선 문서 옆에 사진 창으로 떠 있고, 모바일에선 문서 아래에 창 모양 그대로 모여요. 미리보기에서 창을 끌어다 위치를, 오른쪽 아래 모서리로 크기를 정해요.' });
   const panel = el('details', { class:'panel fold' },
-    el('summary', {}, el('h5', { text:'ATTACH · 첨부 사진' }), sum),
+    el('summary', {}, el('h5', { text: t === 'memo' ? 'ATTACH · 첨부 사진' : 'ATTACH · 예시 사진' }), sum),
     el('div', { class:'fold-body' }, list, nameNote, note, add, file));
   initFold(panel, 'attach');
   $(`.share[data-for="${t}"]`).before(panel);
   attPanels[t] = {
     get,
-    set(arr){ list.replaceChildren(...normAtt(arr).map(a => row(a.v, a.n, a.f))); refresh(); if (list.children.length) panel.open = true; },
+    set(arr){ list.replaceChildren(...normAtt(arr).map((a, i) => row(a.v, a.n, a.f || (t !== 'memo' ? defaultPin(i) : null)))); refresh(); if (list.children.length) panel.open = true; },
     // 미리보기에서 사진 창을 옮기면 위치가 여기로 들어옴
     setPin(i, f){ const r = list.children[i]; if (!r || !r._f) return; r._f = normPin(f); changed(); }
   };
@@ -1405,7 +1420,7 @@ function buildAttach(t){
 }
 const clamp01 = v => Math.min(1, Math.max(0, +v || 0));
 const normPin = f => f && typeof f === 'object' ? { x: +clamp01(f.x).toFixed(4), y: +clamp01(f.y).toFixed(4), w: Math.round(Math.min(560, Math.max(140, +f.w || 260))) } : null;
-const defaultPin = n => ({ x: 0.02, y: Math.min(0.9, 0.14 + n * 0.3), w: 260 });
+const defaultPin = n => ({ x: n % 2 ? 0.98 : 0.02, y: Math.min(0.92, 0.12 + Math.floor(n / 2) * 0.34), w: 260 });
 const normAtt = arr => (Array.isArray(arr) ? arr : []).filter(a => a && okImg(a.v)).slice(0, ATT_MAX).map(a => { const o = { v: a.v, n: String(a.n || '').slice(0, 40) }; const f = normPin(a.f); if (f) o.f = f; return o; });
 
 // 공유 화면: 띄운 사진 창 — 누구나 끌어 옮길 수 있고(그 화면에서만), 미리보기에서 옮기면 작성 화면에 위치가 저장됨
@@ -2293,9 +2308,17 @@ function renderDoc(d, ctx = {}){
     ctx.id ? el('button', { type:'button', class:'doc-edit', onclick(){ this.classList.toggle('on', toggleEditForm()); } }, tx('edit')) : null);
   // 첨부 사진: 문서 옆(좁은 화면은 아래)에 첨부파일처럼
   const att = normAtt(d.att);
+  // OOC·프롬프트: 예시 사진은 모두 사진 창 — 넓은 화면에선 떠 있는 창, 모바일에선 문서 아래에 창 모양 그대로 모임
+  if (d.t !== 'memo') att.forEach((a, i) => { if (!a.f) a.f = defaultPin(i); });
   let main = card;
   const nFree = att.filter(a => !a.f).length;
-  if (att.length) main = el('div', { class:'doc-row has-att' + (nFree ? '' : ' all-pinned') }, card,
+  // OOC·프롬프트: 예시 사진을 문서 바로 아래에 사진 창으로 붙임 (띄운 사진은 넓은 화면에선 떠 있는 창으로)
+  const gallery = d.t !== 'memo' && att.length ? el('div', { class:'doc-gallery' + (nFree ? '' : ' all-pinned'), 'aria-label':'예시 사진' },
+    att.map((a, i) => el('figure', { class:'gal-win' + (a.f ? ' is-pinned' : '') },
+      el('figcaption', { class:'gal-head' }, el('span', { class:'gal-name', text: a.n || '사진 ' + (i + 1) }),
+        el('button', { type:'button', title:'크게 보기', text:'⤢', onclick(){ openLightbox(att, i); } })),
+      el('img', { class:'gal-img', src: a.v, alt: a.n || '', draggable:'false', onclick(){ openLightbox(att, i); } })))) : null;
+  if (att.length && d.t === 'memo') main = el('div', { class:'doc-row has-att' + (nFree ? '' : ' all-pinned') }, card,
     el('aside', { class:'doc-att', 'aria-label':'첨부 사진' },
       el('div', { class:'att-head' }, tx('att'), el('em', {}, el('span', { class:'n-all', text: att.length + '장' }), el('span', { class:'n-free', text: nFree + '장' }))),
       el('ul', { class:'att-list' }, att.map((a, i) => el('li', a.f ? { class:'is-pinned' } : {},
@@ -2308,7 +2331,7 @@ function renderDoc(d, ctx = {}){
     const imgs = [...card.querySelectorAll('.doc-body img,.doc-block-body img')];
     openLightbox(imgs.map((im, i) => ({ v: im.getAttribute('src'), n: '본문 사진 ' + (i + 1) })), imgs.indexOf(e.target));
   });
-  center.append(...[main, after, homeLink(d.mw !== 0)].filter(Boolean));
+  center.append(...[main, gallery, after, homeLink(d.mw !== 0)].filter(Boolean));
   if (att.some(a => a.f)) pinWindows(att, center.closest('.share-page') || center);
   if (d.mw === 0){ const sn = srcNote(); if (sn) center.parentNode.append(sn); }
 
