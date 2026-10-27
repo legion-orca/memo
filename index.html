@@ -796,6 +796,8 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
 .att-add{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;padding:14px 10px;border:1.5px dashed var(--sky);border-radius:10px;background:var(--bg);color:var(--accent);font:600 13px/1.4 inherit;cursor:pointer;text-align:center}
 .att-add small{font-weight:400;font-size:11.5px;color:var(--muted)}
 .att-add:hover,.att-add.drop-on{border-color:var(--accent);background:var(--soft)}
+/* 공유 화면 사진은 끌어가기·길게 눌러 저장·우클릭 저장 막기 */
+.share-page img,.lightbox img,.pin-win img,.att-thumb{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 /* 띄운 사진 창 (공유 화면) */
 .pin-win{position:fixed;z-index:60;left:0;top:0;display:flex;flex-direction:column;background:var(--pin-card,#fff);color:var(--pin-text,#14263d);border:1px solid var(--pin-line,#dbe6f2);border-radius:12px;box-shadow:0 18px 40px -16px rgba(6,24,48,.45);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
 .pin-head{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 11px;cursor:grab;border-bottom:1px solid var(--pin-line,#dbe6f2);font-size:12px;font-weight:700}
@@ -1276,25 +1278,28 @@ const imgKB = v => Math.max(1, Math.round(v.length * 3 / 4 / 1024));
 const imgType = v => (/^data:image\/(\w+)/.exec(v) || [, 'img'])[1].replace('jpeg', 'jpg').toUpperCase();
 const fmtKB = kb => kb >= 1024 ? (kb / 1024).toFixed(1) + 'MB' : kb + 'KB';
 
+// 받는 사람 화면의 사진은 우클릭 메뉴·끌어가기로 저장하지 못하게
+const guardedImg = t => t && t.tagName === 'IMG' && !!t.closest('.share-page, .lightbox, .pin-win');
+document.addEventListener('contextmenu', e => { if (guardedImg(e.target)) e.preventDefault(); });
+document.addEventListener('dragstart', e => { if (guardedImg(e.target)) e.preventDefault(); });
 // 사진 크게 보기: items = [{ v, n }]
 let lb = null;
 function openLightbox(items, idx){
   if (!items.length) return;
   if (!lb){
-    const img = el('img', { alt:'' }), name = el('b'), meta = el('span'), save = el('a', { text:'저장', download:'' });
+    const img = el('img', { alt:'', draggable:'false' }), name = el('b'), meta = el('span');
     const prev = el('button', { type:'button', class:'lb-btn lb-prev', 'aria-label':'이전 사진', text:'‹', onclick(e){ e.stopPropagation(); show(lb.i - 1); } });
     const next = el('button', { type:'button', class:'lb-btn lb-next', 'aria-label':'다음 사진', text:'›', onclick(e){ e.stopPropagation(); show(lb.i + 1); } });
     const close = () => { box.hidden = true; document.removeEventListener('keydown', key); };
     const key = e => { if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') show(lb.i - 1); if (e.key === 'ArrowRight') show(lb.i + 1); };
     const box = el('div', { class:'lightbox', role:'dialog', 'aria-modal':'true', 'aria-label':'사진 크게 보기', onclick(e){ if (e.target === box) close(); } },
       el('button', { type:'button', class:'lb-btn lb-close', 'aria-label':'닫기', text:'×', onclick: close }), prev, next, img,
-      el('div', { class:'lb-cap' }, name, meta, save));
+      el('div', { class:'lb-cap' }, name, meta));
     document.body.append(box);
     function show(i){
       const L = lb.items; lb.i = (i + L.length) % L.length; const it = L[lb.i];
       img.src = it.v; name.textContent = it.n || '사진 ' + (lb.i + 1);
-      meta.textContent = `${imgType(it.v)} · ${fmtKB(imgKB(it.v))}` + (L.length > 1 ? ` · ${lb.i + 1} / ${L.length}` : '');
-      save.href = it.v; save.download = (it.n || '사진-' + (lb.i + 1)).replace(/[\\/:*?"<>|]/g, '_') + '.' + imgType(it.v).toLowerCase();
+      meta.textContent = L.length > 1 ? `${lb.i + 1} / ${L.length}` : '';
       prev.hidden = next.hidden = L.length < 2;
     }
     lb = { box, show, key, items: [], i: 0 };
@@ -1310,7 +1315,7 @@ function buildAttach(t){
   const list = el('div', { class:'att-edit' });
   const sum = el('span', { class:'fold-sum', text:'없음' });
   const file = el('input', { type:'file', accept:'image/*', multiple:'', hidden:'' });
-  const add = el('button', { type:'button', class:'att-add' }, el('span', { text:'＋ 사진 첨부' }), el('small', { text:'공유 화면에서 문서 옆에 첨부파일처럼 보여요 · 최대 ' + ATT_MAX + '장' }));
+  const add = el('button', { type:'button', class:'att-add' }, el('span', { text:'＋ 사진 첨부' }), el('small', { text:'공유 화면에서 문서 옆에 첨부파일처럼 보여요 · 최대 ' + ATT_MAX + '장 · 받는 사람은 저장할 수 없어요' }));
   const changed = () => { refresh(); $('#v-' + t).dispatchEvent(new Event('input')); };
   function refresh(){
     const rows = [...list.children];
@@ -1321,11 +1326,11 @@ function buildAttach(t){
       r._info.replaceChildren(`${imgType(r._v)} · ${fmtKB(imgKB(r._v))}`, ...(r._f ? [' · ', el('span', { class:'pinned', text:'띄움' })] : []));
     });
     note.hidden = !rows.some(r => r._f);
-    rows.forEach((r, i) => { r.querySelector('[data-act=up]').disabled = i === 0; r.querySelector('[data-act=down]').disabled = i === rows.length - 1; r.querySelector('input').placeholder = '사진 ' + (i + 1); });
+    rows.forEach((r, i) => { r.querySelector('[data-act=up]').disabled = i === 0; r.querySelector('[data-act=down]').disabled = i === rows.length - 1; const inp = r.querySelector('input'); inp.placeholder = '표시 이름'; inp.title = '공유 화면에 보이는 이름이에요. 비우면 「사진 ' + (i + 1) + '」로 보여요. 파일 이름은 보이지 않아요.'; });
     add.hidden = rows.length >= ATT_MAX;
   }
   function row(v, n, f){
-    const name = el('input', { maxlength:'60', 'aria-label':'사진 이름' }); name.value = n || '';
+    const name = el('input', { maxlength:'40', 'aria-label':'표시 이름', title:'공유 화면에 보이는 이름이에요. 파일 이름은 보이지 않아요.' }); name.value = n || '';
     const info = el('small');
     const pin = el('button', { type:'button', class:'icon-btn pin', title:'공유 화면 옆에 사진 창으로 띄우기', text:'⧉', onclick(){
       r._f = r._f ? null : defaultPin([...list.children].filter(x => x._f).length); changed(); } });
@@ -1344,7 +1349,7 @@ function buildAttach(t){
     if (!imgs.length) return toast(room ? '사진 파일만 첨부할 수 있어요' : `첨부 사진은 ${ATT_MAX}장까지예요`);
     toast('사진을 줄이는 중이에요…');
     let n = 0;
-    for (const f of imgs){ try { const v = await shrinkImage(f, 180000, 1600); list.append(row(v, f.name.replace(/\.[^.]+$/, '').slice(0, 60))); n++; } catch(e){} }
+    for (const f of imgs){ try { const v = await shrinkImage(f, 180000, 1600); list.append(row(v, '')); n++; } catch(e){} }
     changed(); toast(n ? `사진 ${n}장을 첨부했어요` : '이 사진은 쓸 수 없어요');
   }
   add.addEventListener('click', () => file.click());
@@ -1370,7 +1375,7 @@ function buildAttach(t){
 const clamp01 = v => Math.min(1, Math.max(0, +v || 0));
 const normPin = f => f && typeof f === 'object' ? { x: +clamp01(f.x).toFixed(4), y: +clamp01(f.y).toFixed(4), w: Math.round(Math.min(560, Math.max(140, +f.w || 260))) } : null;
 const defaultPin = n => ({ x: 0.02, y: Math.min(0.9, 0.14 + n * 0.3), w: 260 });
-const normAtt = arr => (Array.isArray(arr) ? arr : []).filter(a => a && okImg(a.v)).slice(0, ATT_MAX).map(a => { const o = { v: a.v, n: String(a.n || '').slice(0, 60) }; const f = normPin(a.f); if (f) o.f = f; return o; });
+const normAtt = arr => (Array.isArray(arr) ? arr : []).filter(a => a && okImg(a.v)).slice(0, ATT_MAX).map(a => { const o = { v: a.v, n: String(a.n || '').slice(0, 40) }; const f = normPin(a.f); if (f) o.f = f; return o; });
 
 // 공유 화면: 띄운 사진 창 — 누구나 끌어 옮길 수 있고(그 화면에서만), 미리보기에서 옮기면 작성 화면에 위치가 저장됨
 function pinWindows(att, page){
@@ -2261,8 +2266,8 @@ function renderDoc(d, ctx = {}){
       el('div', { class:'att-head' }, tx('att'), el('em', {}, el('span', { class:'n-all', text: att.length + '장' }), el('span', { class:'n-free', text: nFree + '장' }))),
       el('ul', { class:'att-list' }, att.map((a, i) => el('li', a.f ? { class:'is-pinned' } : {},
         el('button', { type:'button', class:'att-item', title:'크게 보기', onclick(){ openLightbox(att, i); } },
-          el('img', { class:'att-thumb', src: a.v, alt:'' }),
-          el('span', {}, el('span', { class:'att-name', text: a.n || '사진 ' + (i + 1) }), el('span', { class:'att-meta', text: `${imgType(a.v)} · ${fmtKB(imgKB(a.v))}` }))))))));
+          el('img', { class:'att-thumb', src: a.v, alt:'', draggable:'false' }),
+          el('span', {}, el('span', { class:'att-name', text: a.n || '사진 ' + (i + 1) }), el('span', { class:'att-meta', text: 'PHOTO ' + String(i + 1).padStart(2, '0') }))))))));
   // 글 사이 사진은 눌러서 크게 보기
   card.addEventListener('click', e => {
     if (e.target.tagName !== 'IMG' || !e.target.closest('.doc-body,.doc-block-body')) return;
