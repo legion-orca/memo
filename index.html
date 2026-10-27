@@ -791,11 +791,37 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
 .att-row img{width:52px;height:52px;object-fit:cover;border-radius:7px;cursor:zoom-in;display:block;background:var(--bg)}
 .att-row input{width:100%;min-width:0;border:1px solid transparent;border-radius:6px;padding:5px 7px;font:inherit;font-size:13px;background:transparent;color:var(--ink)}
 .att-row input:focus{outline:0;border-color:var(--sky);background:var(--bg)}
-.att-row small{display:block;padding:0 7px;font:10.5px var(--mono);color:var(--muted)}
+.att-row small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 7px;font:10.5px var(--mono);color:var(--muted)}
 .att-row .att-acts{display:flex}
 .att-add{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;padding:14px 10px;border:1.5px dashed var(--sky);border-radius:10px;background:var(--bg);color:var(--accent);font:600 13px/1.4 inherit;cursor:pointer;text-align:center}
 .att-add small{font-weight:400;font-size:11.5px;color:var(--muted)}
 .att-add:hover,.att-add.drop-on{border-color:var(--accent);background:var(--soft)}
+/* 띄운 사진 창 (공유 화면) */
+.pin-win{position:fixed;z-index:60;left:0;top:0;display:flex;flex-direction:column;background:var(--pin-card,#fff);color:var(--pin-text,#14263d);border:1px solid var(--pin-line,#dbe6f2);border-radius:12px;box-shadow:0 18px 40px -16px rgba(6,24,48,.45);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.pin-head{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 11px;cursor:grab;border-bottom:1px solid var(--pin-line,#dbe6f2);font-size:12px;font-weight:700}
+.pin-win.dragging .pin-head{cursor:grabbing}
+.pin-win.dragging{box-shadow:0 26px 60px -18px rgba(6,24,48,.6)}
+.pin-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pin-name::before{content:'';display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px;background:var(--pin-accent,#1a63b0);-webkit-mask:var(--ico-img) center/contain no-repeat;mask:var(--ico-img) center/contain no-repeat}
+.pin-head button{appearance:none;border:0;background:transparent;color:inherit;width:24px;height:24px;border-radius:6px;cursor:pointer;font-size:13px;line-height:1;opacity:.65;flex:none}
+.pin-head button:hover{opacity:1;background:rgba(127,127,127,.15)}
+.pin-img{display:block;width:100%;height:auto;max-height:70vh;object-fit:contain;background:rgba(127,127,127,.08);cursor:zoom-in;-webkit-user-drag:none}
+.pin-resize{position:absolute;right:0;bottom:0;width:18px;height:18px;cursor:nwse-resize;background:linear-gradient(135deg,transparent 50%,rgba(127,127,127,.55) 50%,rgba(127,127,127,.55) 60%,transparent 60%,transparent 72%,rgba(127,127,127,.55) 72%,rgba(127,127,127,.55) 82%,transparent 82%)}
+.pin-win.min{width:auto!important;max-width:240px}
+.pin-win.min .pin-img,.pin-win.min .pin-resize{display:none}
+.pin-win.min .pin-head{border-bottom:0}
+body.is-preview .pin-win{outline:2px dashed var(--pin-accent,#1a63b0);outline-offset:3px}
+@media (max-width:899px){.pin-win{display:none}.att-head .n-free{display:none}}
+/* 넓은 화면: 띄운 사진은 사진 창으로 보이니 첨부 목록에선 빼고, 좁은 화면에선 목록에 다시 나옴 */
+@media (min-width:900px){
+  .att-list li.is-pinned,.att-head .n-all{display:none}
+  .doc-row.all-pinned .doc-att{display:none}
+}
+/* 작성 화면: 띄우기 버튼 */
+.att-row .icon-btn.pin.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+.att-row small .pinned{color:var(--accent);font-weight:600}
+.att-note{margin:2px 0 8px;font-size:11.5px;line-height:1.5;color:var(--muted)}
+.att-note[hidden]{display:none}
 /* 사진 크게 보기 */
 .lightbox{position:fixed;inset:0;z-index:120;background:rgba(4,14,30,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:56px 16px 24px;animation:rise .2s ease}
 .lightbox[hidden]{display:none}
@@ -1290,19 +1316,27 @@ function buildAttach(t){
     const rows = [...list.children];
     const kb = rows.reduce((n, r) => n + imgKB(r._v), 0);
     sum.textContent = rows.length ? `${rows.length}장 · ${fmtKB(kb)}` : '없음'; sum.classList.toggle('on', rows.length > 0);
+    rows.forEach(r => {
+      r._pin.classList.toggle('on', !!r._f);
+      r._info.replaceChildren(`${imgType(r._v)} · ${fmtKB(imgKB(r._v))}`, ...(r._f ? [' · ', el('span', { class:'pinned', text:'띄움' })] : []));
+    });
+    note.hidden = !rows.some(r => r._f);
     rows.forEach((r, i) => { r.querySelector('[data-act=up]').disabled = i === 0; r.querySelector('[data-act=down]').disabled = i === rows.length - 1; r.querySelector('input').placeholder = '사진 ' + (i + 1); });
     add.hidden = rows.length >= ATT_MAX;
   }
-  function row(v, n){
+  function row(v, n, f){
     const name = el('input', { maxlength:'60', 'aria-label':'사진 이름' }); name.value = n || '';
+    const info = el('small');
+    const pin = el('button', { type:'button', class:'icon-btn pin', title:'공유 화면 옆에 사진 창으로 띄우기', text:'⧉', onclick(){
+      r._f = r._f ? null : defaultPin([...list.children].filter(x => x._f).length); changed(); } });
     const r = el('div', { class:'att-row' },
       el('img', { src: v, alt:'', onclick(){ openLightbox(get(), [...list.children].indexOf(r)); } }),
-      el('div', {}, name, el('small', { text: `${imgType(v)} · ${fmtKB(imgKB(v))}` })),
-      el('div', { class:'att-acts' },
+      el('div', {}, name, info),
+      el('div', { class:'att-acts' }, pin,
         el('button', { type:'button', class:'icon-btn', 'data-act':'up', title:'위로', text:'↑', onclick(){ r.previousElementSibling && r.previousElementSibling.before(r); changed(); } }),
         el('button', { type:'button', class:'icon-btn', 'data-act':'down', title:'아래로', text:'↓', onclick(){ r.nextElementSibling && r.nextElementSibling.after(r); changed(); } }),
         el('button', { type:'button', class:'icon-btn del', title:'첨부 빼기', text:'✕', onclick(){ r.remove(); changed(); } })));
-    r._v = v; return r;
+    r._v = v; r._f = f || null; r._info = info; r._pin = pin; return r;
   }
   async function addFiles(files){
     const room = ATT_MAX - list.children.length;
@@ -1318,19 +1352,74 @@ function buildAttach(t){
   add.addEventListener('dragover', e => { e.preventDefault(); add.classList.add('drop-on'); });
   add.addEventListener('dragleave', () => add.classList.remove('drop-on'));
   add.addEventListener('drop', e => { e.preventDefault(); add.classList.remove('drop-on'); addFiles(e.dataTransfer.files || []); });
-  const get = () => [...list.children].map(r => ({ v: r._v, n: r.querySelector('input').value.trim() }));
+  const get = () => [...list.children].map(r => { const a = { v: r._v, n: r.querySelector('input').value.trim() }; if (r._f) a.f = r._f; return a; });
+  const note = el('p', { class:'att-note', text:'⧉ 띄운 사진은 공유 화면 옆에 사진 창으로 계속 떠 있어요. 미리보기에서 사진 창을 끌어다 위치를, 오른쪽 아래 모서리로 크기를 정해요.' });
   const panel = el('details', { class:'panel fold' },
     el('summary', {}, el('h5', { text:'ATTACH · 첨부 사진' }), sum),
-    el('div', { class:'fold-body' }, list, add, file));
+    el('div', { class:'fold-body' }, list, note, add, file));
   initFold(panel, 'attach');
   $(`.share[data-for="${t}"]`).before(panel);
   attPanels[t] = {
     get,
-    set(arr){ list.replaceChildren(...normAtt(arr).map(a => row(a.v, a.n))); refresh(); if (list.children.length) panel.open = true; }
+    set(arr){ list.replaceChildren(...normAtt(arr).map(a => row(a.v, a.n, a.f))); refresh(); if (list.children.length) panel.open = true; },
+    // 미리보기에서 사진 창을 옮기면 위치가 여기로 들어옴
+    setPin(i, f){ const r = list.children[i]; if (!r || !r._f) return; r._f = normPin(f); changed(); }
   };
   refresh();
 }
-const normAtt = arr => (Array.isArray(arr) ? arr : []).filter(a => a && okImg(a.v)).slice(0, ATT_MAX).map(a => ({ v: a.v, n: String(a.n || '').slice(0, 60) }));
+const clamp01 = v => Math.min(1, Math.max(0, +v || 0));
+const normPin = f => f && typeof f === 'object' ? { x: +clamp01(f.x).toFixed(4), y: +clamp01(f.y).toFixed(4), w: Math.round(Math.min(560, Math.max(140, +f.w || 260))) } : null;
+const defaultPin = n => ({ x: 0.02, y: Math.min(0.9, 0.14 + n * 0.3), w: 260 });
+const normAtt = arr => (Array.isArray(arr) ? arr : []).filter(a => a && okImg(a.v)).slice(0, ATT_MAX).map(a => { const o = { v: a.v, n: String(a.n || '').slice(0, 60) }; const f = normPin(a.f); if (f) o.f = f; return o; });
+
+// 공유 화면: 띄운 사진 창 — 누구나 끌어 옮길 수 있고(그 화면에서만), 미리보기에서 옮기면 작성 화면에 위치가 저장됨
+function pinWindows(att, page){
+  $$('.pin-win').forEach(n => n.remove());
+  const cs = getComputedStyle(page), pv = document.body.classList.contains('is-preview');
+  const vars = ['card','text','line','accent'].map(k => `--pin-${k}:${cs.getPropertyValue('--s-' + k).trim()}`).filter(x => !/:$/.test(x)).join(';');
+  att.forEach((a, i) => {
+    if (!a.f) return;
+    const f = { ...a.f };
+    const img = el('img', { class:'pin-img', src: a.v, alt: a.n || '', draggable:'false', onclick(){ if (!moved) openLightbox(att, i); } });
+    const minB = el('button', { type:'button', title:'접기', text:'–' });
+    const zoomB = el('button', { type:'button', title:'크게 보기', text:'⤢', onclick(){ openLightbox(att, i); } });
+    const head = el('div', { class:'pin-head' }, el('span', { class:'pin-name', text: a.n || '사진 ' + (i + 1) }), minB, zoomB);
+    const grip = el('span', { class:'pin-resize', title:'크기 조절' });
+    const win = el('div', { class:'pin-win', 'data-i': String(i), style: vars }, head, img, grip);
+    win.style.width = f.w + 'px';
+    document.body.append(win);
+    let moved = false;
+    const room = () => [Math.max(1, innerWidth - win.offsetWidth), Math.max(1, innerHeight - win.offsetHeight)];
+    const place = () => { const [rw, rh] = room(); win.style.left = Math.round(f.x * rw) + 'px'; win.style.top = Math.round(f.y * rh) + 'px'; };
+    const save = () => {
+      const [rw, rh] = room(); f.x = clamp01(win.offsetLeft / rw); f.y = clamp01(win.offsetTop / rh); f.w = win.classList.contains('min') ? f.w : win.offsetWidth;
+      if (pv){ try { window.parent.__pinMoved && window.parent.__pinMoved(i, f); } catch(e){} }
+    };
+    minB.addEventListener('click', () => { win.classList.toggle('min'); minB.textContent = win.classList.contains('min') ? '+' : '–'; minB.title = win.classList.contains('min') ? '펼치기' : '접기'; place(); });
+    function drag(e, mode){
+      if (e.button !== 0 || e.target.closest('button')) return;
+      e.preventDefault(); moved = false;
+      const sx = e.clientX, sy = e.clientY, sl = win.offsetLeft, st = win.offsetTop, sw = win.offsetWidth;
+      win.classList.add('dragging'); e.target.setPointerCapture(e.pointerId);
+      const mv = ev => {
+        const dx = ev.clientX - sx, dy = ev.clientY - sy;
+        if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+        if (mode === 'size'){ win.style.width = Math.round(Math.min(560, Math.max(140, sw + dx))) + 'px'; }
+        else { win.style.left = Math.round(Math.min(innerWidth - win.offsetWidth, Math.max(0, sl + dx))) + 'px'; win.style.top = Math.round(Math.min(innerHeight - win.offsetHeight, Math.max(0, st + dy))) + 'px'; }
+      };
+      const up = () => { e.target.removeEventListener('pointermove', mv); e.target.removeEventListener('pointerup', up); e.target.removeEventListener('pointercancel', up); win.classList.remove('dragging'); if (moved) save(); setTimeout(() => moved = false, 0); };
+      e.target.addEventListener('pointermove', mv); e.target.addEventListener('pointerup', up); e.target.addEventListener('pointercancel', up);
+    }
+    head.addEventListener('pointerdown', e => drag(e, 'move'));
+    img.addEventListener('pointerdown', e => drag(e, 'move'));
+    grip.addEventListener('pointerdown', e => drag(e, 'size'));
+    img.complete ? place() : img.addEventListener('load', place, { once:true });
+    place();
+    win._place = place;
+  });
+  if (pv && att.some(a => a.f)) setTimeout(() => toast('사진 창을 끌어다 원하는 위치에 놓아 보세요'), 400);
+}
+window.addEventListener('resize', () => $$('.pin-win').forEach(w => w._place && w._place()));
 
 function makeRich(ph){ return enhanceRich(el('div', { class:'paper rich', contenteditable:'true', spellcheck:'false', 'data-ph': ph || '' })); }
 function swapRich(root, a, b, notify){
@@ -1706,6 +1795,7 @@ function buildShare(t){
         const sfx = styleInto(d);
         // 미리보기는 저장하지 않고, 비밀번호 없이 화면만 보여 줌
         const pc = await pack(d, '');
+        window.__pvT = t;
         // 사진이 많아 주소가 너무 길면 미리보기 창에 내용을 직접 건넴 (같은 사이트 창끼리만 가능)
         if (pc.length > 60000){ window.__pv = pc; openPreview(base() + '#/v/PV' + Date.now() + (sfx || '!m') + '!x'); }
         else openPreview(base() + '#/v/' + pc + (sfx || '!m') + '!x');
@@ -1850,6 +1940,8 @@ async function shrinkImage(file, limit = 140000, side = 1280){
 }
 
 /* 공유 화면 미리보기 (저장하지 않음) */
+// 미리보기 창 안에서 띄운 사진 창을 옮기면 그 위치를 작성 중인 문서에 저장
+window.__pinMoved = (i, f) => { const p = attPanels[window.__pvT]; if (p) p.setPin(i, f); };
 let pv = null;
 function openPreview(url){
   if (!pv){
@@ -2163,10 +2255,11 @@ function renderDoc(d, ctx = {}){
   // 첨부 사진: 문서 옆(좁은 화면은 아래)에 첨부파일처럼
   const att = normAtt(d.att);
   let main = card;
-  if (att.length) main = el('div', { class:'doc-row has-att' }, card,
+  const nFree = att.filter(a => !a.f).length;
+  if (att.length) main = el('div', { class:'doc-row has-att' + (nFree ? '' : ' all-pinned') }, card,
     el('aside', { class:'doc-att', 'aria-label':'첨부 사진' },
-      el('div', { class:'att-head' }, tx('att'), el('em', { text: att.length + '장' })),
-      el('ul', { class:'att-list' }, att.map((a, i) => el('li', {},
+      el('div', { class:'att-head' }, tx('att'), el('em', {}, el('span', { class:'n-all', text: att.length + '장' }), el('span', { class:'n-free', text: nFree + '장' }))),
+      el('ul', { class:'att-list' }, att.map((a, i) => el('li', a.f ? { class:'is-pinned' } : {},
         el('button', { type:'button', class:'att-item', title:'크게 보기', onclick(){ openLightbox(att, i); } },
           el('img', { class:'att-thumb', src: a.v, alt:'' }),
           el('span', {}, el('span', { class:'att-name', text: a.n || '사진 ' + (i + 1) }), el('span', { class:'att-meta', text: `${imgType(a.v)} · ${fmtKB(imgKB(a.v))}` }))))))));
@@ -2177,6 +2270,7 @@ function renderDoc(d, ctx = {}){
     openLightbox(imgs.map((im, i) => ({ v: im.getAttribute('src'), n: '본문 사진 ' + (i + 1) })), imgs.indexOf(e.target));
   });
   center.append(...[main, after, homeLink(d.mw !== 0)].filter(Boolean));
+  if (att.some(a => a.f)) pinWindows(att, center.closest('.share-page') || center);
   if (d.mw === 0){ const sn = srcNote(); if (sn) center.parentNode.append(sn); }
 
   // 작성자 수정: 편집 접속 번호 확인 후 편집기로 불러옴
@@ -2369,6 +2463,7 @@ document.addEventListener('click', e => {
 });
 function render(h){
   if (h === current) return;
+  $$('.pin-win').forEach(n => n.remove());
   current = h;
   $$('.view').forEach(v => v.classList.remove('on'));
   const crumb = $('#crumb'); crumb.replaceChildren();
