@@ -782,6 +782,8 @@ body.is-preview .made-with,body.is-preview .share-brand{pointer-events:none}
 .rich:empty::before{content:attr(data-ph);color:#9db0c4;pointer-events:none}
 .rich img{display:block;max-width:100%;max-height:560px;height:auto;margin:10px 0;border-radius:10px;border:1px solid var(--line);cursor:pointer}
 .rich img:hover{box-shadow:0 0 0 3px var(--soft)}
+.rich[data-img] img{cursor:grab}
+.rich img.dragging{opacity:.45}
 .tb-hint{font-size:12px;color:var(--muted)}
 .chip.img-btn::before{content:'';width:14px;height:14px;margin-right:6px;display:inline-block;vertical-align:-2px;background:currentColor;-webkit-mask:var(--ico-img) center/contain no-repeat;mask:var(--ico-img) center/contain no-repeat}
 .rich.drop-on{box-shadow:inset 0 0 0 2px var(--accent);background:var(--soft)}
@@ -1234,21 +1236,45 @@ function enhanceRich(d){
     if (imgs.length) return insertImages(d, imgs);
     document.execCommand('insertText', false, cd.getData('text/plain'));
   });
-  d.addEventListener('dragover', e => { if (d.dataset.img && [...(e.dataTransfer.items || [])].some(i => i.kind === 'file')){ e.preventDefault(); d.classList.add('drop-on'); } });
+  // 글 안의 사진을 끌면 복사가 아니라 그 자리로 옮김
+  d.addEventListener('dragstart', e => { d._drag = e.target.tagName === 'IMG' && d.contains(e.target) ? e.target : null; if (d._drag){ e.dataTransfer.effectAllowed = 'move'; d._drag.classList.add('dragging'); } });
+  d.addEventListener('dragend', () => { d.querySelectorAll('img.dragging').forEach(i => i.classList.remove('dragging')); d._drag = null; d.classList.remove('drop-on'); });
+  d.addEventListener('dragover', e => {
+    if (d._drag){ e.preventDefault(); e.dataTransfer.dropEffect = 'move'; return; }
+    if (d.dataset.img && [...(e.dataTransfer.items || [])].some(i => i.kind === 'file')){ e.preventDefault(); d.classList.add('drop-on'); }
+  });
   d.addEventListener('dragleave', () => d.classList.remove('drop-on'));
   d.addEventListener('drop', e => {
     e.preventDefault(); d.classList.remove('drop-on');
+    const r = caretAt(e.clientX, e.clientY);
+    const here = r && d.contains(r.startContainer) ? r : null;
+    if (d._drag){
+      const img = d._drag; d._drag = null; img.classList.remove('dragging');
+      if (!here || img.contains(here.startContainer)) return;
+      const next = img.nextSibling;
+      img.remove();
+      if (next && next.nodeName === 'BR' && (!next.previousSibling || next.previousSibling.nodeName === 'BR')) next.remove();   // 사진이 빠진 자리의 빈 줄 정리
+      here.insertNode(img);
+      const s = getSelection(), after = document.createRange(); after.setStartAfter(img); after.collapse(true); s.removeAllRanges(); s.addRange(after);
+      d.dispatchEvent(new Event('input', { bubbles:true }));
+      return;
+    }
     if (!d.dataset.img) return;
     const imgs = [...(e.dataTransfer.files || [])].filter(f => /^image\//.test(f.type));
     if (!imgs.length) return;
-    const r = document.caretRangeFromPoint ? document.caretRangeFromPoint(e.clientX, e.clientY) : null;
-    if (r && d.contains(r.startContainer)){ const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+    if (here){ const s = getSelection(); s.removeAllRanges(); s.addRange(here); }
     insertImages(d, imgs);
   });
   // 사진을 누르면 사진 하나가 선택돼서 Delete/Backspace로 지울 수 있음
   d.addEventListener('click', e => { if (e.target.tagName === 'IMG'){ const r = document.createRange(); r.selectNode(e.target); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } });
   d.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && !e.shiftKey){ e.preventDefault(); document.execCommand('insertLineBreak'); } });
   return d;
+}
+// 화면 좌표 → 글 속 커서 위치 (브라우저마다 함수 이름이 달라서 둘 다 지원)
+function caretAt(x, y){
+  if (document.caretRangeFromPoint) return document.caretRangeFromPoint(x, y);
+  if (document.caretPositionFromPoint){ const p = document.caretPositionFromPoint(x, y); if (!p) return null; const r = document.createRange(); r.setStart(p.offsetNode, p.offset); r.collapse(true); return r; }
+  return null;
 }
 // 글 사이에 사진 넣기 (신규 기록 문서)
 let richRange = null;
